@@ -25,7 +25,7 @@ function createTable() {
 
         if (index === 3) {
             const icon = document.createElement('img');
-            icon.src = '/blank/images/gun.png';
+            icon.src = 'images/gun.png';
             icon.alt = 'Gun Icon';
             icon.style.width = '40px';
             icon.style.height = '20px';
@@ -134,12 +134,12 @@ function createActionButtons(line) {
     const hideButton = document.createElement('td');
     hideButton.className = `hide_${line} all_hide all_bm_actions`;
     hideButton.setAttribute('data-line', line);
-    hideButton.innerHTML = '<img src="/blank/images/hide.png" alt="hide icon">';
+    hideButton.innerHTML = '<img src="images/hide.png" alt="hide icon">';
 
     const showButton = document.createElement('td');
     showButton.className = `show_${line} all_show all_bm_actions`;
     showButton.setAttribute('data-line', line);
-    showButton.innerHTML = '<img src="/blank/images/show.png" alt="show icon">';
+    showButton.innerHTML = '<img src="images/show.png" alt="show icon">';
 
     const nickCell = document.createElement('td');
     nickCell.className = `nick_${line} all_nicks`;
