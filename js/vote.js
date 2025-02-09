@@ -1,195 +1,271 @@
-(function($){
-    let saveDayCalled = false; // Флаг для предотвращения многократного вызова
+// Function to handle kill order
+let killOrder = [];
 
-    function put_to_vote(delta) {
-        var pos = $('.voute_line[data-act="1"]').length;
-        var line = $('#vt_'+pos);
-        var view = $('#vv_'+pos);
-        var dv = $('#dv_'+pos);
-        var pl = $('#vpl_'+delta);
-        var butt = $('#save_day');
-        if($(pl).attr('data-invote') == 0){
-            $(pl).attr('data-invote', '1');
-            $(view).html($(view).html() + (view.html() ? ", " : "") + (delta+1));
-            $(line).attr('data-act', '1');
-            $(line).css('display', 'table-row');
-            $(dv).css('display', 'table-cell');
-            $(dv).html($(dv).html() + (dv.html() ? ", " : "") + (delta+1));
-            if($(butt).css('display') == 'none'){
-                $(butt).css('display', 'table-row');
-            }
-        }
+function handleKillOrder(delta) {
+    if (!killOrder.includes(delta)) {
+        killOrder.push(delta);
+        const order = killOrder.indexOf(delta) + 1;
+        document.getElementById(`fk_${delta}`).textContent = order;
     }
+}
 
-    function rem_from_vote(delta){
-        var pos = $('.voute_line[data-act="1"]').length - 1;
-        var view = $('#vv_'+pos);
-        var dv = $('#dv_'+pos);
-        var pl = $('#vpl_'+delta);
-        if($(view).html().includes(delta+1)){
-            var updatedView = $(view).html().split(', ').filter(v => v != (delta+1).toString()).join(', ');
-            var updatedDv = $(dv).html().split(', ').filter(v => v != (delta+1).toString()).join(', ');
-            $(view).html(updatedView);
-            $(dv).html(updatedDv);
+// Function to create the voting table
+function createTable() {
+    const table = document.createElement('table');
+    table.id = 'game_settings';
+    table.className = 'main-game-table';
 
-            if(updatedView === ''){
-                $(line).css('display', 'none');
-                $(line).attr('data-act', '0');
-            }
-            if(updatedDv === ''){
-                $(dv).css('display', 'none');
-            }
-            $(pl).attr('data-invote', '0');
-            $('#vt_'+pos+' .vote_st').each(function (){
-                $(this).removeClass('vote_st');
-            });
-            $('#vt_'+pos+' .vote_nd').each(function (){
-                $(this).removeClass('vote_nd');
-            });
+    const tbody = document.createElement('tbody');
 
-            if(pos == 0 && updatedView === ''){
-                $('.vote-table').css('display', 'none');
-                $('.vote-table-mirror').css('display', 'none');
-                $(butt).css('display', 'none');
-            }
-        }
-    }
+    // Create table header row
+    const headerRow = document.createElement('tr');
+    const headers = ['№', 'Никнейм', 'Фолы', '', 'Роль', 'Баллы', 'Доп', 'Итог'];
+    headers.forEach((headerText, index) => {
+        const th = document.createElement('td');
 
-    function save_day() {
-        if (saveDayCalled) return; // Проверка на выполнение функции
-        saveDayCalled = true;
-
-        var day = '';
-        $('.voute_line[data-act="1"]').each(function (){
-            var pos = $(this).data('line');
-            var dv = $('#dv_'+pos);
-            var line = $('#vt_'+pos);
-            var view = $('#vv_'+pos);
-            var st = $('#vt_'+pos+' .vote_st');
-            var nd = $('#vt_'+pos+' .vote_nd');
-            var pl = $(view).html();
-            var tmp =0;
-            var ppstr = pl;
-            var str = '';
-
-            if($(st).length){
-                tmp = ($(st).data('pos')+1);
-                if(tmp == 6){ tmp += '+'; }
-                str = pl + " - " + tmp + " голосов";
-            } else {
-                str = pl + " - " + tmp + " голосов";
-            }
-
-            if($(nd).length) {
-                tmp = ($(nd).data('pos')+1);
-                if(tmp == 6){ tmp += '+'; }
-                str = str + " Голосов / После деления - " + tmp + " голосов";
-            }
-
-            $(line).css('display', 'none');
-            $('#vpl_'+(pl-1)).attr('data-invote', '0');
-            $(view).html('');
-            $(line).attr('data-act', '0');
-            $(dv).css('display', 'none');
-            $(dv).html("");
-
-            if(day != ''){
-                day += '<br>';
-            }
-
-            day += str;
-        });
-
-        $('.vote_st').each(function (){
-            $(this).removeClass('vote_st');
-        });
-        $('.vote_nd').each(function (){
-            $(this).removeClass('vote_nd');
-        });
-
-        $('.vote-table').css('display', 'none');
-        $('.vote-table-mirror').css('display', 'none');
-
-        $('#save_day').css('display', 'none');
-
-        var lp = parseInt($("#vote_res").attr("data-line"));
-        var lpn = lp+1;
-        $("#vote_res").attr("data-line", lpn);
-        $("#vr_l"+lp).after('<div class="vote_day" id="vr_l'+lpn+'"><p>'+lpn+'</p><div data-day="'+lpn+'" class="helper">'+day+'</div></div>');
-
-        // Сброс флага после выполнения
-        setTimeout(() => {
-            saveDayCalled = false;
-        }, 1000);
-    }
-
-    function createVotingTable() {
-        const table = document.createElement('table');
-        table.className = 'vote-table';
-        table.style.display = 'none';
-
-        const tbody = document.createElement('tbody');
-        for (let i = 0; i < 10; i++) {
-            const row = document.createElement('tr');
-            row.className = 'voute_line';
-            row.id = `vt_${i}`;
-            row.setAttribute('data-act', '0');
-            row.setAttribute('data-line', `${i}`);
-
-            const viewCell = document.createElement('td');
-            viewCell.id = `vv_${i}`;
-            viewCell.className = 'voute_p';
-            viewCell.setAttribute('data-delta', `${i}`);
-            row.appendChild(viewCell);
-
-            for (let j = 0; j < 6; j++) {
-                const btnCell = document.createElement('td');
-                btnCell.className = 'vote_butt';
-                btnCell.setAttribute('data-line', `${i}`);
-                btnCell.setAttribute('data-pos', `${j}`);
-                btnCell.textContent = j + 1;
-                row.appendChild(btnCell);
-            }
-
-            tbody.appendChild(row);
+        if (index === 3) {
+            const icon = document.createElement('img');
+            icon.src = 'images/gun.png';
+            icon.alt = 'Gun Icon';
+            icon.style.width = '40px';
+            icon.style.height = '20px';
+            th.appendChild(icon);
+        } else {
+            th.textContent = headerText;
         }
 
-        const saveRow = document.createElement('tr');
-        saveRow.id = 'save_day';
-        const saveCell = document.createElement('td');
-        saveCell.className = 'voute_line';
-        saveCell.setAttribute('colspan', '7');
-        saveCell.textContent = 'Сохранить день';
-        saveRow.appendChild(saveCell);
-        tbody.appendChild(saveRow);
+        if (index >= 4) {
+            th.classList.add('hs');
+        }
+        headerRow.appendChild(th);
+    });
+    tbody.appendChild(headerRow);
 
-        table.appendChild(tbody);
-        return table;
-    }
+    // Create table rows
+    for (let i = 0; i < 10; i++) {
+        const row = document.createElement('tr');
+        row.id = `line_${i}`;
+        row.className = 'active_line';
 
-    window.createVotingTable = createVotingTable;
-    window.put_to_vote = put_to_vote;
-    window.rem_from_vote = rem_from_vote;
-    window.save_day = save_day;
+        // Player number
+        const numberCell = document.createElement('td');
+        numberCell.id = `vpl_${i}`;
+        numberCell.className = 'col1 to_vote';
+        numberCell.setAttribute('data-delta', i);
+        numberCell.setAttribute('data-invote', '0');
+        numberCell.textContent = i + 1;
 
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.vote_butt').forEach(button => {
-            button.addEventListener('click', function () {
-                document.querySelectorAll('.vote_butt').forEach(btn => btn.classList.remove('selected'));
-                this.classList.add('selected');
-                document.querySelector('.vote-table').style.display = 'table';
-            });
+        numberCell.addEventListener('click', function () {
+            put_to_vote(i);
         });
 
-        const voteTableWrapper = document.createElement('div');
-        voteTableWrapper.className = 'vote-table-wrapper';
-        voteTableWrapper.appendChild(createVotingTable());
-        document.body.appendChild(voteTableWrapper);
+        row.appendChild(numberCell);
 
-        // Ensure the element exists before adding event listener
-        const saveDayButton = document.getElementById('save_day');
-        if (saveDayButton) {
-            saveDayButton.addEventListener('click', save_day);
+        // Nickname
+        const nicknameCell = document.createElement('td');
+        nicknameCell.className = 'col2 nss';
+        const nicknameTable = document.createElement('table');
+        nicknameTable.className = 'bm_nick';
+        const nicknameRow = document.createElement('tr');
+        for (let j = 0; j < 10; j++) {
+            const bmCell = document.createElement('td');
+            bmCell.className = `bm_pick bm_line_${i} bm_pos_${j} all_bm_buttons`;
+            bmCell.setAttribute('data-pos', j);
+            bmCell.setAttribute('data-line', i);
+            bmCell.textContent = j + 1;
+            nicknameRow.appendChild(bmCell);
+        }
+        nicknameRow.appendChild(createActionButtons(i));
+        nicknameTable.appendChild(nicknameRow);
+        nicknameCell.appendChild(nicknameTable);
+        row.appendChild(nicknameCell);
+
+        // Foul
+        const fallsCell = document.createElement('td');
+        fallsCell.className = 'col3 nss';
+        fallsCell.appendChild(createFallsWidget(i));
+        row.appendChild(fallsCell);
+
+        // Kill order
+        const iconCell = document.createElement('td');
+        iconCell.id = `fk_${i}`;
+        iconCell.className = 'col4 fk_pick nss';
+        iconCell.setAttribute('data-delta', i);
+
+        iconCell.addEventListener('click', function () {
+            handleKillOrder(i);
+        });
+
+        row.appendChild(iconCell);
+
+        // Role
+        const roleCell = document.createElement('td');
+        roleCell.className = 'col5 hs';
+        roleCell.appendChild(createRoleInput(i));
+        row.appendChild(roleCell);
+
+        // Points
+        const pointsCell = document.createElement('td');
+        pointsCell.className = 'col6 hs';
+        pointsCell.appendChild(createPointsInput(i));
+        row.appendChild(pointsCell);
+
+        // Additional points
+        const addPointsCell = document.createElement('td');
+        addPointsCell.className = 'col7 hs';
+        addPointsCell.appendChild(createAddPointsInput(i));
+        row.appendChild(addPointsCell);
+
+        // Total
+        const totalCell = document.createElement('td');
+        totalCell.id = `bp_${i}`;
+        totalCell.className = 'col8 bp_select hs';
+        totalCell.setAttribute('data-delta', i);
+        row.appendChild(totalCell);
+
+        tbody.appendChild(row);
+    }
+
+    table.appendChild(tbody);
+    return table;
+}
+
+function createActionButtons(line) {
+    const hideButton = document.createElement('td');
+    hideButton.className = `hide_${line} all_hide all_bm_actions`;
+    hideButton.setAttribute('data-line', line);
+    hideButton.innerHTML = '<img src="images/hide.png" alt="hide icon">';
+
+    const showButton = document.createElement('td');
+    showButton.className = `show_${line} all_show all_bm_actions`;
+    showButton.setAttribute('data-line', line);
+    showButton.innerHTML = '<img src="images/show.png" alt="show icon">';
+
+    const nickCell = document.createElement('td');
+    nickCell.className = `nick_${line} all_nicks`;
+    const nicknameInput = document.createElement('input');
+    nicknameInput.className = 'user_entity_acp nick_acpl selected form-text form-autocomplete';
+    nicknameInput.setAttribute('data-delta', line);
+    nicknameInput.setAttribute('type', 'text');
+    nicknameInput.setAttribute('name', `field_rate_game_players[und][${line}][target_id]`);
+    nicknameInput.setAttribute('value', '');
+    nicknameInput.setAttribute('maxlength', '1024');
+    nickCell.appendChild(nicknameInput);
+
+    const container = document.createElement('div');
+    container.appendChild(hideButton);
+    container.appendChild(showButton);
+    container.appendChild(nickCell);
+
+    return container;
+}
+
+function createFallsWidget(delta) {
+    const fallsWidget = document.createElement('table');
+    fallsWidget.className = 'falls_widget';
+
+    const fallsRow = document.createElement('tr');
+
+    const fallInput = document.createElement('input');
+    fallInput.id = `fall_field_${delta}`;
+    fallInput.setAttribute('type', 'hidden');
+    fallInput.setAttribute('value', '0');
+    fallsRow.appendChild(fallInput);
+
+    const fallCell = document.createElement('td');
+    fallCell.className = 'fall_click border_0';
+    fallCell.setAttribute('data-delta', delta);
+
+    const fallView = document.createElement('div');
+    fallView.id = `falls_view_${delta}`;
+    fallView.className = 'fall_0';
+    fallView.textContent = '0';
+    fallCell.appendChild(fallView);
+
+    fallCell.addEventListener('click', function () {
+        const currentValue = parseInt(document.getElementById(`fall_field_${delta}`).value) || 0;
+        const newValue = currentValue + 1;
+        if (newValue <= 4) {
+            window.setFall(delta, newValue);
         }
     });
-})(jQuery);
+
+    fallsRow.appendChild(fallCell);
+
+    const removeClickCell = document.createElement('td');
+    removeClickCell.className = 'remove_click border_0';
+    removeClickCell.setAttribute('data-delta', delta);
+    removeClickCell.innerHTML = '-';
+    removeClickCell.addEventListener('click', function () {
+        const currentValue = parseInt(document.getElementById(`fall_field_${delta}`).value) || 0;
+        const newValue = currentValue - 1;
+        if (newValue >= 0) {
+            window.setFall(delta, newValue);
+        }
+    });
+
+    fallsRow.appendChild(removeClickCell);
+
+    fallsWidget.appendChild(fallsRow);
+    return fallsWidget;
+}
+
+function createRoleInput(delta) {
+    const roleInput = document.createElement('input');
+    roleInput.id = `role_field_${delta}`;
+    roleInput.className = 'role_field_all';
+    roleInput.setAttribute('type', 'hidden');
+    roleInput.setAttribute('name', `field_role[und][${delta}][value]`);
+    roleInput.setAttribute('value', 'c');
+
+    const roleView = document.createElement('div');
+    roleView.id = `role_view_${delta}`;
+    roleView.className = 'role';
+    roleView.setAttribute('data-delta', delta);
+
+    const container = document.createElement('div');
+    container.appendChild(roleInput);
+    container.appendChild(roleView);
+
+    return container;
+}
+
+function createPointsInput(delta) {
+    const pointsInput = document.createElement('input');
+    pointsInput.id = `points_${delta}`;
+    pointsInput.setAttribute('type', 'text');
+    pointsInput.setAttribute('name', `field_points[und][${delta}][value]`);
+    pointsInput.setAttribute('value', '');
+    pointsInput.setAttribute('size', '60');
+    pointsInput.setAttribute('maxlength', '128');
+    pointsInput.className = 'form-text';
+
+    const container = document.createElement('div');
+    container.className = 'form-item form-type-textfield form-item-field-points-und-0-value';
+    container.appendChild(pointsInput);
+
+    return container;
+}
+
+function createAddPointsInput(delta) {
+    const addPointsInput = document.createElement('input');
+    addPointsInput.id = `add_points_${delta}`;
+    addPointsInput.setAttribute('type', 'text');
+    addPointsInput.setAttribute('name', `field_add_points[und][${delta}][value]`);
+    addPointsInput.setAttribute('value', '');
+    addPointsInput.setAttribute('size', '60');
+    addPointsInput.setAttribute('maxlength', '128');
+    addPointsInput.className = 'form-text';
+
+    const container = document.createElement('div');
+    container.className = 'form-item form-type-textfield form-item-field-add-points-und-0-value';
+    container.appendChild(addPointsInput);
+
+    return container;
+}
+
+// Add the table to the DOM
+document.addEventListener('DOMContentLoaded', () => {
+    const tableWrapper = document.querySelector('.main-game-table-wrapper');
+    tableWrapper.appendChild(createTable());
+});
