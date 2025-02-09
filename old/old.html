@@ -1,0 +1,897 @@
+<style type="text/css" media="all">
+	@import url("css/mafia.css");
+	@import url("css/styles.css");
+</style>
+<style type="text/css" media="all">
+</style>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.once.js"></script>
+<script type="text/javascript" src="js/drupal.js"></script>
+<script type="text/javascript" src="js/slick.min.js"></script>
+<script type="text/javascript" src="js/game_actions.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<link rel="manifest" href="/manifest.json">
+</head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#000000">
+<link rel="apple-touch-icon" href="/images/icon/apple-touch-icon.png">
+<link rel="android-chrome-192x192" href="/images/icon/android-chrome-192x192.png">
+<script>
+	var bmp_target = [0];
+	var best_player = [[0.50,1], [0.50,1]];
+	var city = [1, 0, 0];
+	var mafia = [1, 0, 0];
+	var sheriff = [1, 0, 0];
+	var don = [1, 0, 0];
+	var first_killed = [0, 0, 0];
+	var bm_03 = [-1, 0, 0];
+	var bm_13 = [0, 0, 0];
+	var bm_23 = [0.25, 0.25, 0];
+	var bm_33 = [0.5, 0.5, 0];
+	var bms_03 = [-1, -0.5, 0];
+	var bms_13 = [0, 1, 0];
+	var bms_23 = [0.25, 0.25, 0];
+	var bms_33 = [0.5, 0.5, 0];
+	var values = [0.10, -1.00, -0.50, 0.50];
+</script>
+
+<div style="display:none">
+	<input id="FK_field_0" type="hidden" name="field_first_killed[und][0][value]" value="">
+	<input id="FK_field_1" type="hidden" name="field_first_killed[und][1][value]" value="">
+	<input id="FK_field_2" type="hidden" name="field_first_killed[und][2][value]" value="">
+	<input id="FK_field_3" type="hidden" name="field_first_killed[und][3][value]" value="">
+	<input id="FK_field_4" type="hidden" name="field_first_killed[und][4][value]" value="">
+	<input id="FK_field_5" type="hidden" name="field_first_killed[und][5][value]" value="">
+	<input id="FK_field_6" type="hidden" name="field_first_killed[und][6][value]" value="">
+	<input id="FK_field_7" type="hidden" name="field_first_killed[und][7][value]" value="">
+	<input id="FK_field_8" type="hidden" name="field_first_killed[und][8][value]" value="">
+	<input id="FK_field_9" type="hidden" name="field_first_killed[und][9][value]" value="">
+	<input id="BM_field_0" type="hidden" name="field_best_move[und][0][value]" value="">
+	<input id="BM_field_1" type="hidden" name="field_best_move[und][1][value]" value="">
+	<input id="BM_field_2" type="hidden" name="field_best_move[und][2][value]" value="">
+	<input id="BP_field_0" class="BP_all" type="hidden" name="field_best_player[und][0][value]" value="">
+	<input id="BP_field_1" class="BP_all" type="hidden" name="field_best_player[und][1][value]" value="">
+	<input id="BP_field_2" class="BP_all" type="hidden" name="field_best_player[und][2][value]" value="">
+	<input id="BP_field_3" class="BP_all" type="hidden" name="field_best_player[und][3][value]" value="">
+	<input id="BP_field_4" class="BP_all" type="hidden" name="field_best_player[und][4][value]" value="">
+	<input id="BP_field_5" class="BP_all" type="hidden" name="field_best_player[und][5][value]" value="">
+	<input id="BP_field_6" class="BP_all" type="hidden" name="field_best_player[und][6][value]" value="">
+	<input id="BP_field_7" class="BP_all" type="hidden" name="field_best_player[und][7][value]" value="">
+	<input id="BP_field_8" class="BP_all" type="hidden" name="field_best_player[und][8][value]" value="">
+	<input id="BP_field_9" class="BP_all" type="hidden" name="field_best_player[und][9][value]" value="">
+</div>
+<body>
+<script>
+	$(function() {
+		const nicknames = [
+			"AMOR", "Asia", "Alien", "Alinellas", "Animag", "Bittir", "Black", "Black Jack", "DULASHA", "Dill",
+			"Dizi", "Dushman", "EL", "Fox", "Gremlin", "Geralt", "Gestalter", "Hisoka", "Ivory", "Kai",
+			"LIRICA", "Miamore", "Mulan", "Neo", "ProDoc", "Shinobi", "Soza", "Saul Goodman", "Scorpion",
+			"TONI MONTANA", "Tam", "ZONDR", "evil", "finnick", "Йору", "Адвокат", "Альтман", "Альфа", "Асур",
+			"Бес", "Биполярка", "Булочка", "Валькирия", "Великая", "228Данте69", "Даня", "Дита", "Добрый",
+			"Дэва", "Ева", "Завклубом", "Зайка", "Зара", "Знаток", "Зёма", "Кари", "Кир", "Кира", "Кобра",
+			"Кову", "Копибара", "Коссмос", "Красавчик", "Лазер", "Лестер", "Лимонная долька", "Белый склон",
+			"Луи", "Мрак", "Маркетолог", "Марсело", "Мау", "Мафия", "Минахор", "Нафиля", "Окси", "Пантера",
+			"Паранойа", "Подкова", "Подсолнух", "Психолог", "Рокфор", "Руди", "Скорпион", "Саид", "Саймон",
+			"Салливан", "Сатору", "Светлячек", "Сирена", "Смурфик", "Статистика", "Темир", "Типсон",
+			"Томас Шелби", "Учитель", "Феникс", "Физик", "Фил", "Хейтер", "Штиль", "Элис"
+		];
+
+		$(".user_entity_acp").autocomplete({
+			source: nicknames
+		});
+	});
+</script>
+<div class="timer-container">
+	<div id="timer-display" class="timer-display">00:00</div>
+	<div class="timer-controls">
+		<button class="material-button large-button" onclick="startTimer(60)">1 мин</button>
+		<button class="material-button large-button" onclick="startTimer(30)">30 сек</button>
+		<button class="material-button large-button" onclick="pauseTimer()">Пауза</button>
+		<button class="material-button large-button" onclick="resumeTimer()">Продолжить</button>
+		<button class="material-button large-button" onclick="stopTimer()">Стоп</button>
+	</div>
+</div>
+<script src="script.js"></script>
+<div>
+	<div class="main-game-table-wrapper table-wrapper">
+		<table id="game_settings" class="main-game-table">
+			<tbody>
+			<tr>
+				<td class="col1">№<i class="fa fa-thumbs-up"></i></td>
+				<td class="col2">Никнейм<i class="fa fa-thumbs-up"></i></td>
+				<td class="col3 nss" width="110px">Фолы</td>
+				<td class="col4 nss" width="40px"><img src="images/gun.png"></td>
+				<td class="col5 hs">Роль</td>
+				<td class="col6 hs" width="80px">Баллы</td>
+				<td class="col7 add_tag hs" width="80px">Доп</td>
+				<td class="col8 add_tag hs" width="80px">Итог</td>
+			</tr>
+			<tr id="line_0" class="active_line">
+				<td id="vpl_0" class="col1 to_vote" data-delta="0" data-invote="0">1</td>
+				<td class="col2 nss">
+					<table class="bm_nick">
+						<tbody><tr>
+							<td class="bm_pick bm_line_0 bm_pos_0 all_bm_buttons" data-pos="0" data-line="0">1</td>
+							<td class="bm_pick bm_line_0 bm_pos_1 all_bm_buttons" data-pos="1" data-line="0">2</td>
+							<td class="bm_pick bm_line_0 bm_pos_2 all_bm_buttons" data-pos="2" data-line="0">3</td>
+							<td class="bm_pick bm_line_0 bm_pos_3 all_bm_buttons" data-pos="3" data-line="0">4</td>
+							<td class="bm_pick bm_line_0 bm_pos_4 all_bm_buttons" data-pos="4" data-line="0">5</td>
+							<td class="bm_pick bm_line_0 bm_pos_5 all_bm_buttons" data-pos="5" data-line="0">6</td>
+							<td class="bm_pick bm_line_0 bm_pos_6 all_bm_buttons" data-pos="6" data-line="0">7</td>
+							<td class="bm_pick bm_line_0 bm_pos_7 all_bm_buttons" data-pos="7" data-line="0">8</td>
+							<td class="bm_pick bm_line_0 bm_pos_8 all_bm_buttons" data-pos="8" data-line="0">9</td>
+							<td class="bm_pick bm_line_0 bm_pos_9 all_bm_buttons" data-pos="9" data-line="0">10</td>
+							<td class="hide_0 all_hide all_bm_actions" data-line="0"><img src="/blank/images/hide.png" alt="hide icon"></td>
+							<td class="show_0 all_show all_bm_actions" data-line="0"><img src="/blank/images/show.png" alt="show icon"></td>
+							<td class="nick_0 all_nicks">
+								<div class="form-item form-type-textfield form-item-field-rate-game-players-und-0-target-id">
+									<input class="user_entity_acp nick_acpl selected form-text form-autocomplete" data-delta="0" type="text" name="field_rate_game_players[und][0][target_id]" value="" maxlength="1024">
+								</div>
+							</td>
+						</tr>
+						</tbody></table>
+				</td>
+				<td width="90px" class="col3 nss">
+					<input id="fall_field_0" type="hidden" name="field_falls[und][0][value]" value="0">
+					<table class="falls_widget">
+						<tbody><tr>
+							<td data-delta="0" class="fall_click border_0">
+								<div id="falls_view_0" class="fall_0"> </div>
+							</td>
+							<td width="20px" class="remove_click border_0" data-delta="0">
+							</td>
+						</tr>
+						</tbody></table>           			</td>
+				<td id="fk_0" class="col4 fk_pick nss" data-delta="0"> </td>
+				<td class="col5 hs">
+					<input id="role_field_0" class="role_field_all" type="hidden" name="field_role[und][0][value]" value="c">
+					<div id="role_view_0" class="role" data-delta="0"> </div>
+				</td>
+				<td class="col6 hs">
+					<div class="form-item form-type-textfield form-item-field-points-und-0-value">
+						<input id="points_0" type="text" name="field_points[und][0][value]" value="" size="60" maxlength="128" class="form-text">
+					</div>
+				</td>
+				<td class="col7 hs">
+					<div class="form-item form-type-textfield form-item-field-add-points-und-0-value">
+						<input id="add_points_0" type="text" name="field_add_points[und][0][value]" value="" size="60" maxlength="128" class="form-text">
+					</div>
+				</td>
+				<td id="bp_0" class="col8 bp_select hs" data-delta="0" readonly></td>
+			</tr>
+			<tr id="line_1" class="active_line">
+				<td id="vpl_1" class="col1 to_vote" data-delta="1" data-invote="0">2</td>
+				<td class="col2 nss">
+					<table class="bm_nick">
+						<tbody><tr>
+							<td class="bm_pick bm_line_1 bm_pos_0 all_bm_buttons" data-pos="0" data-line="1">1</td>
+							<td class="bm_pick bm_line_1 bm_pos_1 all_bm_buttons" data-pos="1" data-line="1">2</td>
+							<td class="bm_pick bm_line_1 bm_pos_2 all_bm_buttons" data-pos="2" data-line="1">3</td>
+							<td class="bm_pick bm_line_1 bm_pos_3 all_bm_buttons" data-pos="3" data-line="1">4</td>
+							<td class="bm_pick bm_line_1 bm_pos_4 all_bm_buttons" data-pos="4" data-line="1">5</td>
+							<td class="bm_pick bm_line_1 bm_pos_5 all_bm_buttons" data-pos="5" data-line="1">6</td>
+							<td class="bm_pick bm_line_1 bm_pos_6 all_bm_buttons" data-pos="6" data-line="1">7</td>
+							<td class="bm_pick bm_line_1 bm_pos_7 all_bm_buttons" data-pos="7" data-line="1">8</td>
+							<td class="bm_pick bm_line_1 bm_pos_8 all_bm_buttons" data-pos="8" data-line="1">9</td>
+							<td class="bm_pick bm_line_1 bm_pos_9 all_bm_buttons" data-pos="9" data-line="1">10</td>
+							<td class="hide_1 all_hide all_bm_actions" data-line="1"><img src="/blank/images/hide.png" alt="hide icon"></td>
+							<td class="show_1 all_show all_bm_actions" data-line="1"><img src="/blank/images/show.png" alt="show icon"></td>
+							<td class="nick_1 all_nicks">
+								<div class="form-item form-type-textfield form-item-field-rate-game-players-und-1-target-id">
+									<input class="user_entity_acp nick_acpl selected form-text form-autocomplete" data-delta="1" type="text" name="field_rate_game_players[und][1][target_id]" value="" maxlength="1024">
+								</div>
+							</td>
+						</tr>
+						</tbody></table>
+				</td>
+				<td width="90px" class="col3 nss">
+					<input id="fall_field_1" type="hidden" name="field_falls[und][0][value]" value="0">
+					<table class="falls_widget">
+						<tbody><tr>
+							<td data-delta="1" class="fall_click border_0">
+								<div id="falls_view_1" class="fall_0"> </div>
+							</td>
+							<td width="20px" class="remove_click border_0" data-delta="1">
+							</td>
+						</tr>
+						</tbody></table>            			</td>
+				<td id="fk_1" class="col4 fk_pick nss" data-delta="1"> </td>
+				<td class="col5 hs">
+					<input id="role_field_1" class="role_field_all" type="hidden" name="field_role[und][1][value]" value="c">
+					<div id="role_view_1" class="role" data-delta="1"> </div>
+				</td>
+				<td class="col6 hs">
+					<div class="form-item form-type-textfield form-item-field-points-und-1-value">
+						<input id="points_1" type="text" name="field_points[und][0][value]" value="" size="60" maxlength="128" class="form-text">
+					</div>
+				</td>
+				<td class="col7 hs">
+					<div class="form-item form-type-textfield form-item-field-add-points-und-1-value">
+						<input id="add_points_1" type="text" name="field_add_points[und][1][value]" value="" size="60" maxlength="128" class="form-text">
+					</div>
+				</td>
+				<td id="bp_1" class="col8 bp_select hs" data-delta="1"> </td>
+			</tr>
+			<tr id="line_2" class="active_line">
+				<td id="vpl_2" class="col1 to_vote" data-delta="2" data-invote="0">3</td>
+				<td class="col2 nss">
+					<table class="bm_nick">
+						<tbody><tr>
+							<td class="bm_pick bm_line_2 bm_pos_0 all_bm_buttons" data-pos="0" data-line="2">1</td>
+							<td class="bm_pick bm_line_2 bm_pos_1 all_bm_buttons" data-pos="1" data-line="2">2</td>
+							<td class="bm_pick bm_line_2 bm_pos_2 all_bm_buttons" data-pos="2" data-line="2">3</td>
+							<td class="bm_pick bm_line_2 bm_pos_3 all_bm_buttons" data-pos="3" data-line="2">4</td>
+							<td class="bm_pick bm_line_2 bm_pos_4 all_bm_buttons" data-pos="4" data-line="2">5</td>
+							<td class="bm_pick bm_line_2 bm_pos_5 all_bm_buttons" data-pos="5" data-line="2">6</td>
+							<td class="bm_pick bm_line_2 bm_pos_6 all_bm_buttons" data-pos="6" data-line="2">7</td>
+							<td class="bm_pick bm_line_2 bm_pos_7 all_bm_buttons" data-pos="7" data-line="2">8</td>
+							<td class="bm_pick bm_line_2 bm_pos_8 all_bm_buttons" data-pos="8" data-line="2">9</td>
+							<td class="bm_pick bm_line_2 bm_pos_9 all_bm_buttons" data-pos="9" data-line="2">10</td>
+							<td class="hide_2 all_hide all_bm_actions" data-line="2"><img src="/blank/images/hide.png" alt="hide icon"></td>
+							<td class="show_2 all_show all_bm_actions" data-line="2"><img src="/blank/images/show.png" alt="show icon"></td>
+							<td class="nick_2 all_nicks">
+								<div class="form-item form-type-textfield form-item-field-rate-game-players-und-2-target-id">
+									<input class="user_entity_acp nick_acpl selected form-text form-autocomplete" data-delta="2" type="text" name="field_rate_game_players[und][2][target_id]" value="" maxlength="1024">
+								</div>
+							</td>
+						</tr>
+						</tbody></table>
+				</td>
+				<td width="90px" class="col3 nss">
+					<input id="fall_field_2" type="hidden" name="field_falls[und][0][value]" value="0">
+					<table class="falls_widget">
+						<tbody><tr>
+							<td data-delta="2" class="fall_click border_0">
+								<div id="falls_view_2" class="fall_0"> </div>
+							</td>
+							<td width="20px" class="remove_click border_0" data-delta="2">
+							</td>
+						</tr>
+						</tbody></table>            			</td>
+				<td id="fk_2" class="col4 fk_pick nss" data-delta="2"> </td>
+				<td class="col5 hs">
+					<input id="role_field_2" class="role_field_all" type="hidden" name="field_role[und][2][value]" value="c">
+					<div id="role_view_2" class="role" data-delta="2"> </div>
+				</td>
+				<td class="col6 hs">
+					<div class="form-item form-type-textfield form-item-field-points-und-2-value">
+						<input id="points_2" type="text" name="field_points[und][0][value]" value="" size="60" maxlength="128" class="form-text">
+					</div>
+				</td>
+				<td class="col7 hs">
+					<div class="form-item form-type-textfield form-item-field-add-points-und-2-value">
+						<input id="add_points_2" type="text" name="field_add_points[und][2][value]" value="" size="60" maxlength="128" class="form-text">
+					</div>
+				</td>
+				<td id="bp_2" class="col8 bp_select hs" data-delta="2"> </td>
+			</tr>
+			<tr id="line_3" class="active_line">
+				<td id="vpl_3" class="col1 to_vote" data-delta="3" data-invote="0">4</td>
+				<td class="col2 nss">
+					<table class="bm_nick">
+						<tbody><tr>
+							<td class="bm_pick bm_line_3 bm_pos_0 all_bm_buttons" data-pos="0" data-line="3">1</td>
+							<td class="bm_pick bm_line_3 bm_pos_1 all_bm_buttons" data-pos="1" data-line="3">2</td>
+							<td class="bm_pick bm_line_3 bm_pos_2 all_bm_buttons" data-pos="2" data-line="3">3</td>
+							<td class="bm_pick bm_line_3 bm_pos_3 all_bm_buttons" data-pos="3" data-line="3">4</td>
+							<td class="bm_pick bm_line_3 bm_pos_4 all_bm_buttons" data-pos="4" data-line="3">5</td>
+							<td class="bm_pick bm_line_3 bm_pos_5 all_bm_buttons" data-pos="5" data-line="3">6</td>
+							<td class="bm_pick bm_line_3 bm_pos_6 all_bm_buttons" data-pos="6" data-line="3">7</td>
+							<td class="bm_pick bm_line_3 bm_pos_7 all_bm_buttons" data-pos="7" data-line="3">8</td>
+							<td class="bm_pick bm_line_3 bm_pos_8 all_bm_buttons" data-pos="8" data-line="3">9</td>
+							<td class="bm_pick bm_line_3 bm_pos_9 all_bm_buttons" data-pos="9" data-line="3">10</td>
+							<td class="hide_3 all_hide all_bm_actions" data-line="3"><img src="/blank/images/hide.png" alt="hide icon"></td>
+							<td class="show_3 all_show all_bm_actions" data-line="3"><img src="/blank/images/show.png" alt="show icon"></td>
+							<td class="nick_3 all_nicks">
+								<div class="form-item form-type-textfield form-item-field-rate-game-players-und-3-target-id">
+									<input class="user_entity_acp nick_acpl selected form-text form-autocomplete" data-delta="3" type="text" name="field_rate_game_players[und][3][target_id]" value="" maxlength="1024">
+								</div>
+							</td>
+						</tr>
+						</tbody></table>
+				</td>
+				<td width="90px" class="col3 nss">
+					<input id="fall_field_3" type="hidden" name="field_falls[und][0][value]" value="0">
+					<table class="falls_widget">
+						<tbody><tr>
+							<td data-delta="3" class="fall_click border_0">
+								<div id="falls_view_3" class="fall_0"> </div>
+							</td>
+							<td width="20px" class="remove_click border_0" data-delta="3">
+							</td>
+						</tr>
+						</tbody></table>            			</td>
+				<td id="fk_3" class="col4 fk_pick nss" data-delta="3"> </td>
+				<td class="col5 hs">
+					<input id="role_field_3" class="role_field_all" type="hidden" name="field_role[und][3][value]" value="c">
+					<div id="role_view_3" class="role" data-delta="3"> </div>
+				</td>
+				<td class="col6 hs">
+					<div class="form-item form-type-textfield form-item-field-points-und-3-value">
+						<input id="points_3" type="text" name="field_points[und][0][value]" value="" size="60" maxlength="128" class="form-text">
+					</div>
+				</td>
+				<td class="col7 hs">
+					<div class="form-item form-type-textfield form-item-field-add-points-und-3-value">
+						<input id="add_points_3" type="text" name="field_add_points[und][3][value]" value="" size="60" maxlength="128" class="form-text">
+					</div>
+				</td>
+				<td id="bp_3" class="col8 bp_select hs" data-delta="3"> </td>
+			</tr>
+			<tr id="line_4" class="active_line">
+				<td id="vpl_4" class="col1 to_vote" data-delta="4" data-invote="0">5</td>
+				<td class="col2 nss">
+					<table class="bm_nick">
+						<tbody><tr>
+							<td class="bm_pick bm_line_4 bm_pos_0 all_bm_buttons" data-pos="0" data-line="4">1</td>
+							<td class="bm_pick bm_line_4 bm_pos_1 all_bm_buttons" data-pos="1" data-line="4">2</td>
+							<td class="bm_pick bm_line_4 bm_pos_2 all_bm_buttons" data-pos="2" data-line="4">3</td>
+							<td class="bm_pick bm_line_4 bm_pos_3 all_bm_buttons" data-pos="3" data-line="4">4</td>
+							<td class="bm_pick bm_line_4 bm_pos_4 all_bm_buttons" data-pos="4" data-line="4">5</td>
+							<td class="bm_pick bm_line_4 bm_pos_5 all_bm_buttons" data-pos="5" data-line="4">6</td>
+							<td class="bm_pick bm_line_4 bm_pos_6 all_bm_buttons" data-pos="6" data-line="4">7</td>
+							<td class="bm_pick bm_line_4 bm_pos_7 all_bm_buttons" data-pos="7" data-line="4">8</td>
+							<td class="bm_pick bm_line_4 bm_pos_8 all_bm_buttons" data-pos="8" data-line="4">9</td>
+							<td class="bm_pick bm_line_4 bm_pos_9 all_bm_buttons" data-pos="9" data-line="4">10</td>
+							<td class="hide_4 all_hide all_bm_actions" data-line="4"><img src="/blank/images/hide.png" alt="hide icon"></td>
+							<td class="show_4 all_show all_bm_actions" data-line="4"><img src="/blank/images/show.png" alt="show icon"></td>
+							<td class="nick_4 all_nicks">
+								<div class="form-item form-type-textfield form-item-field-rate-game-players-und-4-target-id">
+									<input class="user_entity_acp nick_acpl selected form-text form-autocomplete" data-delta="4" type="text" name="field_rate_game_players[und][4][target_id]" value="" maxlength="1024">
+								</div>
+							</td>
+						</tr>
+						</tbody></table>
+				</td>
+				<td width="90px" class="col3 nss">
+					<input id="fall_field_4" type="hidden" name="field_falls[und][0][value]" value="0">
+					<table class="falls_widget">
+						<tbody><tr>
+							<td data-delta="4" class="fall_click border_0">
+								<div id="falls_view_4" class="fall_0"> </div>
+							</td>
+							<td width="20px" class="remove_click border_0" data-delta="4">
+							</td>
+						</tr>
+						</tbody></table>            			</td>
+				<td id="fk_4" class="col4 fk_pick nss" data-delta="4"> </td>
+				<td class="col5 hs">
+					<input id="role_field_4" class="role_field_all" type="hidden" name="field_role[und][4][value]" value="c">
+					<div id="role_view_4" class="role" data-delta="4"> </div>
+				</td>
+				<td class="col6 hs">
+					<div class="form-item form-type-textfield form-item-field-points-und-4-value">
+						<input id="points_4" type="text" name="field_points[und][0][value]" value="" size="60" maxlength="128" class="form-text">
+					</div>
+				</td>
+				<td class="col7 hs">
+					<div class="form-item form-type-textfield form-item-field-add-points-und-4-value">
+						<input id="add_points_4" type="text" name="field_add_points[und][4][value]" value="" size="60" maxlength="128" class="form-text">
+					</div>
+				</td>
+				<td id="bp_4" class="col8 bp_select hs" data-delta="4"> </td>
+			</tr>
+			<tr id="line_5" class="active_line">
+				<td id="vpl_5" class="col1 to_vote" data-delta="5" data-invote="0">6</td>
+				<td class="col2 nss">
+					<table class="bm_nick">
+						<tbody><tr>
+							<td class="bm_pick bm_line_5 bm_pos_0 all_bm_buttons" data-pos="0" data-line="5">1</td>
+							<td class="bm_pick bm_line_5 bm_pos_1 all_bm_buttons" data-pos="1" data-line="5">2</td>
+							<td class="bm_pick bm_line_5 bm_pos_2 all_bm_buttons" data-pos="2" data-line="5">3</td>
+							<td class="bm_pick bm_line_5 bm_pos_3 all_bm_buttons" data-pos="3" data-line="5">4</td>
+							<td class="bm_pick bm_line_5 bm_pos_4 all_bm_buttons" data-pos="4" data-line="5">5</td>
+							<td class="bm_pick bm_line_5 bm_pos_5 all_bm_buttons" data-pos="5" data-line="5">6</td>
+							<td class="bm_pick bm_line_5 bm_pos_6 all_bm_buttons" data-pos="6" data-line="5">7</td>
+							<td class="bm_pick bm_line_5 bm_pos_7 all_bm_buttons" data-pos="7" data-line="5">8</td>
+							<td class="bm_pick bm_line_5 bm_pos_8 all_bm_buttons" data-pos="8" data-line="5">9</td>
+							<td class="bm_pick bm_line_5 bm_pos_9 all_bm_buttons" data-pos="9" data-line="5">10</td>
+							<td class="hide_5 all_hide all_bm_actions" data-line="5"><img src="/blank/images/hide.png" alt="hide icon"></td>
+							<td class="show_5 all_show all_bm_actions" data-line="5"><img src="/blank/images/show.png" alt="show icon"></td>
+							<td class="nick_5 all_nicks">
+								<div class="form-item form-type-textfield form-item-field-rate-game-players-und-5-target-id">
+									<input class="user_entity_acp nick_acpl selected form-text form-autocomplete" data-delta="5" type="text" name="field_rate_game_players[und][5][target_id]" value="" maxlength="1024">
+								</div>
+							</td>
+						</tr>
+						</tbody></table>
+				</td>
+				<td width="90px" class="col3 nss">
+					<input id="fall_field_5" type="hidden" name="field_falls[und][0][value]" value="0">
+					<table class="falls_widget">
+						<tbody><tr>
+							<td data-delta="5" class="fall_click border_0">
+								<div id="falls_view_5" class="fall_0"> </div>
+							</td>
+							<td width="20px" class="remove_click border_0" data-delta="5">
+							</td>
+						</tr>
+						</tbody></table>            			</td>
+				<td id="fk_5" class="col4 fk_pick nss" data-delta="5"> </td>
+				<td class="col5 hs">
+					<input id="role_field_5" class="role_field_all" type="hidden" name="field_role[und][5][value]" value="c">
+					<div id="role_view_5" class="role" data-delta="5"> </div>
+				</td>
+				<td class="col6 hs">
+					<div class="form-item form-type-textfield form-item-field-points-und-5-value">
+						<input id="points_5" type="text" name="field_points[und][0][value]" value="" size="60" maxlength="128" class="form-text">
+					</div>
+				</td>
+				<td class="col7 hs">
+					<div class="form-item form-type-textfield form-item-field-add-points-und-5-value">
+						<input id="add_points_5" type="text" name="field_add_points[und][5][value]" value="" size="60" maxlength="128" class="form-text">
+					</div>
+				</td>
+				<td id="bp_5" class="col8 bp_select hs" data-delta="5"> </td>
+			</tr>
+			<tr id="line_6" class="active_line">
+				<td id="vpl_6" class="col1 to_vote" data-delta="6" data-invote="0">7</td>
+				<td class="col2 nss">
+					<table class="bm_nick">
+						<tbody><tr>
+							<td class="bm_pick bm_line_6 bm_pos_0 all_bm_buttons" data-pos="0" data-line="6">1</td>
+							<td class="bm_pick bm_line_6 bm_pos_1 all_bm_buttons" data-pos="1" data-line="6">2</td>
+							<td class="bm_pick bm_line_6 bm_pos_2 all_bm_buttons" data-pos="2" data-line="6">3</td>
+							<td class="bm_pick bm_line_6 bm_pos_3 all_bm_buttons" data-pos="3" data-line="6">4</td>
+							<td class="bm_pick bm_line_6 bm_pos_4 all_bm_buttons" data-pos="4" data-line="6">5</td>
+							<td class="bm_pick bm_line_6 bm_pos_5 all_bm_buttons" data-pos="5" data-line="6">6</td>
+							<td class="bm_pick bm_line_6 bm_pos_6 all_bm_buttons" data-pos="6" data-line="6">7</td>
+							<td class="bm_pick bm_line_6 bm_pos_7 all_bm_buttons" data-pos="7" data-line="6">8</td>
+							<td class="bm_pick bm_line_6 bm_pos_8 all_bm_buttons" data-pos="8" data-line="6">9</td>
+							<td class="bm_pick bm_line_6 bm_pos_9 all_bm_buttons" data-pos="9" data-line="6">10</td>
+							<td class="hide_6 all_hide all_bm_actions" data-line="6"><img src="/blank/images/hide.png" alt="hide icon"></td>
+							<td class="show_6 all_show all_bm_actions" data-line="6"><img src="/blank/images/show.png" alt="show icon"></td>
+							<td class="nick_6 all_nicks">
+								<div class="form-item form-type-textfield form-item-field-rate-game-players-und-6-target-id">
+									<input class="user_entity_acp nick_acpl selected form-text form-autocomplete" data-delta="6" type="text" name="field_rate_game_players[und][6][target_id]" value="" maxlength="1024">
+								</div>
+							</td>
+						</tr>
+						</tbody></table>
+				</td>
+				<td width="90px" class="col3 nss">
+					<input id="fall_field_6" type="hidden" name="field_falls[und][0][value]" value="0">
+					<table class="falls_widget">
+						<tbody><tr>
+							<td data-delta="6" class="fall_click border_0">
+								<div id="falls_view_6" class="fall_0"> </div>
+							</td>
+							<td width="20px" class="remove_click border_0" data-delta="6">
+							</td>
+						</tr>
+						</tbody></table>            			</td>
+				<td id="fk_6" class="col4 fk_pick nss" data-delta="6"> </td>
+				<td class="col5 hs">
+					<input id="role_field_6" class="role_field_all" type="hidden" name="field_role[und][6][value]" value="c">
+					<div id="role_view_6" class="role" data-delta="6"> </div>
+				</td>
+				<td class="col6 hs">
+					<div class="form-item form-type-textfield form-item-field-points-und-6-value">
+						<input id="points_6" type="text" name="field_points[und][0][value]" value="" size="60" maxlength="128" class="form-text">
+					</div>
+				</td>
+				<td class="col7 hs">
+					<div class="form-item form-type-textfield form-item-field-add-points-und-6-value">
+						<input id="add_points_6" type="text" name="field_add_points[und][6][value]" value="" size="60" maxlength="128" class="form-text">
+					</div>
+				</td>
+				<td id="bp_6" class="col8 bp_select hs" data-delta="6"> </td>
+			</tr>
+			<tr id="line_7" class="active_line">
+				<td id="vpl_7" class="col1 to_vote" data-delta="7" data-invote="0">8</td>
+				<td class="col2 nss">
+					<table class="bm_nick">
+						<tbody><tr>
+							<td class="bm_pick bm_line_7 bm_pos_0 all_bm_buttons" data-pos="0" data-line="7">1</td>
+							<td class="bm_pick bm_line_7 bm_pos_1 all_bm_buttons" data-pos="1" data-line="7">2</td>
+							<td class="bm_pick bm_line_7 bm_pos_2 all_bm_buttons" data-pos="2" data-line="7">3</td>
+							<td class="bm_pick bm_line_7 bm_pos_3 all_bm_buttons" data-pos="3" data-line="7">4</td>
+							<td class="bm_pick bm_line_7 bm_pos_4 all_bm_buttons" data-pos="4" data-line="7">5</td>
+							<td class="bm_pick bm_line_7 bm_pos_5 all_bm_buttons" data-pos="5" data-line="7">6</td>
+							<td class="bm_pick bm_line_7 bm_pos_6 all_bm_buttons" data-pos="6" data-line="7">7</td>
+							<td class="bm_pick bm_line_7 bm_pos_7 all_bm_buttons" data-pos="7" data-line="7">8</td>
+							<td class="bm_pick bm_line_7 bm_pos_8 all_bm_buttons" data-pos="8" data-line="7">9</td>
+							<td class="bm_pick bm_line_7 bm_pos_9 all_bm_buttons" data-pos="9" data-line="7">10</td>
+							<td class="hide_7 all_hide all_bm_actions" data-line="7"><img src="/blank/images/hide.png" alt="hide icon"></td>
+							<td class="show_7 all_show all_bm_actions" data-line="7"><img src="/blank/images/show.png" alt="show icon"></td>
+							<td class="nick_7 all_nicks">
+								<div class="form-item form-type-textfield form-item-field-rate-game-players-und-7-target-id">
+									<input class="user_entity_acp nick_acpl selected form-text form-autocomplete" data-delta="7" type="text" name="field_rate_game_players[und][7][target_id]" value="" maxlength="1024">
+								</div>
+							</td>
+						</tr>
+						</tbody></table>
+				</td>
+				<td width="90px" class="col3 nss">
+					<input id="fall_field_7" type="hidden" name="field_falls[und][0][value]" value="0">
+					<table class="falls_widget">
+						<tbody><tr>
+							<td data-delta="7" class="fall_click border_0">
+								<div id="falls_view_7" class="fall_0"> </div>
+							</td>
+							<td width="20px" class="remove_click border_0" data-delta="7">
+							</td>
+						</tr>
+						</tbody></table>            			</td>
+				<td id="fk_7" class="col4 fk_pick nss" data-delta="7"> </td>
+				<td class="col5 hs">
+					<input id="role_field_7" class="role_field_all" type="hidden" name="field_role[und][7][value]" value="c">
+					<div id="role_view_7" class="role" data-delta="7"> </div>
+				</td>
+				<td class="col6 hs">
+					<div class="form-item form-type-textfield form-item-field-points-und-7-value">
+						<input id="points_7" type="text" name="field_points[und][0][value]" value="" size="60" maxlength="128" class="form-text">
+					</div>
+				</td>
+				<td class="col7 hs">
+					<div class="form-item form-type-textfield form-item-field-add-points-und-7-value">
+						<input id="add_points_7" type="text" name="field_add_points[und][7][value]" value="" size="60" maxlength="128" class="form-text">
+					</div>
+				</td>
+				<td id="bp_7" class="col8 bp_select hs" data-delta="7"> </td>
+			</tr>
+			<tr id="line_8" class="active_line">
+				<td id="vpl_8" class="col1 to_vote" data-delta="8" data-invote="0">9</td>
+				<td class="col2 nss">
+					<table class="bm_nick">
+						<tbody><tr>
+							<td class="bm_pick bm_line_8 bm_pos_0 all_bm_buttons" data-pos="0" data-line="8">1</td>
+							<td class="bm_pick bm_line_8 bm_pos_1 all_bm_buttons" data-pos="1" data-line="8">2</td>
+							<td class="bm_pick bm_line_8 bm_pos_2 all_bm_buttons" data-pos="2" data-line="8">3</td>
+							<td class="bm_pick bm_line_8 bm_pos_3 all_bm_buttons" data-pos="3" data-line="8">4</td>
+							<td class="bm_pick bm_line_8 bm_pos_4 all_bm_buttons" data-pos="4" data-line="8">5</td>
+							<td class="bm_pick bm_line_8 bm_pos_5 all_bm_buttons" data-pos="5" data-line="8">6</td>
+							<td class="bm_pick bm_line_8 bm_pos_6 all_bm_buttons" data-pos="6" data-line="8">7</td>
+							<td class="bm_pick bm_line_8 bm_pos_7 all_bm_buttons" data-pos="7" data-line="8">8</td>
+							<td class="bm_pick bm_line_8 bm_pos_8 all_bm_buttons" data-pos="8" data-line="8">9</td>
+							<td class="bm_pick bm_line_8 bm_pos_9 all_bm_buttons" data-pos="9" data-line="8">10</td>
+							<td class="hide_8 all_hide all_bm_actions" data-line="8"><img src="/blank/images/hide.png" alt="hide icon"></td>
+							<td class="show_8 all_show all_bm_actions" data-line="8"><img src="/blank/images/show.png" alt="show icon"></td>
+								<div class="form-item form-type-textfield form-item-field-rate-game-players-und-8-target-id">
+									<input class="user_entity_acp nick_acpl selected form-text form-autocomplete" data-delta="8" type="text" name="field_rate_game_players[und][8][target_id]" value="" maxlength="1024">
+								</div>
+							</td>
+						</tr>
+						</tbody></table>
+				</td>
+				<td width="90px" class="col3 nss">
+					<input id="fall_field_8" type="hidden" name="field_falls[und][0][value]" value="0">
+					<table class="falls_widget">
+						<tbody><tr>
+							<td data-delta="8" class="fall_click border_0">
+								<div id="falls_view_8" class="fall_0"> </div>
+							</td>
+							<td width="20px" class="remove_click border_0" data-delta="8">
+							</td>
+						</tr>
+						</tbody></table>            			</td>
+				<td id="fk_8" class="col4 fk_pick nss" data-delta="8"> </td>
+				<td class="col5 hs">
+					<input id="role_field_8" class="role_field_all" type="hidden" name="field_role[und][8][value]" value="c">
+					<div id="role_view_8" class="role" data-delta="8"> </div>
+				</td>
+				<td class="col6 hs">
+					<div class="form-item form-type-textfield form-item-field-points-und-8-value">
+						<input id="points_8" type="text" name="field_points[und][0][value]" value="" size="60" maxlength="128" class="form-text">
+					</div>
+				</td>
+				<td class="col7 hs">
+					<div class="form-item form-type-textfield form-item-field-add-points-und-8-value">
+						<input id="add_points_8" type="text" name="field_add_points[und][8][value]" value="" size="60" maxlength="128" class="form-text">
+					</div>
+				</td>
+				<td id="bp_8" class="col8 bp_select hs" data-delta="8"> </td>
+			</tr>
+			<tr id="line_9" class="active_line">
+				<td id="vpl_9" class="col1 to_vote" data-delta="9" data-invote="0">10</td>
+				<td class="col2 nss">
+					<table class="bm_nick">
+						<tbody><tr>
+							<td class="bm_pick bm_line_9 bm_pos_0 all_bm_buttons" data-pos="0" data-line="9">1</td>
+							<td class="bm_pick bm_line_9 bm_pos_1 all_bm_buttons" data-pos="1" data-line="9">2</td>
+							<td class="bm_pick bm_line_9 bm_pos_2 all_bm_buttons" data-pos="2" data-line="9">3</td>
+							<td class="bm_pick bm_line_9 bm_pos_3 all_bm_buttons" data-pos="3" data-line="9">4</td>
+							<td class="bm_pick bm_line_9 bm_pos_4 all_bm_buttons" data-pos="4" data-line="9">5</td>
+							<td class="bm_pick bm_line_9 bm_pos_5 all_bm_buttons" data-pos="5" data-line="9">6</td>
+							<td class="bm_pick bm_line_9 bm_pos_6 all_bm_buttons" data-pos="6" data-line="9">7</td>
+							<td class="bm_pick bm_line_9 bm_pos_7 all_bm_buttons" data-pos="7" data-line="9">8</td>
+							<td class="bm_pick bm_line_9 bm_pos_8 all_bm_buttons" data-pos="8" data-line="9">9</td>
+							<td class="bm_pick bm_line_9 bm_pos_9 all_bm_buttons" data-pos="9" data-line="9">10</td>
+							<td class="hide_9 all_hide all_bm_actions" data-line="9"><img src="/blank/images/hide.png" alt="hide icon"></td>
+							<td class="show_9 all_show all_bm_actions" data-line="9"><img src="/blank/images/show.png" alt="show icon"></td>
+							<td class="nick_9 all_nicks">
+								<div class="form-item form-type-textfield form-item-field-rate-game-players-und-9-target-id">
+									<input class="user_entity_acp nick_acpl selected form-text form-autocomplete" data-delta="9" type="text" name="field_rate_game_players[und][9][target_id]" value="" maxlength="1024">
+								</div>
+							</td>
+						</tr>
+						</tbody></table>
+				</td>
+				<td width="90px" class="col3 nss">
+					<input id="fall_field_9" type="hidden" name="field_falls[und][0][value]" value="0">
+					<table class="falls_widget">
+						<tbody><tr>
+							<td data-delta="9" class="fall_click border_0">
+								<div id="falls_view_9" class="fall_0"> </div>
+							</td>
+							<td width="20px" class="remove_click border_0" data-delta="9">
+							</td>
+						</tr>
+						</tbody></table>            			</td>
+				<td id="fk_9" class="col4 fk_pick nss" data-delta="9"> </td>
+				<td class="col5 hs">
+					<input id="role_field_9" class="role_field_all" type="hidden" name="field_role[und][9][value]" value="c">
+					<div id="role_view_9" class="role" data-delta="9"> </div>
+				</td>
+				<td class="col6 hs">
+					<div class="form-item form-type-textfield form-item-field-points-und-9-value">
+						<input id="points_9" type="text" name="field_points[und][0][value]" value="" size="60" maxlength="128" class="form-text">
+					</div>
+				</td>
+				<td class="col7 hs">
+					<div class="form-item form-type-textfield form-item-field-add-points-und-9-value">
+						<input id="add_points_9" type="text" name="field_add_points[und][9][value]" value="" size="60" maxlength="128" class="form-text">
+					</div>
+				</td>
+				<td id="bp_9" class="col8 bp_select hs" data-delta="9"> </td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+	<div id="firstKillModal" class="modal">
+		<div class="modal-content">
+			<h3>Выберите первого убитого</h3>
+			<div id="firstKillOptions"></div>
+		</div>
+	</div>
+	<div class="vote-wrapper">
+		<div class="vote-table-wrapper">
+			<table class="vote-table" cellspacing="5">
+				<tbody>
+				<tr id="vt_0" class="voute_line" data-act="0" data-line="0">
+					<td id="vv_0" class="voute_p" data-delta="0"></td>
+					<td class="vote_butt" data-line="0" data-pos="0">1</td>
+					<td class="vote_butt" data-line="0" data-pos="1">2</td>
+					<td class="vote_butt" data-line="0" data-pos="2">3</td>
+					<td class="vote_butt" data-line="0" data-pos="3">4</td>
+					<td class="vote_butt" data-line="0" data-pos="4">5</td>
+					<td class="vote_butt" data-line="0" data-pos="5">6+</td>
+				</tr>
+				<tr id="vt_1" class="voute_line" data-act="0" data-line="1">
+					<td id="vv_1" class="voute_p" data-delta="1"></td>
+					<td class="vote_butt" data-line="1" data-pos="0">1</td>
+					<td class="vote_butt" data-line="1" data-pos="1">2</td>
+					<td class="vote_butt" data-line="1" data-pos="2">3</td>
+					<td class="vote_butt" data-line="1" data-pos="3">4</td>
+					<td class="vote_butt" data-line="1" data-pos="4">5</td>
+					<td class="vote_butt" data-line="1" data-pos="5">6+</td>
+				</tr>
+				<tr id="vt_2" class="voute_line" data-act="0" data-line="2">
+					<td id="vv_2" class="voute_p" data-delta="2"></td>
+					<td class="vote_butt" data-line="2" data-pos="0">1</td>
+					<td class="vote_butt" data-line="2" data-pos="1">2</td>
+					<td class="vote_butt" data-line="2" data-pos="2">3</td>
+					<td class="vote_butt" data-line="2" data-pos="3">4</td>
+					<td class="vote_butt" data-line="2" data-pos="4">5</td>
+					<td class="vote_butt" data-line="2" data-pos="5">6+</td>
+				</tr>
+				<tr id="vt_3" class="voute_line" data-act="0" data-line="3">
+					<td id="vv_3" class="voute_p" data-delta="3"></td>
+					<td class="vote_butt" data-line="3" data-pos="0">1</td>
+					<td class="vote_butt" data-line="3" data-pos="1">2</td>
+					<td class="vote_butt" data-line="3" data-pos="2">3</td>
+					<td class="vote_butt" data-line="3" data-pos="3">4</td>
+					<td class="vote_butt" data-line="3" data-pos="4">5</td>
+					<td class="vote_butt" data-line="3" data-pos="5">6+</td>
+				</tr>
+				<tr id="vt_4" class="voute_line" data-act="0" data-line="4">
+					<td id="vv_4" class="voute_p" data-delta="4"></td>
+					<td class="vote_butt" data-line="4" data-pos="0">1</td>
+					<td class="vote_butt" data-line="4" data-pos="1">2</td>
+					<td class="vote_butt" data-line="4" data-pos="2">3</td>
+					<td class="vote_butt" data-line="4" data-pos="3">4</td>
+					<td class="vote_butt" data-line="4" data-pos="4">5</td>
+					<td class="vote_butt" data-line="4" data-pos="5">6+</td>
+				</tr>
+				<tr id="vt_5" class="voute_line" data-act="0" data-line="5">
+					<td id="vv_5" class="voute_p" data-delta="5"></td>
+					<td class="vote_butt" data-line="5" data-pos="0">1</td>
+					<td class="vote_butt" data-line="5" data-pos="1">2</td>
+					<td class="vote_butt" data-line="5" data-pos="2">3</td>
+					<td class="vote_butt" data-line="5" data-pos="3">4</td>
+					<td class="vote_butt" data-line="5" data-pos="4">5</td>
+					<td class="vote_butt" data-line="5" data-pos="5">6+</td>
+				</tr>
+				<tr id="vt_6" class="voute_line" data-act="0" data-line="6">
+					<td id="vv_6" class="voute_p" data-delta="6"></td>
+					<td class="vote_butt" data-line="6" data-pos="0">1</td>
+					<td class="vote_butt" data-line="6" data-pos="1">2</td>
+					<td class="vote_butt" data-line="6" data-pos="2">3</td>
+					<td class="vote_butt" data-line="6" data-pos="3">4</td>
+					<td class="vote_butt" data-line="6" data-pos="4">5</td>
+					<td class="vote_butt" data-line="6" data-pos="5">6+</td>
+				</tr>
+				<tr id="vt_7" class="voute_line" data-act="0" data-line="7">
+					<td id="vv_7" class="voute_p" data-delta="7"></td>
+					<td class="vote_butt" data-line="7" data-pos="0">1</td>
+					<td class="vote_butt" data-line="7" data-pos="1">2</td>
+					<td class="vote_butt" data-line="7" data-pos="2">3</td>
+					<td class="vote_butt" data-line="7" data-pos="3">4</td>
+					<td class="vote_butt" data-line="7" data-pos="4">5</td>
+					<td class="vote_butt" data-line="7" data-pos="5">6+</td>
+				</tr>
+				<tr id="vt_8" class="voute_line" data-act="0" data-line="8">
+					<td id="vv_8" class="voute_p" data-delta="8"></td>
+					<td class="vote_butt" data-line="8" data-pos="0">1</td>
+					<td class="vote_butt" data-line="8" data-pos="1">2</td>
+					<td class="vote_butt" data-line="8" data-pos="2">3</td>
+					<td class="vote_butt" data-line="8" data-pos="3">4</td>
+					<td class="vote_butt" data-line="8" data-pos="4">5</td>
+					<td class="vote_butt" data-line="8" data-pos="5">6+</td>
+				</tr>
+				<tr id="vt_9" class="voute_line" data-act="0" data-line="9">
+					<td id="vv_9" class="voute_p" data-delta="9"></td>
+					<td class="vote_butt" data-line="9" data-pos="0">1</td>
+					<td class="vote_butt" data-line="9" data-pos="1">2</td>
+					<td class="vote_butt" data-line="9" data-pos="2">3</td>
+					<td class="vote_butt" data-line="9" data-pos="3">4</td>
+					<td class="vote_butt" data-line="9" data-pos="4">5</td>
+					<td class="vote_butt" data-line="9" data-pos="5">6+</td>
+				</tr>
+				<tr id="save_day">
+					<td class="voute_line" colspan="7">Сохранить день</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div id="vote_res" data-line="0">
+		<div id="vr_l0" data-day="0" style="display:none;" class="vote_day">
+		</div>
+	</div>
+</div>
+</body>
+<div class="button-container">
+	<button class="menu-cont-button" id="settingsToggle">Роли и баллы</button>
+	<button class="menu-cont-button" id="shuffleButton">Рассадка</button>
+	<button class="menu-cont-button" id="distributeButton">Распределить роли</button>
+	<button type="button" class="menu-cont-button" id="mafia">Победа Мафии</button>
+	<button type="button" class="menu-cont-button" id="citizens">Победа Мирных</button>
+
+
+	<button class="menu-cont-button" id="resetAllForms">Новая игра</button>
+</div>
+	</div>
+</div>
+	</div>
+</div>
+</div>
+</div>
+<script>
+	let isFirstDistribution = true;
+	function handleDistribution() {
+		if (isFirstDistribution) {
+			distributeRoles();
+			isFirstDistribution = false;
+		} else {
+			if (confirm('Вы действительно хотите перераздачу?')) {
+				distributeRoles();
+			}
+		}
+	}
+	document.getElementById('distributeButton').addEventListener('click', handleDistribution);
+
+	function distributeRoles() {
+		let roles = [
+			{display: 'Д', value: 'd'},  // Дон
+			{display: 'М', value: 'm'},  // Мафия
+			{display: 'М', value: 'm'},  // Мафия
+			{display: 'Ш', value: 's'},  // Шериф
+			{display: '', value: 'c'},   // Мирные
+			{display: '', value: 'c'},
+			{display: '', value: 'c'},
+			{display: '', value: 'c'},
+			{display: '', value: 'c'},
+			{display: '', value: 'c'}
+		];
+		function shuffleArray(array) {
+			for (let i = array.length - 1; i > 0; i--) {
+				const j = Math.floor(Math.random() * (i + 1));
+				[array[i], array[j]] = [array[j], array[i]];
+			}
+			return array;
+		}
+		const shuffledRoles = shuffleArray(roles);
+		for(let i = 0; i < 10; i++) {
+			document.getElementById(`role_field_${i}`).value = shuffledRoles[i].value;
+			const roleView = document.getElementById(`role_view_${i}`);
+			roleView.textContent = shuffledRoles[i].display;
+			roleView.className = 'role';
+		}
+	}
+</script>
+<script>$(document).ready(function() {
+	$('#mafia, #citizens').click(function() {
+		setTimeout(function() {
+			for(let i = 0; i < 10; i++) {
+				updateTotal(i);
+			}
+		}, 0);
+	});
+});
+</script>
+<script>document.getElementById('settingsToggle').addEventListener('click', function() {
+	const elements = document.querySelectorAll('.hs');
+	elements.forEach(el => {
+		el.style.display = el.style.display === 'none' ? 'table-cell' : 'none';
+	});
+	this.textContent = this.textContent === "Скрыть роли и баллы" ?
+			"Показать роли и баллы" :
+			"Скрыть роли и баллы";
+});
+</script>
+<script>
+	function shuffleNicknames() {
+// Получаем все поля с никнеймами
+const nicknameInputs = document.querySelectorAll('.nick_acpl');
+
+// Собираем текущие значения
+let nicknames = Array.from(nicknameInputs).map(input => input.value);
+
+// Перемешиваем массив
+for (let i = nicknames.length - 1; i > 0; i--) {
+const j = Math.floor(Math.random() * (i + 1));
+[nicknames[i], nicknames[j]] = [nicknames[j], nicknames[i]];
+}
+
+// Присваиваем новые значения
+nicknameInputs.forEach((input, index) => {
+input.value = nicknames[index];
+});
+}
+
+// Добавляем обработчик события
+document.getElementById('shuffleButton').addEventListener('click', shuffleNicknames);
+
+	document.getElementById('shuffleButton').addEventListener('click', function() {
+		if (confirm('Вы действительно хотите рассадить игроков?')) {
+			// Сброс ролей
+			for(let i = 0; i < 10; i++) {
+				document.getElementById(`role_field_${i}`).value = 'c';
+				document.getElementById(`role_view_${i}`).textContent = '';
+				document.getElementById(`role_view_${i}`).className = 'role';
+			}
+
+			// Рассадка игроков
+			const nickInputs = document.querySelectorAll('.nick_acpl');
+			const nicknames = Array.from(nickInputs).map(input => input.value);
+			const shuffled = nicknames.sort(() => Math.random() - 0.5);
+
+			nickInputs.forEach((input, index) => {
+				input.value = shuffled[index];
+			});
+		}
+	});
+</script>
+<script>document.getElementById('resetAllForms').addEventListener('click', function() {
+	localStorage.clear(); // Очищаем все данные из localStorage
+	location.reload(); // Перезагружаем страницу
+});</script>
+<script>
+	$('#mafia, #citizens').click(function() {
+		setTimeout(function() {
+			for(let i = 0; i < 10; i++) {
+				updateTotal(i);
+			}
+		}, 0);
+	});
+</script>
+
+</section>
+</div>
+</section>
+</div>
+</body></html>
