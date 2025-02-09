@@ -1,6 +1,6 @@
+// Function to handle kill order
 let killOrder = [];
 
-// Функция для обработки порядка убийств
 function handleKillOrder(delta) {
     if (!killOrder.includes(delta)) {
         killOrder.push(delta);
@@ -8,33 +8,8 @@ function handleKillOrder(delta) {
         document.getElementById(`fk_${delta}`).textContent = order;
     }
 }
-$(document).ready(function() {
-    $('.to_vote').on('click', function() {
-        const delta = $(this).data('delta');
-        put_to_vote(delta);
-    });
 
-    $('.vote-table td').on('click', function() {
-        if (!$(this).hasClass('disabled')) {
-            const value = $(this).text();
-            $(this).addClass('vote_st');
-        }
-    });
-});
-// Функция для обработки голосования
-$(document).ready(function() {
-    $('.to_vote').on('click', function() {
-        const delta = $(this).data('delta');
-        put_to_vote(delta);
-    });
-
-    $('.vote-table td').on('click', function() {
-        if (!$(this).hasClass('disabled')) {
-            $(this).addClass('vote_st');
-        }
-    });
-});
-
+// Function to create the voting table
 function createTable() {
     const table = document.createElement('table');
     table.id = 'game_settings';
@@ -42,7 +17,7 @@ function createTable() {
 
     const tbody = document.createElement('tbody');
 
-    // Создаем заголовок таблицы
+    // Create table header row
     const headerRow = document.createElement('tr');
     const headers = ['№', 'Никнейм', 'Фолы', '', 'Роль', 'Баллы', 'Доп', 'Итог'];
     headers.forEach((headerText, index) => {
@@ -66,13 +41,13 @@ function createTable() {
     });
     tbody.appendChild(headerRow);
 
-    // Создаем строки таблицы
+    // Create table rows
     for (let i = 0; i < 10; i++) {
         const row = document.createElement('tr');
         row.id = `line_${i}`;
         row.className = 'active_line';
 
-        // Номер игрока
+        // Player number
         const numberCell = document.createElement('td');
         numberCell.id = `vpl_${i}`;
         numberCell.className = 'col1 to_vote';
@@ -86,7 +61,7 @@ function createTable() {
 
         row.appendChild(numberCell);
 
-        // Никнейм
+        // Nickname
         const nicknameCell = document.createElement('td');
         nicknameCell.className = 'col2 nss';
         const nicknameTable = document.createElement('table');
@@ -105,13 +80,13 @@ function createTable() {
         nicknameCell.appendChild(nicknameTable);
         row.appendChild(nicknameCell);
 
-        // Фолы
+        // Foul
         const fallsCell = document.createElement('td');
         fallsCell.className = 'col3 nss';
         fallsCell.appendChild(createFallsWidget(i));
         row.appendChild(fallsCell);
 
-        // Ячейка для порядка убийств
+        // Kill order
         const iconCell = document.createElement('td');
         iconCell.id = `fk_${i}`;
         iconCell.className = 'col4 fk_pick nss';
@@ -123,25 +98,25 @@ function createTable() {
 
         row.appendChild(iconCell);
 
-        // Роль
+        // Role
         const roleCell = document.createElement('td');
         roleCell.className = 'col5 hs';
         roleCell.appendChild(createRoleInput(i));
         row.appendChild(roleCell);
 
-        // Баллы
+        // Points
         const pointsCell = document.createElement('td');
         pointsCell.className = 'col6 hs';
         pointsCell.appendChild(createPointsInput(i));
         row.appendChild(pointsCell);
 
-        // Дополнительные баллы
+        // Additional points
         const addPointsCell = document.createElement('td');
         addPointsCell.className = 'col7 hs';
         addPointsCell.appendChild(createAddPointsInput(i));
         row.appendChild(addPointsCell);
 
-        // Итог
+        // Total
         const totalCell = document.createElement('td');
         totalCell.id = `bp_${i}`;
         totalCell.className = 'col8 bp_select hs';
@@ -289,11 +264,8 @@ function createAddPointsInput(delta) {
     return container;
 }
 
-// Добавляем таблицу в DOM
+// Add the table to the DOM
 document.addEventListener('DOMContentLoaded', () => {
     const tableWrapper = document.querySelector('.main-game-table-wrapper');
     tableWrapper.appendChild(createTable());
 });
-
-// Делаем функцию put_to_vote доступной в глобальной области видимости
-window.put_to_vote = put_to_vote;
