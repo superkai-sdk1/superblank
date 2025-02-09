@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Mafia Game</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+	<link rel="stylesheet" href="css/mafia.css">
+	<link rel="stylesheet" href="css/styles.css">
+	<script src="js/game_actions.js"></script>
+	<script src="js/table.js"></script>
+	<link rel="manifest" href="/manifest.json">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="theme-color" content="#000000">
+	<link rel="apple-touch-icon" href="/images/icon/apple-touch-icon.png">
+	<link rel="android-chrome-192x192" href="/images/icon/android-chrome-192x192.png">
+</head>
+<body>
+	<script>
+		$(function () {
+			const nicknames = [
+				"AMOR", "Asia", "Alien", "Alinellas", "Animag", "Bittir", "Black", "Black Jack", "DULASHA", "Dill",
+				"Dizi", "Dushman", "EL", "Fox", "Gremlin", "Geralt", "Gestalter", "Hisoka", "Ivory", "Kai",
+				"LIRICA", "Miamore", "Mulan", "Neo", "ProDoc", "Shinobi", "Soza", "Saul Goodman", "Scorpion",
+				"TONI MONTANA", "Tam", "ZONDR", "evil", "finnick", "Йору", "Адвокат", "Альтман", "Альфа", "Асур",
+				"Бес", "Биполярка", "Булочка", "Валькирия", "Великая", "228Данте69", "Даня", "Дита", "Добрый",
+				"Дэва", "Ева", "Завклубом", "Зайка", "Зара", "Знаток", "Зёма", "Кари", "Кир", "Кира", "Кобра",
+				"Кову", "Копибара", "Коссмос", "Красавчик", "Лазер", "Лестер", "Лимонная долька", "Белый склон",
+				"Луи", "Мрак", "Маркетолог", "Марсело", "Мау", "Мафия", "Минахор", "Нафиля", "Окси", "Пантера",
+				"Паранойа", "Подкова", "Подсолнух", "Психолог", "Рокфор", "Руди", "Скорпион", "Саид", "Саймон",
+				"Салливан", "Сатору", "Светлячек", "Сирена", "Смурфик", "Статистика", "Темир", "Типсон",
+				"Томас Шелби", "Учитель", "Феникс", "Физик", "Фил", "Хейтер", "Штиль", "Элис"
+			];
+
+			$(".user_entity_acp").autocomplete({
+				source: nicknames
+			});
+		});
+	</script>
+	<div class="timer-container">
+		<div id="timer-display" class="timer-display">00:00</div>
+		<div class="timer-controls">
+			<button class="material-button large-button" onclick="startTimer(60)">1 мин</button>
+			<button class="material-button large-button" onclick="startTimer(30)">30 сек</button>
+			<button class="material-button large-button" onclick="pauseTimer()">Пауза</button>
+			<button class="material-button large-button" onclick="resumeTimer()">Продолжить</button>
+			<button class="material-button large-button" onclick="stopTimer()">Стоп</button>
+		</div>
+	</div>
+	<script>
+		document.querySelectorAll('.vote_butt').forEach(button => {
+			button.addEventListener('click', function () {
+				// Удаляем класс 'selected' у всех кнопок
+				document.querySelectorAll('.vote_butt').forEach(btn => btn.classList.remove('selected'));
+
+				// Добавляем класс 'selected' к нажатой кнопке
+				this.classList.add('selected');
+
+				// Отображаем таблицу голосования
+				document.querySelector('.vote-table').style.display = 'table';
+			});
+		});
+	</script>
+	<style>
+		.vote-table {
+			display: none; /* Изначально скрываем таблицу */
+		}
+
+		.vote_butt.selected {
+			background-color: yellow; /* Пример стиля для выбранной кнопки */
+		}
+	</style>
+
+	<div>
+		<div class="main-game-table-wrapper table-wrapper"></div> <!-- Контейнер для таблицы -->
+		<div id="firstKillModal" class="modal">
+			<div class="modal-content">
+				<h3>Выберите первого убитого</h3>
+				<div id="firstKillOptions"></div>
+			</div>
+		</div>
+		<div class="vote-wrapper">
+			<div class="vote-table-wrapper">
+				<table class="vote-table" cellspacing="5">
+					<tbody>
+						<tr id="vt_0" class="voute_line" data-act="0" data-line="0">
+							<td id="vv_0" class="voute_p" data-delta="0"></td>
+							<td class="vote_butt" data-line="0" data-pos="0">1</td>
+							<td class="vote_butt" data-line="0" data-pos="1">2</td>
+							<td class="vote_butt" data-line="0" data-pos="2">3</td>
+							<td class="vote_butt" data-line="0" data-pos="3">4</td>
+							<td class="vote_butt" data-line="0" data-pos="4">5</td>
+							<td class="vote_butt" data-line="0" data-pos="5">6+</td>
+						</tr>
+						<tr id="vt_1" class="voute_line" data-act="0" data-line="1">
+							<td id="vv_1" class="voute_p" data-delta="1"></td>
+							<td class="vote_butt" data-line="1" data-pos="0">1</td>
+							<td class="vote_butt" data-line="1" data-pos="1">2</td>
+							<td class="vote_butt" data-line="1" data-pos="2">3</td>
+							<td class="vote_butt" data-line="1" data-pos="3">4</td>
+							<td class="vote_butt" data-line="1" data-pos="4">5</td>
+							<td class="vote_butt" data-line="1" data-pos="5">6+</td>
+						</tr>
+						<tr id="vt_2" class="voute_line" data-act="0" data-line="2">
+							<td id="vv_2" class="voute_p" data-delta="2"></td>
+							<td class="vote_butt" data-line="2" data-pos="0">1</td>
+							<td class="vote_butt" data-line="2" data-pos="1">2</td>
+							<td class="vote_butt" data-line="2" data-pos="2">3</td>
+							<td class="vote_butt" data-line="2" data-pos="3">4</td>
+							<td class="vote_butt" data-line="2" data-pos="4">5</td>
+							<td class="vote_butt" data-line="2" data-pos="5">6+</td>
+						</tr>
+						<tr id="vt_3" class="voute_line" data-act="0" data-line="3">
+							<td id="vv_3" class="voute_p" data-delta="3"></td>
+							<td class="vote_butt" data-line="3" data-pos="0">1</td>
+							<td class="vote_butt" data-line="3" data-pos="1">2</td>
+							<td class="vote_butt" data-line="3" data-pos="2">3</td>
+							<td class="vote_butt" data-line="3" data-pos="3">4</td>
+							<td class="vote_butt" data-line="3" data-pos="4">5</td>
+							<td class="vote_butt" data-line="3" data-pos="5">6+</td>
+						</tr>
+						<tr id="vt_4" class="voute_line" data-act="0" data-line="4">
+							<td id="vv_4" class="voute_p" data-delta="4"></td>
+							<td class="vote_butt" data-line="4" data-pos="0">1</td>
+							<td class="vote_butt" data-line="4" data-pos="1">2</td>
+							<td class="vote_butt" data-line="4" data-pos="2">3</td>
+							<td class="vote_butt" data-line="4" data-pos="3">4</td>
+							<td class="vote_butt" data-line="4" data-pos="4">5</td>
+							<td class="vote_butt" data-line="4" data-pos="5">6+</td>
+						</tr>
+						<tr id="vt_5" class="voute_line" data-act="0" data-line="5">
+							<td id="vv_5" class="voute_p" data-delta="5"></td>
+							<td class="vote_butt" data-line="5" data-pos="0">1</td>
+							<td class="vote_butt" data-line="5" data-pos="1">2</td>
+							<td class="vote_butt" data-line="5" data-pos="2">3</td>
+							<td class="vote_butt" data-line="5" data-pos="3">4</td>
+							<td class="vote_butt" data-line="5" data-pos="4">5</td>
+							<td class="vote_butt" data-line="5" data-pos="5">6+</td>
+						</tr>
+						<tr id="vt_6" class="voute_line" data-act="0" data-line="6">
+							<td id="vv_6" class="voute_p" data-delta="6"></td>
+							<td class="vote_butt" data-line="6" data-pos="0">1</td>
+							<td class="vote_butt" data-line="6" data-pos="1">2</td>
+							<td class="vote_butt" data-line="6" data-pos="2">3</td>
+							<td class="vote_butt" data-line="6" data-pos="3">4</td>
+							<td class="vote_butt" data-line="6" data-pos="4">5</td>
+							<td class="vote_butt" data-line="6" data-pos="5">6+</td>
+						</tr>
+						<tr id="vt_7" class="voute_line" data-act="0" data-line="7">
+							<td id="vv_7" class="voute_p" data-delta="7"></td>
+							<td class="vote_butt" data-line="7" data-pos="0">1</td>
+							<td class="vote_butt" data-line="7" data-pos="1">2</td>
+							<td class="vote_butt" data-line="7" data-pos="2">3</td>
+							<td class="vote_butt" data-line="7" data-pos="3">4</td>
+							<td class="vote_butt" data-line="7" data-pos="4">5</td>
+							<td class="vote_butt" data-line="7" data-pos="5">6+</td>
+						</tr>
+						<tr id="vt_8" class="voute_line" data-act="0" data-line="8">
+							<td id="vv_8" class="voute_p" data-delta="8"></td>
+							<td class="vote_butt" data-line="8" data-pos="0">1</td>
+							<td class="vote_butt" data-line="8" data-pos="1">2</td>
+							<td class="vote_butt" data-line="8" data-pos="2">3</td>
+							<td class="vote_butt" data-line="8" data-pos="3">4</td>
+							<td class="vote_butt" data-line="8" data-pos="4">5</td>
+							<td class="vote_butt" data-line="8" data-pos="5">6+</td>
+						</tr>
+						<tr id="vt_9" class="voute_line" data-act="0" data-line="9">
+							<td id="vv_9" class="voute_p" data-delta="9"></td>
+							<td class="vote_butt" data-line="9" data-pos="0">1</td>
+							<td class="vote_butt" data-line="9" data-pos="1">2</td>
+							<td class="vote_butt" data-line="9" data-pos="2">3</td>
+							<td class="vote_butt" data-line="9" data-pos="3">4</td>
+							<td class="vote_butt" data-line="9" data-pos="4">5</td>
+							<td class="vote_butt" data-line="9" data-pos="5">6+</td>
+						</tr>
+						<tr id="save_day">
+							<td class="voute_line" colspan="7">Сохранить день</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div id="vote_res" data-line="0">
+			<div id="vr_l0" data-day="0" style="display:none;" class="vote_day"></div>
+		</div>
+	</div>
+	<div class="button-container">
+		<button class="menu-cont-button" id="settingsToggle">Роли и баллы</button>
+		<button class="menu-cont-button" id="shuffleButton">Рассадка</button>
+		<button class="menu-cont-button" id="distributeButton">Распределить роли</button>
+		<button type="button" class="menu-cont-button" id="mafia">Победа Мафии</button>
+		<button type="button" class="menu-cont-button" id="citizens">Победа Мирных</button>
+		<button class="menu-cont-button" id="resetAllForms">Новая игра</button>
+	</div>
+	<script>
+		let isFirstDistribution = true;
+		function handleDistribution() {
+			if (isFirstDistribution) {
+				distributeRoles();
+				isFirstDistribution = false;
+			} else {
+				if (confirm('Вы действительно хотите перераздачу?')) {
+					distributeRoles();
+				}
+			}
+		}
+		document.getElementById('distributeButton').addEventListener('click', handleDistribution);
+
+		function distributeRoles() {
+			let roles = [
+				{ display: 'Д', value: 'd' },  // Дон
+				{ display: 'М', value: 'm' },  // Мафия
+				{ display: 'М', value: 'm' },  // Мафия
+				{ display: 'Ш', value: 's' },  // Шериф
+				{ display: '', value: 'c' },   // Мирные
+				{ display: '', value: 'c' },
+				{ display: '', value: 'c' },
+				{ display: '', value: 'c' },
+				{ display: '', value: 'c' },
+				{ display: '', value: 'c' }
+			];
+			function shuffleArray(array) {
+				for (let i = array.length - 1; i > 0; i--) {
+					const j = Math.floor(Math.random() * (i + 1));
+					[array[i], array[j]] = [array[j], array[i]];
+				}
+				return array;
+			}
+			const shuffledRoles = shuffleArray(roles);
+			for (let i = 0; i < 10; i++) {
+				document.getElementById(`role_field_${i}`).value = shuffledRoles[i].value;
+				const roleView = document.getElementById(`role_view_${i}`);
+				roleView.textContent = shuffledRoles[i].display;
+				roleView.className = 'role';
+			}
+		}
+	</script>
+	<script>
+		document.getElementById('settingsToggle').addEventListener('click', function () {
+			const elements = document.querySelectorAll('.hs');
+			elements.forEach(el => {
+				el.style.display = el.style.display === 'none' ? 'table-cell' : 'none';
+			});
+			this.textContent = this.textContent === "Скрыть роли и баллы" ?
+				"Показать роли и баллы" :
+				"Скрыть роли и баллы";
+		});
+	</script>
+	<script>
+		function shuffleNicknames() {
+			const nicknameInputs = document.querySelectorAll('.nick_acpl');
+			let nicknames = Array.from(nicknameInputs).map(input => input.value);
+
+			for (let i = nicknames.length - 1; i > 0; i--) {
+				const j = Math.floor(Math.random() * (i + 1));
+				[nicknames[i], nicknames[j]] = [nicknames[j], nicknames[i]];
+			}
+
+			nicknameInputs.forEach((input, index) => {
+				input.value = nicknames[index];
+			});
+		}
+
+		document.getElementById('shuffleButton').addEventListener('click', shuffleNicknames);
+
+		document.getElementById('resetAllForms').addEventListener('click', function () {
+			localStorage.clear();
+			location.reload();
+		});
+	</script>
+</body>
+</html>
