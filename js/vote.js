@@ -1,10 +1,8 @@
 (function($){
+    let saveDayCalled = false; // Флаг для предотвращения многократного вызова
+
     function put_to_vote(delta) {
         var pos = $('.voute_line[data-act="1"]').length;
-        if(pos == 0){
-            $('.vote-table').css('display', 'table');
-            $('.vote-table-mirror').css('display', 'table');
-        }
         var line = $('#vt_'+pos);
         var view = $('#vv_'+pos);
         var dv = $('#dv_'+pos);
@@ -12,11 +10,11 @@
         var butt = $('#save_day');
         if($(pl).attr('data-invote') == 0){
             $(pl).attr('data-invote', '1');
-            $(view).html(delta+1);
+            $(view).html($(view).html() + (view.html() ? ", " : "") + (delta+1));
             $(line).attr('data-act', '1');
             $(line).css('display', 'table-row');
             $(dv).css('display', 'table-cell');
-            $(dv).html(delta+1);
+            $(dv).html($(dv).html() + (dv.html() ? ", " : "") + (delta+1));
             if($(butt).css('display') == 'none'){
                 $(butt).css('display', 'table-row');
             }
@@ -25,23 +23,23 @@
 
     function rem_from_vote(delta){
         var pos = $('.voute_line[data-act="1"]').length - 1;
-        if(pos == 0){
-            $('.vote-table').css('display', 'none');
-            $('.vote-table-mirror').css('display', 'none');
-        }
         var view = $('#vv_'+pos);
-        if($(view).html() == delta){
-            delta -= 1;
-            var pl = $('#vpl_'+delta);
-            var line = $('#vt_'+pos);
-            var dv = $('#dv_'+pos);
-            var butt = $('#save_day');
+        var dv = $('#dv_'+pos);
+        var pl = $('#vpl_'+delta);
+        if($(view).html().includes(delta+1)){
+            var updatedView = $(view).html().split(', ').filter(v => v != (delta+1).toString()).join(', ');
+            var updatedDv = $(dv).html().split(', ').filter(v => v != (delta+1).toString()).join(', ');
+            $(view).html(updatedView);
+            $(dv).html(updatedDv);
+
+            if(updatedView === ''){
+                $(line).css('display', 'none');
+                $(line).attr('data-act', '0');
+            }
+            if(updatedDv === ''){
+                $(dv).css('display', 'none');
+            }
             $(pl).attr('data-invote', '0');
-            $(view).html('');
-            $(line).attr('data-act', '0');
-            $(line).css('display', 'none');
-            $(dv).css('display', 'none');
-            $(dv).html("");
             $('#vt_'+pos+' .vote_st').each(function (){
                 $(this).removeClass('vote_st');
             });
@@ -49,13 +47,18 @@
                 $(this).removeClass('vote_nd');
             });
 
-            if(pos == 0){
+            if(pos == 0 && updatedView === ''){
+                $('.vote-table').css('display', 'none');
+                $('.vote-table-mirror').css('display', 'none');
                 $(butt).css('display', 'none');
             }
         }
     }
 
-    function save_day(){
+    function save_day() {
+        if (saveDayCalled) return; // Проверка на выполнение функции
+        saveDayCalled = true;
+
         var day = '';
         $('.voute_line[data-act="1"]').each(function (){
             var pos = $(this).data('line');
@@ -113,6 +116,11 @@
         var lpn = lp+1;
         $("#vote_res").attr("data-line", lpn);
         $("#vr_l"+lp).after('<div class="vote_day" id="vr_l'+lpn+'"><p>'+lpn+'</p><div data-day="'+lpn+'" class="helper">'+day+'</div></div>');
+
+        // Сброс флага после выполнения
+        setTimeout(() => {
+            saveDayCalled = false;
+        }, 1000);
     }
 
     function createVotingTable() {
