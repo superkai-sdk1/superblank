@@ -55,50 +55,56 @@
         }
     }
 
-    function save_day(){
+    function save_day() {
         var day = '';
-        $('.voute_line[data-act="1"]').each(function (){
+        $('.voute_line[data-act="1"]').each(function () {
             var pos = $(this).data('line');
-            var dv = $('#dv_'+pos);
-            var line = $('#vt_'+pos);
-            var view = $('#vv_'+pos);
-            var st = $('#vt_'+pos+' .vote_st');
-            var nd = $('#vt_'+pos+' .vote_nd');
+            var dv = $('#dv_' + pos);
+            var line = $('#vt_' + pos);
+            var view = $('#vv_' + pos);
+            var st = $('#vt_' + pos + ' .vote_st');
+            var nd = $('#vt_' + pos + ' .vote_nd');
             var pl = $(view).html();
-            var tmp =0;
+            var tmp = 0;
             var ppstr = pl;
-            if($(st).length){
-                tmp = ($(st).data('pos')+1);
-                if(tmp == 6){ tmp += '+'; }
+            var str = '';
+
+            if ($(st).length) {
+                tmp = ($(st).data('pos') + 1);
+                if (tmp == 6) {
+                    tmp += '+';
+                }
                 str = pl + " - " + tmp + " голосов";
             } else {
                 str = pl + " - " + tmp + " голосов";
             }
 
-            if($(nd).length) {
-                tmp = ($(nd).data('pos')+1);
-                if(tmp == 6){ tmp += '+'; }
+            if ($(nd).length) {
+                tmp = ($(nd).data('pos') + 1);
+                if (tmp == 6) {
+                    tmp += '+';
+                }
                 str = str + " Голосов / После деления - " + tmp + " голосов";
             }
 
             $(line).css('display', 'none');
-            $('#vpl_'+(pl-1)).attr('data-invote', '0');
+            $('#vpl_' + (pl - 1)).attr('data-invote', '0');
             $(view).html('');
             $(line).attr('data-act', '0');
             $(dv).css('display', 'none');
             $(dv).html("");
 
-            if(day != ''){
+            if (day != '') {
                 day += '<br>';
             }
 
             day += str;
         });
 
-        $('.vote_st').each(function (){
+        $('.vote_st').each(function () {
             $(this).removeClass('vote_st');
         });
-        $('.vote_nd').each(function (){
+        $('.vote_nd').each(function () {
             $(this).removeClass('vote_nd');
         });
 
@@ -108,10 +114,12 @@
         $('#save_day').css('display', 'none');
 
         var lp = parseInt($("#vote_res").attr("data-line"));
-        var lpn = lp+1;
+        var lpn = lp + 1;
         $("#vote_res").attr("data-line", lpn);
-        $("#vr_l"+lp).after('<div class="vote_day" id="vr_l'+lpn+'"><p>'+lpn+'</p><div data-day="'+lpn+'" class="helper">'+day+'</div></div>');
+        $("#vr_l" + lp).after('<div class="vote_day" id="vr_l' + lpn + '"><p>' + lpn + '</p><div data-day="' + lpn + '" class="helper">' + day + '</div></div>');
+        document.getElementById('saveDayButton').addEventListener('click', save_day);
     }
+
 
     function createVotingTable() {
         const table = document.createElement('table');
