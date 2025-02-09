@@ -142,7 +142,9 @@
     }
 
     function set_winner_mafia(){
+
         for(var i=0; i<10; i++){
+
             var points = 0;
             var add_points = 0;
 
@@ -227,7 +229,9 @@
     }
 
     function set_winner_city(){
+
         for(var i=0; i<10; i++){
+
             var points = 0;
             var add_points = 0;
 
@@ -331,6 +335,7 @@
     }
 
     function set_fk(delta){
+
         var pos = $('.fk_selected').length + $('.miss-select').length;
         if(pos<10){
             var input = $('#FK_field_'+pos);
@@ -467,10 +472,18 @@
 
         document.querySelectorAll('.vote_butt').forEach(button => {
             button.addEventListener('click', function () {
-                document.querySelectorAll('.vote_butt').forEach(btn => btn.classList.remove('selected'));
-                this.classList.add('selected');
+                document.querySelectorAll('.vote_butt').forEach(btn => btn.classList.remove('vote_st'));
+                this.classList.add('vote_st');
                 document.querySelector('.vote-table').style.display = 'table';
             });
         });
+
+        $('#save_day').click(function() {
+            save_day();
+            $('.vote-table-wrapper').hide();
+            $('#vote_res').show();
+        });
     });
+
+    window.setFall = setFall;
 })(jQuery);
