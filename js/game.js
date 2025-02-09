@@ -237,7 +237,7 @@
         document.getElementById(`bp_${rowIndex}`).textContent = total.toFixed(2);
     }
 
-    if ('serviceWorker' in navigator) {
+    if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost')) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('/service-worker.js')
                 .then(registration => {
@@ -257,35 +257,36 @@
                 $('.col5, .col6, .col7, .col8').css('display', 'none');
             }
         });
-    });
 
-    $('#settingsToggle').click(function() {
-        $('.hs').toggle();
-        $(this).text(function(i, text) {
-            return text === "Скрыть роли и баллы" ? "Показать роли и баллы" : "Скрыть роли и баллы";
+        $('#settingsToggle').click(function() {
+            $('.hs').toggle();
+            $(this).text(function(i, text) {
+                return text === "Скрыть роли и баллы" ? "Показать роли и баллы" : "Скрыть роли и баллы";
+            });
         });
-    });
 
-    document.getElementById('menuToggle').addEventListener('click', function() {
-        document.querySelector('.dropdown-content').classList.toggle('show');
-    });
+        const menuToggle = document.getElementById('menuToggle');
+        if (menuToggle) {
+            menuToggle.addEventListener('click', function() {
+                document.querySelector('.dropdown-content').classList.toggle('show');
+            });
+        }
 
-    document.addEventListener('click', function(e) {
-        if (!e.target.matches('#menuToggle')) {
-            const dropdowns = document.getElementsByClassName('dropdown-content');
-            for (let dropdown of dropdowns) {
-                if (dropdown.classList.contains('show')) {
-                    dropdown.classList.remove('show');
+        document.addEventListener('click', function(e) {
+            if (!e.target.matches('#menuToggle')) {
+                const dropdowns = document.getElementsByClassName('dropdown-content');
+                for (let dropdown of dropdowns) {
+                    if (dropdown.classList.contains('show')) {
+                        dropdown.classList.remove('show');
+                    }
                 }
             }
-        }
-    });
+        });
 
-    document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.vote_butt').forEach(button => {
             button.addEventListener('click', function () {
-                document.querySelectorAll('.vote_butt').forEach(btn => btn.classList.remove('selected'));
-                this.classList.add('selected');
+                document.querySelectorAll('.vote_butt').forEach(btn => btn.classList.remove('vote_st'));
+                this.classList.add('vote_st');
                 document.querySelector('.vote-table').style.display = 'table';
             });
         });
