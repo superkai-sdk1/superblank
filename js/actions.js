@@ -439,31 +439,32 @@
                 $('.col5, .col6, .col7, .col8').css('display', 'none');
             }
         });
-    });
 
-    $('#settingsToggle').click(function() {
-        $('.hs').toggle();
-        $(this).text(function(i, text) {
-            return text === "Скрыть роли и баллы" ? "Показать роли и баллы" : "Скрыть роли и баллы";
+        $('#settingsToggle').click(function() {
+            $('.hs').toggle();
+            $(this).text(function(i, text) {
+                return text === "Скрыть роли и баллы" ? "Показать роли и баллы" : "Скрыть роли и баллы";
+            });
         });
-    });
 
-    document.getElementById('menuToggle').addEventListener('click', function() {
-        document.querySelector('.dropdown-content').classList.toggle('show');
-    });
+        const menuToggle = document.getElementById('menuToggle');
+        if (menuToggle) {
+            menuToggle.addEventListener('click', function() {
+                document.querySelector('.dropdown-content').classList.toggle('show');
+            });
+        }
 
-    document.addEventListener('click', function(e) {
-        if (!e.target.matches('#menuToggle')) {
-            const dropdowns = document.getElementsByClassName('dropdown-content');
-            for (let dropdown of dropdowns) {
-                if (dropdown.classList.contains('show')) {
-                    dropdown.classList.remove('show');
+        document.addEventListener('click', function(e) {
+            if (!e.target.matches('#menuToggle')) {
+                const dropdowns = document.getElementsByClassName('dropdown-content');
+                for (let dropdown of dropdowns) {
+                    if (dropdown.classList.contains('show')) {
+                        dropdown.classList.remove('show');
+                    }
                 }
             }
-        }
-    });
+        });
 
-    document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.vote_butt').forEach(button => {
             button.addEventListener('click', function () {
                 document.querySelectorAll('.vote_butt').forEach(btn => btn.classList.remove('selected'));
@@ -472,17 +473,4 @@
             });
         });
     });
-
-    window.setFall = setFall;
-    window.applyFallPenalty = applyFallPenalty;
-    window.rem_from_vote = rem_from_vote;
-    window.save_day = save_day;
-    window.get_cnt_bm = get_cnt_bm;
-    window.set_winner_mafia = set_winner_mafia;
-    window.set_winner_city = set_winner_city;
-    window.clear_fk = clear_fk;
-    window.set_fk = set_fk;
-    window.rem_fk = rem_fk;
-    window.set_bp = set_bp;
-    window.rem_bp = rem_bp;
 })(jQuery);
