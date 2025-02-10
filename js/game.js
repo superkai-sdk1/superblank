@@ -826,11 +826,6 @@
             points_callc(delta, cur, dir);
 		});
 
-		$('.bm_pick').click(function(){
-			var pos = parseInt($(this).data('pos'));
-			set_bm(pos);
-		});
-
 		$('.all_hide').click(function(){
 			var line = parseInt($(this).data('line'));
 			hide_bm(line);
