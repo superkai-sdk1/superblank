@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const lhButton = document.createElement('button');
     lhButton.id = 'lh-button';
     lhButton.textContent = 'ЛХ';
-    lhButton.className = 'lh-button';
+    lhButton.className = 'lh-button settings-toggle-button';
     lhButton.style.display = 'none'; // Hide the button initially
     lhButton.addEventListener('click', openSelectionModal);
     document.querySelector('.main-game-table-wrapper').appendChild(lhButton);
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="player-buttons">
                 ${[...Array(10).keys()].map(i => `<button class="player-button" data-player="${i + 1}">${i + 1}</button>`).join('')}
             </div>
-            <button id="save-selection">Принять ЛХ</button>
+            <button id="save-selection" class="settings-toggle-button">Принять ЛХ</button>
             <div class="error-message" style="display: none;">Нельзя выбрать более трех кандидатов!</div>
         </div>
     `;
@@ -89,7 +89,9 @@ function closeSelectionModal() {
 }
 
 function saveSelection() {
-    // Logic to save the selected players
+    const selectedPlayers = Array.from(document.querySelectorAll('.player-button.selected')).map(button => button.dataset.player);
+    const lhButton = document.getElementById('lh-button');
+    lhButton.textContent = `ЛХ (${selectedPlayers.join(', ')})`;
     closeSelectionModal();
 }
 
