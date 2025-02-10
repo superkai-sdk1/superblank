@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
     lhButton.className = 'lh-button';
     lhButton.style.display = 'none'; // Hide the button initially
     lhButton.addEventListener('click', openSelectionModal);
-    document.querySelector('.table-wrapper').appendChild(lhButton);
+    document.querySelector('.main-game-table-wrapper').appendChild(lhButton);
 
     // Add the modal to the DOM
     const modal = document.createElement('div');
@@ -68,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ${[...Array(10).keys()].map(i => `<button class="player-button" data-player="${i + 1}">${i + 1}</button>`).join('')}
             </div>
             <button id="save-selection">Принять ЛХ</button>
+            <div class="error-message" style="display: none;">Нельзя выбрать более трех кандидатов!</div>
         </div>
     `;
     document.body.appendChild(modal);
@@ -93,7 +94,13 @@ function saveSelection() {
 }
 
 function togglePlayerSelection(button) {
-    button.classList.toggle('selected');
+    const selectedButtons = document.querySelectorAll('.player-button.selected');
+    if (selectedButtons.length < 3 || button.classList.contains('selected')) {
+        button.classList.toggle('selected');
+        document.querySelector('.error-message').style.display = 'none';
+    } else {
+        document.querySelector('.error-message').style.display = 'block';
+    }
 }
 
 // Function to create the voting table
@@ -344,4 +351,5 @@ function createAddPointsInput(delta) {
 document.addEventListener('DOMContentLoaded', () => {
     const tableWrapper = document.querySelector('.main-game-table-wrapper');
     tableWrapper.appendChild(createTable());
+    document.querySelector('.main-game-table-wrapper').appendChild(document.getElementById('lh-button'));
 });
