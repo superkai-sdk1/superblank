@@ -19,91 +19,12 @@
 
             return 0;
         }
-// Сохранение данных
-        function saveData() {
-            // Сохраняем никнеймы
-            const nicknames = [];
-            document.querySelectorAll('.nick_acpl').forEach((input, index) => {
-                nicknames[index] = input.value;
-                localStorage.setItem('nicknames', JSON.stringify(nicknames));
-            });
 
-            // Сохраняем роли
-            const roles = [];
-            document.querySelectorAll('.role_field_all').forEach((input, index) => {
-                roles[index] = input.value;
-                localStorage.setItem('roles', JSON.stringify(roles));
-            });
-
-            // Сохраняем фолы
-            const falls = [];
-            document.querySelectorAll('[id^=fall_field_]').forEach((input, index) => {
-                falls[index] = input.value;
-                localStorage.setItem('falls', JSON.stringify(falls));
-            });
-
-            // Сохраняем баллы
-            const points = [];
-            document.querySelectorAll('[id^=points_]').forEach((input, index) => {
-                points[index] = input.value;
-                localStorage.setItem('points', JSON.stringify(points));
-            });
-        }
-
-// Загрузка данных
-        function loadData() {
-            // Загружаем никнеймы
-            const nicknames = JSON.parse(localStorage.getItem('nicknames')) || [];
-            document.querySelectorAll('.nick_acpl').forEach((input, index) => {
-                if(nicknames[index]) input.value = nicknames[index];
-            });
-
-            // Загружаем роли
-            const roles = JSON.parse(localStorage.getItem('roles')) || [];
-            document.querySelectorAll('.role_field_all').forEach((input, index) => {
-                if(roles[index]) {
-                    input.value = roles[index];
-                    document.getElementById(`role_view_${index}`).innerHTML = roles[index];
-                }
-            });
-
-            // Загружаем фолы
-            const falls = JSON.parse(localStorage.getItem('falls')) || [];
-            document.querySelectorAll('[id^=fall_field_]').forEach((input, index) => {
-                if(falls[index]) input.value = falls[index];
-            });
-
-            // Загружаем баллы
-            const points = JSON.parse(localStorage.getItem('points')) || [];
-            document.querySelectorAll('[id^=points_]').forEach((input, index) => {
-                if(points[index]) input.value = points[index];
-            });
-        }
 
 // Добавляем обработчики событий
         document.addEventListener('DOMContentLoaded', loadData);
         document.addEventListener('input', saveData);
 
-        function setFall(delta, value) {
-            if((value >= 0) && (value <= 4)) {
-                var input = $('#fall_field_'+delta);
-                var view = $('#falls_view_'+delta);
-                var addPoints = $('#add_points_'+delta);
-
-                $(input).attr('value', value);
-                $(input).val(value);
-                $(view).attr('class', 'fall_'+value);
-
-                // Добавляем штраф только при 4-м фоле
-                if(value === 4) {
-                    var penalty = -0.5;
-                    var currentPoints = parseFloat(addPoints.val()) || 0;
-                    addPoints.attr('data-fall-penalty', penalty);
-                    addPoints.val((currentPoints + penalty).toFixed(2));
-                    addPoints.attr('value', (currentPoints + penalty).toFixed(2));
-                }
-            }
-        }
 
 
         function setRole(delta, value){
@@ -134,6 +55,29 @@
                     $('#bp_'+bp).addClass('b_pl');
                 }
             }
+            function distributeRoles() {
+                const rolesArray = ['m', 'm', 'd', 's'];  // 2 мафии, 1 дон, 1 шериф
+                // Заполняем оставшиеся роли мирными жителями
+                while (rolesArray.length < 10) {
+                    rolesArray.push('c');
+                }
+
+                // Перемешиваем роли случайным образом
+                for (let i = rolesArray.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [rolesArray[i], rolesArray[j]] = [rolesArray[j], rolesArray[i]];
+                }
+
+                // Присваиваем роли игрокам
+                document.querySelectorAll('.role_field_all').forEach((input, index) => {
+                    input.value = rolesArray[index];
+                    document.getElementById(`role_view_${index}`).innerHTML = roles[rolesArray[index]];
+                });
+
+                saveData();  // Сохраняем данные после распределения ролей
+            }
+            document.getElementById('distributeButton').addEventListener('click', distributeRoles);
+            document.getElementById('shuffleButton').addEventListener('click', shufflePlayers);
 
             clear_fk();
             for(var i = 0; i < 10; i++){
@@ -709,28 +653,6 @@
             }
         }
 
-        function setFall(delta, value) {
-            if((value >= 0) && (value <= 4)) {
-                var input = $('#fall_field_'+delta);
-                var view = $('#falls_view_'+delta);
-                $(input).attr('value', value);
-                $(input).val(value);
-                $(view).attr('class', 'fall_'+value);
-
-                // При 4-м фоле добавляем штраф в поле "Доп"
-                if(value === 4) {
-                    var addPoints = $('#add_points_'+delta);
-                    var currentPoints = parseFloat(addPoints.val()) || 0;
-                    var penalty = -0.5;
-
-                    // Сохраняем штраф в data-атрибуте
-                    addPoints.attr('data-fall-penalty', penalty);
-                    addPoints.val((currentPoints + penalty).toFixed(2));
-                    addPoints.attr('value', (currentPoints + penalty).toFixed(2));
-                }
-            }
-        }
-
 
         Drupal.behaviors.game_actions = {
         attach: function (context, settings) {
@@ -879,38 +801,6 @@
 
 		});
 
-		$('.fall_click').click(function(){
-			var delta = $(this).data('delta');
-			var val = parseInt($('#fall_field_'+delta).val());
-			val = val+1;
-			switch(val){
-				case 4:
-					if($('#line_'+delta).hasClass('fall_active')){
-						$('#line_'+delta).removeClass('fall_active');
-					} else {
-						setFall(delta, val);
-					}
-				break;
-				case 3:
-					$('#line_'+delta).addClass('fall_active');
-				case 2:
-				case 1:
-					setFall(delta, val);
-				break;
-			}
-		});
-
-		$('.remove_click').click(function(){
-			var delta = $(this).data('delta');
-			var val = parseInt($('#fall_field_'+delta).val());
-            if((val == 3) && ($('#line_'+delta).hasClass('fall_active'))){
-                $('#line_'+delta).removeClass('fall_active');
-            } else {
-    			val = val-1;
-    			setFall(delta, val);
-            }
-		});
-
 		$('.role').click(function(){
 			var delta = $(this).data('delta');
 			var val = $('#role_field_'+delta).val();
@@ -999,14 +889,4 @@ document.addEventListener('click', function(e) {
         }
     }
 });
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-            .then(registration => {
-                console.log('ServiceWorker зарегистрирован');
-            })
-            .catch(error => {
-                console.log('Ошибка регистрации ServiceWorker:', error);
-            });
-    });
-}
+
