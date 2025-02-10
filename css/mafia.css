@@ -14,6 +14,15 @@
     --md-transition: all 0.2s ease;
 }
 
+body {
+    font-family: "Inter";
+    background: var(--md-background);
+    color: var(--md-text-primary);
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    overflow-x: hidden;
+}
 
 .miss_clik {
     width: 27px;
@@ -140,7 +149,6 @@
     font-size: 22px;
     text-align: center; /* Центрирование текста */
     font-weight: bold;
-
 }
 
 .voute_line:hover {
@@ -158,6 +166,7 @@
 .hs {
     display: none;
 }
+
 .settings-toggle-button {
     position: static;
     margin: 8px;
@@ -173,6 +182,7 @@
 .settings-toggle-button:hover {
     background: var(--md-primary-variant);
 }
+
 .target {
     cursor: pointer;
     transition: transform 0.3s ease;
@@ -253,6 +263,7 @@
 .fk_pick:hover, .fall_click:hover, .remove_click:hover, .role:hover {
     transform: scale(1.1);
 }
+
 .remove_click {
     width: 25px;
     background: url(../images/backspace.svg);
@@ -262,6 +273,7 @@
     border-radius: var(--md-radius);
     transition: background 0.3s ease, transform 0.3s ease;
 }
+
 #point_settings * {
     margin: 0;
     padding: 0;
@@ -283,6 +295,7 @@
     width: 100%;
     height: 200px;
 }
+
 .main-game-table-wrapper {
     width: 50%;
     float: left;
@@ -339,10 +352,12 @@
 .falls_widget tbody, .bm_nick tbody, .all_nicks {
     border: 0 !important;
 }
+
 .nick-container {
     position: relative;
     width: 100%;
 }
+
 .bm_nick tbody td {
     border-top: 0 !important;
     border-bottom: 0 !important;
@@ -364,9 +379,11 @@
     font-weight: bold;
     border-radius: var(--md-radius);
 }
+
 .fall_0 {
     visibility: hidden; /* Текст скрыт, но место остается */
 }
+
 .fall_3, .fall_4 {
     color: red; /* Красный цвет */
     font-weight: bold; /* Жирный текст */
@@ -377,6 +394,7 @@
     color: red; /* Красный цвет для символа */
     margin-left: 5px; /* Отступ от текста */
 }
+
 .fall_active {
     background-color: rgba(87, 48, 168, 0.7) !important;
 }
@@ -384,12 +402,13 @@
 .active_line:hover {
     background-color: #252525;
 }
-/* Добавьте в mafia.css */
+
 .bp_select {
     pointer-events: none; /* Запрещает взаимодействие */
     user-select: none; /* Запрещает выделение текста */
     background-color: var(--md-surface-2) !important; /* Визуально показывает что поле нередактируемо */
 }
+
 .role {
     width: 100%;
     height: 100%;
@@ -403,7 +422,7 @@
 }
 
 #vote_res {
-    width: 100%;
+    width: 80%;
     height: auto;
     display: flex;
     justify-content: center;
@@ -495,7 +514,6 @@
 
 /* Адаптивность */
 @media (max-width: 768px) {
-
     #game_settings td {
         padding: 8px 4px;
     }
@@ -526,14 +544,12 @@
     }
 }
 
-
 @media (max-width: 480px) {
-
     .timer-container {
         width: 100%;
         float: none;
         margin: 0 auto;
-        padding: 0 0px;
+        padding: 0;
         order: -1; /* Move the timer above the table */
     }
 
@@ -541,6 +557,7 @@
         font-size: 150px; /* Adjust the size for mobile */
         margin-bottom: 10px;
     }
+
     .falls_widget, .bm_nick {
         padding: 0;
         margin: 0;
@@ -564,6 +581,7 @@
         margin-top: 3px;
     }
 }
+
 .vote {
     text-align: center; /* Центрирование текста */
     display: flex; /* Используем flexbox для центрирования по вертикали и горизонтали */
@@ -571,10 +589,11 @@
     align-items: center; /* Центрирование по вертикали */
     height: 100%; /* Занимать всю высоту родительского элемента */
 }
+
 .bm_pick {
     position: relative;
     cursor: pointer;
-    transition: var(--md-transition);
+    transition: var (--md-transition);
     background: var(--md-surface);
     border-radius: var(--md-radius);
     padding: 8px;
@@ -593,11 +612,13 @@
     box-shadow: var(--md-elevation-2);
     display: table-cell;
 }
+
 .all_nicks {
     display: table-cell !important; /* Всегда показываем поле с никнеймом */
 }
+
 .bm_pick:hover {
-    background: var (--md-primary-variant);
+    background: var(--md-primary-variant);
     transform: scale(1.05);
 }
 
@@ -605,8 +626,9 @@
     background: var(--md-primary) !important;
     color: var(--md-text-primary) !important;
 }
+
 .bm_nick input {
-    background: var (--md-surface);
+    background: var(--md-surface);
     color: var(--md-text-primary);
     border: 1px solid var(--md-primary);
     border-radius: var(--md-radius);
