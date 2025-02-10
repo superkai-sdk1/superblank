@@ -495,6 +495,7 @@
 
 /* Адаптивность */
 @media (max-width: 768px) {
+
     #game_settings td {
         padding: 8px 4px;
     }
@@ -525,8 +526,21 @@
     }
 }
 
+
 @media (max-width: 480px) {
-    /* Уменьшаем отступы для экономии места */
+
+    .timer-container {
+        width: 100%;
+        float: none;
+        margin: 0 auto;
+        padding: 0 0px;
+        order: -1; /* Move the timer above the table */
+    }
+
+    .timer-display {
+        font-size: 150px; /* Adjust the size for mobile */
+        margin-bottom: 10px;
+    }
     .falls_widget, .bm_nick {
         padding: 0;
         margin: 0;
