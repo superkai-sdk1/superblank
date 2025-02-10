@@ -1010,5 +1010,3 @@ if ('serviceWorker' in navigator) {
             });
     });
 }
-
-
