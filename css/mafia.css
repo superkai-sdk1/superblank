@@ -416,11 +416,6 @@
     transition: background 0.3s ease, color 0.3s ease;
 }
 
-#vote_res:hover {
-    background: var(--md-primary-variant); /* Темный фиолетовый фон при наведении */
-    color: #ffffff; /* Белый цвет текста при наведении */
-}
-
 .vote_day {
     display: flex;
     justify-content: center;
@@ -587,7 +582,7 @@
     display: table-cell !important; /* Всегда показываем поле с никнеймом */
 }
 .bm_pick:hover {
-    background: var(--md-primary-variant);
+    background: var (--md-primary-variant);
     transform: scale(1.05);
 }
 
@@ -596,7 +591,7 @@
     color: var(--md-text-primary) !important;
 }
 .bm_nick input {
-    background: var(--md-surface);
+    background: var (--md-surface);
     color: var(--md-text-primary);
     border: 1px solid var(--md-primary);
     border-radius: var(--md-radius);
@@ -621,6 +616,7 @@
     transform: translateX(-50%);
     z-index: 1000;
 }
+
 .modal {
     display: none;
     position: fixed;
@@ -651,3 +647,7 @@
 
 .player-button {
     background: var(--md-primary);
+    color: var(--md-text-primary);
+    border: none;
+    border-radius: var(--md-radius);
+    padding: 8
