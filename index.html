@@ -18,6 +18,25 @@
 	<meta name="theme-color" content="#000000">
 	<link rel="apple-touch-icon" href="/images/icon/apple-touch-icon.png">
 	<link rel="android-chrome-192x192" href="/images/icon/android-chrome-192x192.png">
+	<!-- Telegram Web Apps script -->
+	<script src="https://telegram.org/js/telegram-web-app.js"></script>
+	<script>
+		$(document).ready(function() {
+			// Initialize Telegram Web Apps
+			const tg = window.Telegram.WebApp;
+
+			tg.ready();
+			
+			// Example: Set the main button text and enable it
+			tg.MainButton.text = "Начать игру";
+			tg.MainButton.show();
+
+			// Example: Handle main button click event
+			tg.MainButton.onClick(function() {
+				alert('Telegram MainButton clicked!');
+			});
+		});
+	</script>
 </head>
 <body>
 <div class="timer-container">
@@ -144,7 +163,6 @@
 	<button type="button" class="menu-cont-button" id="mafia">Победа Мафии</button>
 	<button type="button" class="menu-cont-button" id="citizens">Победа Мирных</button>
 	<button class="menu-cont-button" id="resetAllForms">Новая игра</button>
-</div>
 </div>
 <div id="selection-modal" class="modal">
 	<div class="modal-content">
