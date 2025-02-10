@@ -19,6 +19,10 @@ function handleKillOrder(delta) {
         killOrder.push(delta);
         const order = killOrder.indexOf(delta) + 1;
         document.getElementById(`fk_${delta}`).textContent = order;
+        if (order === 1) {
+            openSelectionModal();
+            document.getElementById('lh-button').style.display = 'block'; // Show the ЛХ button on first kill
+        }
     }
 }
 
@@ -43,7 +47,54 @@ document.addEventListener('DOMContentLoaded', () => {
             handleKillOrder(delta);
         });
     });
+
+    // Add the "ЛХ" button
+    const lhButton = document.createElement('button');
+    lhButton.id = 'lh-button';
+    lhButton.textContent = 'ЛХ';
+    lhButton.className = 'lh-button';
+    lhButton.style.display = 'none'; // Hide the button initially
+    lhButton.addEventListener('click', openSelectionModal);
+    document.querySelector('.table-wrapper').appendChild(lhButton);
+
+    // Add the modal to the DOM
+    const modal = document.createElement('div');
+    modal.id = 'selection-modal';
+    modal.className = 'modal';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <h2>Select Up to 3 Players</h2>
+            <div class="player-buttons">
+                ${[...Array(10).keys()].map(i => `<button class="player-button" data-player="${i + 1}">${i + 1}</button>`).join('')}
+            </div>
+            <button id="save-selection">Save</button>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    // Add modal event listeners
+    document.getElementById('save-selection').addEventListener('click', saveSelection);
+    document.querySelectorAll('.player-button').forEach(button => {
+        button.addEventListener('click', () => togglePlayerSelection(button));
+    });
 });
+
+function openSelectionModal() {
+    document.getElementById('selection-modal').style.display = 'block';
+}
+
+function closeSelectionModal() {
+    document.getElementById('selection-modal').style.display = 'none';
+}
+
+function saveSelection() {
+    // Logic to save the selected players
+    closeSelectionModal();
+}
+
+function togglePlayerSelection(button) {
+    button.classList.toggle('selected');
+}
 
 // Function to create the voting table
 function createTable() {
@@ -220,7 +271,7 @@ function createFallsWidget(delta) {
     const removeClickCell = document.createElement('td');
     removeClickCell.className = 'remove_click border_0';
     removeClickCell.setAttribute('data-delta', delta);
-    removeClickCell.innerHTML = '-';
+    removeClickCell.innerHTML = '';
     removeClickCell.addEventListener('click', function () {
         const currentValue = parseInt(document.getElementById(`fall_field_${delta}`).value) || 0;
         const newValue = currentValue - 1;
