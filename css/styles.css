@@ -1,11 +1,10 @@
-/* Material You Dark стили */
 :root {
-    --md-primary: rgb(141, 111, 255); /* Основной фиолетовый */
-    --md-primary-variant: rgba(101, 72, 216, 0.88); /* Темно-фиолетовый */
-    --md-secondary: #6200EA; /* Вторичный фиолетовый */
-    --md-background: #121212; /* Темный фон */
-    --md-surface: #1E1E1E; /* Поверхность */
-    --md-surface-2: #232323; /* Поверхность второго уровня */
+    --md-primary: rgb(141, 111, 255);
+    --md-primary-variant: rgba(101, 72, 216, 0.88);
+    --md-secondary: #6200EA;
+    --md-background: #121212;
+    --md-surface: #1E1E1E;
+    --md-surface-2: #232323;
     --md-error: #CF6679;
     --md-text-primary: rgba(228, 228, 228, 0.87);
     --md-text-secondary: rgba(255,255,255,0.60);
@@ -14,17 +13,19 @@
     --md-radius: 16px;
     --md-transition: all 0.2s ease;
 }
+
 body {
     font-family: "Inter";
     background: var(--md-background);
     color: var(--md-text-primary);
     margin: 0;
-    padding: 16px;
+    padding: 8px;
+    padding-right: 16px;
     max-width: 100vw;
     overflow-x: hidden;
+    width: 100%;
 }
 
-/* Верхняя панель */
 .main-game-top-info {
     background: var(--md-surface);
     border-radius: var(--md-radius);
@@ -36,13 +37,13 @@ body {
 .timer {
     background: var(--md-primary-variant);
     color: var(--md-text-primary);
-    padding: 1px 1px;
+    padding: 1px;
     border-radius: var(--md-radius);
     display: inline-flex;
     align-items: center;
     gap: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    font-size: 1.65rem; /* Уменьшенный размер шрифта */
+    font-size: 1.65rem;
     font-weight: 400;
     transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
@@ -78,7 +79,7 @@ body {
 }
 
 .radio-wrapper label {
-    padding: 12px 20px; /* Уменьшенные отступы */
+    padding: 12px 20px;
     background-color: var(--md-primary);
     color: white;
     border: none;
@@ -98,11 +99,12 @@ body {
     background-color: var(--md-primary-variant);
     color: white;
 }
+
 .table-wrapper {
     width: 100%;
-    overflow-x: auto;
+    overflow-x: hidden;
 }
-/* Основная таблица */
+
 .main-game-table {
     background: var(--md-surface);
     border-radius: var(--md-radius);
@@ -111,16 +113,16 @@ body {
     width: 100%;
     box-shadow: var(--md-elevation-1);
 }
-}
-.col1 { width: 10%; } /* Столбец с номерами */
-.col2 { width: auto; } /* Столбец с никнеймами */
-.col3 { width: 10%; } /* Столбец с фолами */
-.col4 { width: 10%; } /* Столбец с иконкой */
-.col5 { width: 10%; } /* Столбец с ролью */
-.col6 { width: 10%; } /* Столбец с баллами */
-.col7 { width: 10%; } /* Столбец с доп. баллами */
-.col8 { width: 10%; } /* Столбец с итогом */
-}
+
+.col1 { width: 10%; }
+.col2 { width: auto; }
+.col3 { width: 10%; }
+.col4 { width: 10%; }
+.col5 { width: 10%; }
+.col6 { width: 10%; }
+.col7 { width: 10%; }
+.col8 { width: 10%; }
+
 .main-game-table th,
 .main-game-table td {
     padding: 12px;
@@ -128,18 +130,17 @@ body {
     color: var(--md-text-primary);
 }
 
-/* Кнопки голосования */
 .vote_butt {
     background: #8d6fff;
     border: none;
     border-radius: 24px;
-    padding: 14px 20px; /* Уменьшенные отступы */
+    padding: 14px 20px;
     cursor: pointer;
     transition: background 0.3s ease, color 0.3s ease;
     color: var(--md-primary);
     border: 1px solid var(--md-primary);
     font-size: 28px;
-    text-align: center; /* Центрирование текста */
+    text-align: center;
 }
 
 .vote_butt:hover {
@@ -147,7 +148,6 @@ body {
     color: var(--md-text-primary);
 }
 
-/* Поля ввода */
 input[type="text"] {
     border: none;
     border-bottom: 2px solid rgba(255, 255, 255, 0.42);
@@ -163,27 +163,25 @@ input[type="text"]:focus {
     outline: none;
 }
 
-/* Таблица голосования */
 .vote-table {
     background: var(--md-primary-variant);
-    border-radius: var(--md-radius);
+    border-radius: var (--md-radius);
     border-collapse: separate;
     border-spacing: 4px;
     margin-top: 24px;
     box-shadow: var(--md-elevation-1);
-    width: 60%; /* Изменено с 60% на 100% */
+    width: 60%;
 }
 
-/* Добавьте медиа-запрос для мобильных устройств */
 @media (max-width: 768px) {
     .vote-wrapper {
         width: 100%;
-        overflow-x: auto;
+        overflow-x: hidden;
     }
 
     .vote-table {
         width: 100%;
-        min-width: 300px; /* Минимальная ширина для предотвращения сжатия */
+        min-width: 300px;
     }
 
     .vote-table td {
@@ -196,7 +194,6 @@ input[type="text"]:focus {
     color: var(--md-text-primary);
 }
 
-/* Кнопка сохранения */
 #save_day td {
     background: var(--md-primary);
     color: var(--md-text-primary);
@@ -211,49 +208,42 @@ input[type="text"]:focus {
     background: var(--md-primary-variant);
 }
 
-/* Роли и статусы */
 .role {
-    padding: 8px 16px; /* Увеличенные отступы */
+    padding: 8px 16px;
     border-radius: 12px;
     text-align: center;
     background: rgba(255,255,255,0.08);
-    color: var (--md-text-primary);
+    color: var(--md-text-primary);
 }
 
-/* Адаптивность */
 @media (max-width: 768px) {
     .main-game-table {
         font-size: 14px;
     }
 
-
     .vote_butt {
-        padding: 12px 18px; /* Уменьшенные отступы для мобильных устройств */
+        padding: 12px 18px;
         font-size: 16px;
-        text-align: center; /* Центрирование текста */
+        text-align: center;
     }
 }
 
 .timer-container {
-    width: 39%; /* Ширина для desktop */
-    float: right;
+    width: 100%;
     text-align: center;
     background-color: rgba(255, 255, 255, 0);
-
-
 }
 
 @media (max-width: 768px) {
     .timer-container {
-        width: 100%; /* Ширина для мобильных устройств */
-        float: none;
+        width: 100%;
         margin: 0 auto;
         padding: 0 0px;
     }
 }
 
 .timer-display {
-    font-size: 150px; /* Уменьшенный размер шрифта */
+    font-size: 150px;
     margin-bottom: 10px;
 }
 
@@ -261,42 +251,41 @@ input[type="text"]:focus {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 20px; /* Увеличенный разрыв между кнопками */
+    gap: 10px;
 }
 
-.col1 { width: 8%; } /* Столбец с номерами */
-.col2 { width: auto; } /* Столбец с никнеймами */
-.col3 { width: 14%; } /* Столбец с фолами */
-.col4 { width: 5%; } /* Столбец с иконкой */
-.col5 { width: 5%; } /* Столбец с ролью */
-.col6 { width: 5%; } /* Столбец с баллами */
-.col7 { width: 5%; } /* Столбец с доп. баллами */
-.col8 { width: 5%; } /* Столбец с итогом */
-}
+.col1 { width: 8%; }
+.col2 { width: auto; }
+.col3 { width: 14%; }
+.col4 { width: 5%; }
+.col5 { width: 5%; }
+.col6 { width: 5%; }
+.col7 { width: 5%; }
+.col8 { width: 5%; }
 
 @media (max-width: 768px) {
-
     .main-game-table-wrapper {
         width: 100%;
         float: none;
     }
     .timer-container {
-        width: 40%; /* Занимает всю ширину */
+        width: 100%;
         float: none;
-        margin: 0 auto; /* Центрирование */
-        padding: 1px; /* Отступы по бокам */
+        margin: 0 auto;
+        padding: 1px;
     }
     .timer-display {
-        font-size: 150px; /* Уменьшаем размер для мобильных */
+        font-size: 150px;
     }
 }
+
 .material-button {
     background-color: var(--md-primary);
     color: white;
     border: none;
     border-radius: 24px;
-    padding: 15px 25px; /* Уменьшенные отступы */
-    font-size: 20px; /* Уменьшенный размер шрифта */
+    padding: 15px 25px;
+    font-size: 20px;
     cursor: pointer;
     transition: background-color 0.3s;
     flex: 1 1 25%;
@@ -327,15 +316,14 @@ input[type="text"]:focus {
     }
 }
 
-/* Media query for smaller screens */
 @media (max-width: 600px) {
     .timer-display {
-        font-size: 70px; /* Уменьшенный размер шрифта */
+        font-size: 70px;
     }
 
     .material-button {
-        padding: 15px 25px; /* Уменьшенные отступы */
-        font-size: 18px; /* Уменьшенный размер шрифта */
+        padding: 15px 25px;
+        font-size: 18px;
     }
 }
 
@@ -344,20 +332,20 @@ input[type="text"]:focus {
     color: white;
     border: none;
     border-radius: 24px;
-    padding: 10px 20px; /* Уменьшенные отступы */
-    font-size: 16px; /* Уменьшенный размер шрифта */
+    padding: 10px 20px;
+    font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s;
-    width: 300px
-    height: 30px
+    width: 300px;
+    height: 30px;
     text-align: center;
     border: 1px solid var(--md-primary);
     display: inline-block;
     line-height: 24px;
     margin: 5px;
-    white-space: nowrap; /* Запрещает перенос текста */
-    overflow: hidden; /* Обрезает текст, выходящий за границы */
-    text-overflow: ellipsis; /* Добавляет многоточие для обрезанного текста */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .menu-cont-button:hover {
@@ -369,20 +357,20 @@ input[type="text"]:focus {
     color: white;
     border: none;
     border-radius: 24px;
-    padding: 10px 20px; /* Уменьшенные отступы */
-    font-size: 16px; /* Уменьшенный размер шрифта */
+    padding: 10px 20px;
+    font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s;
-    width: 100px
-    height: 30px
+    width: 100px;
+    height: 30px;
     text-align: center;
     border: 1px solid var(--md-primary);
     display: inline-block;
     line-height: 24px;
     margin: 5px;
-    white-space: nowrap; /* Запрещает перенос текста */
-    overflow: hidden; /* Обрезает текст, выходящий за границы */
-    text-overflow: ellipsis; /* Добавляет многоточие для обрезанного текста */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .reset-button:hover {
@@ -393,8 +381,7 @@ input[type="text"]:focus {
     .main-game-table {
         font-size: 14px;
         width: 100%;
-        overflow-x: auto;
-
+        overflow-x: hidden;
     }
 
     .menu-cont-button {
@@ -403,52 +390,48 @@ input[type="text"]:focus {
     }
 
     .vote-wrapper {
-        overflow-x: auto;
+        overflow-x: hidden;
     }
 
     .timer-display {
-        font-size: 130px; /* Уменьшенный размер шрифта */
+        font-size: 130px;
     }
 }
 
 @media (max-width: 480px) {
-    /* Уменьшаем отступы для экономии места */
     body {
         padding: 8px;
+        padding-right: 16px;
     }
 
-    /* Адаптируем таблицу */
     .main-game-table td {
         padding: 8px 4px;
         text-align: center;
     }
 
-    /* Уменьшаем кнопки меню */
     .menu-cont-button {
         width: 100%;
-        height: 40px; /* Уменьшенные размеры */
-        font-size: 14px; /* Уменьшенный размер шрифта */
+        height: 40px;
+        font-size: 14px;
         line-height: 20px;
     }
 
-    /* Оптимизируем таблицу голосования */
     .vote-table td {
         padding: 8px;
     }
 
-    /* Адаптируем размер шрифта для номеров игроков */
     .voute_p {
         font-size: 18px;
     }
 }
 
-/* Центрирование текста */
 .vote {
-    display: flex; /* Используем flexbox для центрирования по вертикали и горизонтали */
-    justify-content: center; /* Центzzzzрирование по горизонтали */
-    align-items: center; /* Центрирование по вертикали */
-    height: 100%; /* Занимать всю высоту родительского элемента */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }
+
 .bm_pick {
     position: relative;
     cursor: pointer;
@@ -471,9 +454,11 @@ input[type="text"]:focus {
     box-shadow: var(--md-elevation-2);
     display: table-cell;
 }
+
 .all_nicks {
-    display: table-cell !important; /* Всегда показываем поле с никнеймом */
+    display: table-cell !important;
 }
+
 .bm_pick:hover {
     background: var(--md-primary-variant);
     transform: scale(1.05);
@@ -483,6 +468,7 @@ input[type="text"]:focus {
     background: var(--md-primary) !important;
     color: var(--md-text-primary) !important;
 }
+
 .bm_nick input {
     background: var(--md-surface);
     color: var(--md-text-primary);
@@ -509,6 +495,7 @@ input[type="text"]:focus {
     transform: translateX(-50%);
     z-index: 1000;
 }
+
 .modal {
     display: none;
     position: fixed;
@@ -535,7 +522,6 @@ input[type="text"]:focus {
     justify-content: center;
 }
 
-/* Адаптивность для мобильных устройств */
 @media (max-width: 768px) {
     .modal {
         width: 90%;
@@ -545,6 +531,7 @@ input[type="text"]:focus {
         width: 100%;
     }
 }
+
 .settings-toggle-button {
     position: static;
     margin: 8px;
@@ -560,18 +547,17 @@ input[type="text"]:focus {
 .settings-toggle-button:hover {
     background: var(--md-primary-variant);
 }
+
 .ui-helper-hidden-accessible {
     display: none !important;
 }
-
-
 
 @media (min-width: 769px) {
     .main-game-table-wrapper {
         width: 60%;
         float: left;
     }
-
+}
 
 .ui-menu.ui-widget.ui-widget-content.ui-autocomplete.ui-front {
     background: var(--md-surface);
@@ -592,10 +578,6 @@ input[type="text"]:focus {
     transition: var(--md-transition);
 }
 
-.ui-menu .ui-menu-item:hover {
-    background: var(--md-primary-variant);
-    color: var(--md-text-primary);
-}
 .ui-menu .ui-state-focus,
 .ui-menu .ui-state-active {
     margin: 0;
@@ -604,8 +586,6 @@ input[type="text"]:focus {
     border: none;
 }
 
-    .active_line.kill {
-        background-color: rgba(141, 111, 255, 0.17); /* Нежно-красный цвет с прозрачностью */
-    }
-
-
+.active_line.kill {
+    background-color: rgba(141, 111, 255, 0.17);
+}
