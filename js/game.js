@@ -20,13 +20,6 @@
             return 0;
         }
 
-
-// Добавляем обработчики событий
-        document.addEventListener('DOMContentLoaded', loadData);
-        document.addEventListener('input', saveData);
-
-
-
         function setRole(delta, value){
             if(roles.hasOwnProperty(value)){
                 var input = $('#role_field_'+delta);
