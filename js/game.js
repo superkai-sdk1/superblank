@@ -69,9 +69,23 @@
 
                 saveData();  // Сохраняем данные после распределения ролей
             }
-            document.getElementById('distributeButton').addEventListener('click', distributeRoles);
-            document.getElementById('shuffleButton').addEventListener('click', shufflePlayers);
+            // Function to shuffle nicknames in col2
+            function shuffleNicknames() {
+                const nicknames = document.querySelectorAll('.col2 .nick_acpl');
+                const nicknameArray = Array.from(nicknames).map(nickname => nickname.value);
 
+                for (let i = nicknameArray.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [nicknameArray[i], nicknameArray[j]] = [nicknameArray[j], nicknameArray[i]];
+                }
+
+                nicknames.forEach((nickname, index) => {
+                    nickname.value = nicknameArray[index];
+                });
+            }
+
+            document.getElementById('distributeButton').addEventListener('click', distributeRoles);
+            document.getElementById('shuffleButton').addEventListener('click', shuffleNicknames);
             clear_fk();
             for(var i = 0; i < 10; i++){
                 if($('#FK_field_'+i).val() != ""){
@@ -881,5 +895,24 @@ document.addEventListener('click', function(e) {
             }
         }
     }
+});
+const modal = document.querySelector('.modal');
+const modalBackground = document.querySelector('.modal-background');
+const openModalButton = document.querySelector('.burger-menu-button');
+const closeModalButton = document.querySelector('.close-modal-button');
+
+openModalButton.addEventListener('click', () => {
+    modal.classList.add('show');
+    modalBackground.classList.add('show');
+});
+
+closeModalButton.addEventListener('click', () => {
+    modal.classList.remove('show');
+    modalBackground.classList.remove('show');
+});
+
+modalBackground.addEventListener('click', () => {
+    modal.classList.remove('show');
+    modalBackground.classList.remove('show');
 });
 
