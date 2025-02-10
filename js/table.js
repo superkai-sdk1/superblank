@@ -1,3 +1,13 @@
+window.setFall = function(delta, value) {
+    const fallInput = document.getElementById(`fall_field_${delta}`);
+    const fallView = document.getElementById(`falls_view_${delta}`);
+
+    if (fallInput && fallView) {
+        fallInput.value = value;
+        fallView.textContent = value;
+        fallView.className = `fall_${value}`;
+    }
+};
 // Function to handle kill order
 let killOrder = [];
 
