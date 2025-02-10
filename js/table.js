@@ -8,16 +8,42 @@ window.setFall = function(delta, value) {
         fallView.className = `fall_${value}`;
     }
 };
+
 // Function to handle kill order
 let killOrder = [];
 
 function handleKillOrder(delta) {
-    if (!killOrder.includes(delta)) {
+    if (killOrder.includes(delta)) {
+        removeFromKillOrder(delta);
+    } else {
         killOrder.push(delta);
         const order = killOrder.indexOf(delta) + 1;
         document.getElementById(`fk_${delta}`).textContent = order;
     }
 }
+
+function removeFromKillOrder(delta) {
+    const index = killOrder.indexOf(delta);
+    if (index > -1) {
+        killOrder.splice(index, 1);
+        document.getElementById(`fk_${delta}`).textContent = '';
+        // Update the order of remaining items in killOrder
+        killOrder.forEach((item, idx) => {
+            document.getElementById(`fk_${item}`).textContent = idx + 1;
+        });
+    }
+}
+
+// Add the event listener to col4 elements
+document.addEventListener('DOMContentLoaded', () => {
+    const col4Elements = document.querySelectorAll('.col4');
+    col4Elements.forEach(element => {
+        element.addEventListener('click', () => {
+            const delta = parseInt(element.id.replace('fk_', ''));
+            handleKillOrder(delta);
+        });
+    });
+});
 
 // Function to create the voting table
 function createTable() {
@@ -79,11 +105,6 @@ function createTable() {
         const nicknameRow = document.createElement('tr');
         for (let j = 0; j < 10; j++) {
             const bmCell = document.createElement('td');
-            bmCell.className = `bm_pick bm_line_${i} bm_pos_${j} all_bm_buttons`;
-            bmCell.setAttribute('data-pos', j);
-            bmCell.setAttribute('data-line', i);
-            bmCell.textContent = j + 1;
-            nicknameRow.appendChild(bmCell);
         }
         nicknameRow.appendChild(createActionButtons(i));
         nicknameTable.appendChild(nicknameRow);
@@ -142,14 +163,8 @@ function createTable() {
 
 function createActionButtons(line) {
     const hideButton = document.createElement('td');
-    hideButton.className = `hide_${line} all_hide all_bm_actions`;
-    hideButton.setAttribute('data-line', line);
-    hideButton.innerHTML = '<img src="images/hide.png" alt="hide icon">';
 
     const showButton = document.createElement('td');
-    showButton.className = `show_${line} all_show all_bm_actions`;
-    showButton.setAttribute('data-line', line);
-    showButton.innerHTML = '<img src="images/show.png" alt="show icon">';
 
     const nickCell = document.createElement('td');
     nickCell.className = `nick_${line} all_nicks`;
