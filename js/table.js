@@ -63,11 +63,11 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.className = 'modal';
     modal.innerHTML = `
         <div class="modal-content">
-            <h2>Select Up to 3 Players</h2>
+            <h2>Введите лучший ход</h2>
             <div class="player-buttons">
                 ${[...Array(10).keys()].map(i => `<button class="player-button" data-player="${i + 1}">${i + 1}</button>`).join('')}
             </div>
-            <button id="save-selection">Save</button>
+            <button id="save-selection">Принять ЛХ</button>
         </div>
     `;
     document.body.appendChild(modal);
