@@ -1,7 +1,7 @@
 /* Material You Dark стили */
 :root {
     --md-primary: rgb(141, 111, 255); /* Основной фиолетовый */
-    --md-primary-variant: rgb(115, 85, 231); /* Темно-фиолетовый */
+    --md-primary-variant: rgba(101, 72, 216, 0.88); /* Темно-фиолетовый */
     --md-secondary: #6200EA; /* Вторичный фиолетовый */
     --md-background: #121212; /* Темный фон */
     --md-surface: #1E1E1E; /* Поверхность */
@@ -14,16 +14,6 @@
     --md-radius: 16px;
     --md-transition: all 0.2s ease;
 }
-@font-face {
-    font-family: "Inter";
-    src:
-            url("/fonts/Inter-Regular.otf") format("opentype"),
-            url("/fonts/Inter-Medium.otf") format("opentype"),
-            url("/fonts/Inter-Bold.otf") format("opentype"),
-            url("/fonts/Inter-Light.otf") format("opentype"),
-            url("/fonts/Inter-Black.otf") format("opentype");
-}
-
 body {
     font-family: "Inter";
     background: var(--md-background);
@@ -46,14 +36,14 @@ body {
 .timer {
     background: var(--md-primary-variant);
     color: var(--md-text-primary);
-    padding: 16px 24px;
+    padding: 1px 1px;
     border-radius: var(--md-radius);
     display: inline-flex;
     align-items: center;
     gap: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    font-size: 1.75rem; /* Уменьшенный размер шрифта */
-    font-weight: 500;
+    font-size: 1.65rem; /* Уменьшенный размер шрифта */
+    font-weight: 400;
     transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
@@ -250,6 +240,7 @@ input[type="text"]:focus {
     text-align: center;
     background-color: rgba(255, 255, 255, 0);
 
+
 }
 
 @media (max-width: 768px) {
@@ -257,7 +248,7 @@ input[type="text"]:focus {
         width: 100%; /* Ширина для мобильных устройств */
         float: none;
         margin: 0 auto;
-        padding: 0 16px;
+        padding: 0 0px;
     }
 }
 
@@ -293,7 +284,7 @@ input[type="text"]:focus {
         width: 40%; /* Занимает всю ширину */
         float: none;
         margin: 0 auto; /* Центрирование */
-        padding: 5 5px; /* Отступы по бокам */
+        padding: 1px; /* Отступы по бокам */
     }
     .timer-display {
         font-size: 150px; /* Уменьшаем размер для мобильных */
