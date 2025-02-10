@@ -137,14 +137,14 @@
 <div id="vote_res" data-line="0">
 	<div id="vr_l0" data-day="0" style="display:none;" class="vote_day"></div>
 </div>
-	<div class="menu-content" id="menuContent">
-		<button class="menu-cont-button" id="settingsToggle">Роли и баллы</button>
-		<button class="menu-cont-button" id="shuffleButton">Рассадка</button>
-		<button class="menu-cont-button" id="distributeButton">Распределить роли</button>
-		<button type="button" class="menu-cont-button" id="mafia">Победа Мафии</button>
-		<button type="button" class="menu-cont-button" id="citizens">Победа Мирных</button>
-		<button class="menu-cont-button" id="resetAllForms">Новая игра</button>
-	</div>
+<div class="menu-content" id="menuContent">
+	<button class="menu-cont-button" id="settingsToggle">Роли и баллы</button>
+	<button class="menu-cont-button" id="shuffleButton">Рассадка</button>
+	<button class="menu-cont-button" id="distributeButton">Распределить роли</button>
+	<button type="button" class="menu-cont-button" id="mafia">Победа Мафии</button>
+	<button type="button" class="menu-cont-button" id="citizens">Победа Мирных</button>
+	<button class="menu-cont-button" id="resetAllForms">Новая игра</button>
+</div>
 </div>
 <div id="selection-modal" class="modal">
 	<div class="modal-content">
@@ -165,5 +165,8 @@
 		<div class="error-message" style="display: none;">Нельзя выбрать более трех кандидатов!</div>
 	</div>
 </div>
+<script>
+	document.getElementById('distributeButton').addEventListener('click', distributeRoles);
+</script>
 </body>
 </html>
