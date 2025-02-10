@@ -1,6 +1,6 @@
 :root {
     --md-primary: rgba(74, 30, 172, 0.7); /* Основной фиолетовый */
-    --md-primary-variant: rgba(115, 85, 231, 0.7); /* Темно-фиолетовый */
+    --md-primary-variant: rgba(108, 71, 251, 0.7); /* Темно-фиолетовый */
     --md-secondary: #6200EA; /* Вторичный фиолетовый */
     --md-background: #121212; /* Темный фон */
     --md-surface: #1E1E1E; /* Поверхность */
@@ -13,6 +13,7 @@
     --md-radius: 16px;
     --md-transition: all 0.2s ease;
 }
+
 
 .miss_clik {
     width: 27px;
@@ -275,7 +276,7 @@
 #point_settings td {
     text-align: center;
     border: 1px solid var(--md-primary); /* Фиолетовая граница */
-    border-radius: var(--md-radius);
+    border-radius: var (--md-radius);
 }
 
 #game_settings {
@@ -320,7 +321,7 @@
 
 .border_1 {
     border: 1px solid var(--md-primary); /* Фиолетовая граница */
-    border-radius: var(--md-radius);
+    border-radius: var (--md-radius);
 }
 
 .border_0 {
@@ -638,7 +639,7 @@
     gap: 16px;
 }
 
-.modal-buttons {
+.player-buttons {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
@@ -650,4 +651,35 @@
     color: var(--md-text-primary);
     border: none;
     border-radius: var(--md-radius);
-    padding: 8
+    padding: 16px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.player-button.selected {
+    background: var(--md-primary-variant);
+}
+
+.player-button:hover {
+    transform: scale(1.1);
+}
+
+.settings-toggle-button {
+    position: static;
+    margin: 8px;
+    background: var(--md-primary);
+    color: var(--md-text-primary);
+    border: none;
+    border-radius: var(--md-radius);
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: var(--md-transition);
+    text-align: center;
+    display: inline-block;
+}
+
+.settings-toggle-button:hover {
+    background: var(--md-primary-variant);
+
+
