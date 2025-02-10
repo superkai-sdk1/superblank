@@ -683,3 +683,70 @@
     background: var(--md-primary-variant);
 
 
+    .burger-menu-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        padding: 10px 20px;
+        background-color: var(--md-primary);
+        color: var(--md-text-primary);
+        border: none;
+        border-radius: var(--md-radius);
+        cursor: pointer;
+        font-size: 16px;
+        z-index: 1000;
+        box-shadow: var(--md-elevation-2);
+        transition: var(--md-transition);
+    }
+
+    .burger-menu-button:hover {
+        background-color: var(--md-primary-variant);
+    }
+
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: var(--md-modal-background);
+        backdrop-filter: blur(var(--md-blur));
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+        z-index: 2000;
+    }
+
+    .modal.show {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .modal-content {
+        background: var(--md-surface);
+        border-radius: var(--md-radius);
+        box-shadow: var(--md-elevation-2);
+        padding: 20px;
+        width: 90%;
+        max-width: 400px;
+        text-align: center;
+    }
+
+    .menu-cont-button {
+        display: block;
+        margin: 10px 0;
+        padding: 10px;
+        background-color: var(--md-primary);
+        color: var(--md-text-primary);
+        border: none;
+        border-radius: var(--md-radius);
+        cursor: pointer;
+        transition: var(--md-transition);
+    }
+
+    .menu-cont-button:hover {
+        background-color: var(--md-primary-variant);
+    }
