@@ -19,6 +19,10 @@ function handleKillOrder(delta) {
         killOrder.push(delta);
         const order = killOrder.indexOf(delta) + 1;
         document.getElementById(`fk_${delta}`).textContent = order;
+
+        // Добавляем класс для подсветки строки
+        document.getElementById(`line_${delta}`).classList.add('killed-player');
+
         if (order === 1) {
             openSelectionModal();
             document.getElementById('lh-button').style.display = 'block'; // Show the ЛХ button on first kill
@@ -31,6 +35,10 @@ function removeFromKillOrder(delta) {
     if (index > -1) {
         killOrder.splice(index, 1);
         document.getElementById(`fk_${delta}`).textContent = '';
+
+        // Убираем класс для подсветки строки
+        document.getElementById(`line_${delta}`).classList.remove('killed-player');
+
         // Update the order of remaining items in killOrder
         killOrder.forEach((item, idx) => {
             document.getElementById(`fk_${item}`).textContent = idx + 1;
