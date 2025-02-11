@@ -803,3 +803,58 @@ modalBackground.addEventListener('click', () => {
     modal.classList.remove('show');
     modalBackground.classList.remove('show');
 });
+function collectGameResults() {
+    let results = [];
+    document.querySelectorAll('.main-game-table tbody tr').forEach(row => {
+        const number = row.querySelector('.col1').textContent.trim();
+        const nickname = row.querySelector('.nick_acpl').value.trim();
+        const role = row.querySelector('.role').textContent.trim();
+        const lh = row.querySelector('.lh-button')?.textContent.trim() || '';
+        const points = row.querySelector('.form-item .form-text').value.trim();
+        const addPoints = row.querySelector('.col7 .form-text').value.trim();
+        const total = row.querySelector('.col8').textContent.trim();
+
+        if (nickname) {
+            results.push({
+                number,
+                nickname,
+                role,
+                lh,
+                points,
+                addPoints,
+                total
+            });
+        }
+    });
+
+    const winner = document.querySelector('#winner_field').value === 'm' ? 'Победа Мафия' : 'Победа Мирные';
+    return { results, winner };
+}
+async function sendGameResultsToTelegram(results, winner) {
+    const botToken = '7656955712:AAGsnp8Wh8xqw3YhXH2pFKZMm89x6gL8axA';
+    const chatId = window.Telegram.WebApp.initDataUnsafe.user.id;
+    const message = results.map(result =>
+        `(${result.number})|(${result.nickname})|(${result.role})|(${result.lh})|(${result.points})|(${result.addPoints})|(${result.total})`
+    ).join('\n') + `\n${winner}`;
+
+    const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            chat_id: chatId,
+            text: message
+        })
+    });
+
+    if (!response.ok) {
+        console.error('Failed to send message to Telegram:', response.status, response.statusText);
+    }
+}
+document.getElementById('saveGameButton').addEventListener('click', async () => {
+    const { results, winner } = collectGameResults();
+    await sendGameResultsToTelegram(results, winner);
+    alert('Итоги игры отправлены в Telegram');
+});
