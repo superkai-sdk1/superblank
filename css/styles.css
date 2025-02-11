@@ -605,3 +605,6 @@ input[type="text"]:focus {
 .active_line.kill {
     background-color: rgba(141, 111, 255, 0.17);
 }
+.killed-player {
+    background-color: rgba(147, 112, 219, 0.3); /* Нежно-фиолетовый цвет с прозрачностью */
+}
