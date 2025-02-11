@@ -20,7 +20,7 @@
 	<link rel="apple-touch-icon" href="/images/icon/apple-touch-icon.png">
 	<link rel="android-chrome-192x192" href="/images/icon/android-chrome-192x192.png">
 	<script src="https://telegram.org/js/telegram-web-app.js"></script>
-	<script>
+		<script>
 		$(document).ready(function() {
 			const tg = window.Telegram.WebApp;
 			tg.ready();
@@ -86,17 +86,10 @@
 			});
 
 			if (!response.ok) {
-				console.error('Failed to send message to Telegram:', response.status, response.statusText);
+				const errorText = await response.text();
+				console.error('Failed to send message to Telegram:', response.status, response.statusText, errorText);
 			}
 		}
-
-		document.getElementById('saveGameButton').addEventListener('click', async () => {
-			const { results, winner } = collectGameResults();
-			await sendGameResultsToTelegram(results, winner);
-			alert('Итоги игры отправлены в Telegram');
-
-			console.log('Chat ID:', chatId);
-		});
 	</script>
 </head>
 <body>
