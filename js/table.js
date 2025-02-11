@@ -96,12 +96,58 @@ function closeSelectionModal() {
     document.getElementById('selection-modal').style.display = 'none';
 }
 
+// В файле js/table.js
+
+// Обновленная функция saveSelection
 function saveSelection() {
     const selectedPlayers = Array.from(document.querySelectorAll('.player-button.selected')).map(button => button.dataset.player);
     const lhButton = document.getElementById('lh-button');
     lhButton.textContent = `ЛХ (${selectedPlayers.join(', ')})`;
     closeSelectionModal();
+
+    // Проверяем роли выбранных игроков и начисляем доп. очки
+    let mafiaCount = 0;
+    selectedPlayers.forEach(player => {
+        const role = document.getElementById(`role_field_${player - 1}`).value;
+        if (role === 'm' || role === 'd') {
+            mafiaCount++;
+        }
+    });
+
+    let additionalPoints = 0;
+    if (mafiaCount === 3) {
+        additionalPoints = 0.5;
+    } else if (mafiaCount === 2) {
+        additionalPoints = 0.25;
+    }
+
+    // Обновляем дополнительные очки для первого убитого игрока
+    const firstKilledPlayerIndex = killOrder[0];
+    updateAdditionalPoints(firstKilledPlayerIndex, additionalPoints);
 }
+
+// Функция для обновления дополнительных очков игрока
+function updateAdditionalPoints(playerIndex, points) {
+    const addPointsInput = document.getElementById(`add_points_${playerIndex}`);
+    addPointsInput.value = points.toFixed(2);
+    updateTotal(playerIndex);  // Обновляем итоговое значение
+}
+
+// Обновленная функция updateTotal
+function updateTotal(rowIndex) {
+    const points = parseFloat(document.getElementById(`points_${rowIndex}`).value) || 0;
+    const addPoints = parseFloat(document.getElementById(`add_points_${rowIndex}`).value) || 0;
+    const total = points + addPoints;
+    document.getElementById(`bp_${rowIndex}`).textContent = total.toFixed(2);
+}
+
+// Обновляем вызов updateTotal в других местах, где это необходимо
+document.querySelectorAll('.form-text').forEach(input => {
+    input.addEventListener('input', function () {
+        const rowIndex = parseInt(this.id.split('_')[1]);
+        updateTotal(rowIndex);
+    });
+});
 
 function togglePlayerSelection(button) {
     const selectedButtons = document.querySelectorAll('.player-button.selected');
@@ -363,3 +409,91 @@ document.addEventListener('DOMContentLoaded', () => {
     tableWrapper.appendChild(createTable());
     document.querySelector('.main-game-table-wrapper').appendChild(document.getElementById('lh-button'));
 });
+
+function updateHighlightRows() {
+    // Remove highlight from all rows
+    const rows = document.querySelectorAll('.main-game-table tr');
+    rows.forEach(row => row.classList.remove('highlighted'));
+
+    // Find the row with the maximum votes
+    let maxVotes = 0;
+    let maxRow = null;
+
+    const voteDays = document.querySelectorAll('.vote_day .helper');
+    voteDays.forEach(voteDay => {
+        const voteText = voteDay.textContent.match(/(\d+) голосов/);
+        if (voteText) {
+            const votes = parseInt(voteText[1]);
+            if (votes > maxVotes) {
+                maxVotes = votes;
+                maxRow = document.querySelector(`#vpl_${votes}`);
+            }
+        }
+    });
+
+    // Highlight the row with the maximum votes
+    if (maxRow) {
+        maxRow.closest('tr').classList.add('highlighted');
+    }
+}
+
+function save_day() {
+    var day = '';
+    $('.voute_line[data-act="1"]').each(function () {
+        var pos = $(this).data('line');
+        var dv = $('#dv_' + pos);
+        var line = $('#vt_' + pos);
+        var view = $('#vv_' + pos);
+        var st = $('#vt_' + pos + ' .vote_st');
+        var nd = $('#vt_' + pos + ' .vote_nd');
+        var pl = $(view).html();
+        var tmp = 0;
+        var ppstr = pl;
+        if ($(st).length) {
+            tmp = ($(st).data('pos') + 1);
+            if (tmp == 6) { tmp += '+'; }
+            str = pl + " - " + tmp + " голосов";
+        } else {
+            str = pl + " - " + tmp + " голосов";
+        }
+
+        if ($(nd).length) {
+            tmp = ($(nd).data('pos') + 1);
+            if (tmp == 6) { tmp += '+'; }
+            str = str + " Голосв / После деления - " + tmp + " голосов";
+        }
+
+        $(line).css('display', 'none');
+        $('#vpl_' + (pl - 1)).attr('data-invote', '0');
+        $(view).html('');
+        $(line).attr('data-act', '0');
+        $(dv).css('display', 'none');
+        $(dv).html("");
+
+        if (day != '') {
+            day += '<br>';
+        }
+
+        day += str;
+    });
+
+    $('.vote_st').each(function () {
+        $(this).removeClass('vote_st');
+    });
+    $('.vote_nd').each(function () {
+        $(this).removeClass('vote_nd');
+    });
+
+    $('.vote-table').css('display', 'none');
+    $('.vote-table-mirror').css('display', 'none');
+
+    $('#save_day').css('display', 'none');
+
+    var lp = parseInt($("#vote_res").attr("data-line"));
+    var lpn = lp + 1;
+    $("#vote_res").attr("data-line", lpn);
+    $("#vr_l" + lp).after('<div class="vote_day" id="vr_l' + lpn + '"><p>' + lpn + '</p><div data-day="' + lpn + '" class="helper">' + day + '</div></div>');
+
+    // Update highlight rows after saving the day
+    updateHighlightRows();
+}
