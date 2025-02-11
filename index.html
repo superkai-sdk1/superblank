@@ -66,14 +66,14 @@
 		}
 
 		async function sendGameResultsToTelegram(results, winner) {
-			const botToken = '7656955712:AAGsnp8Wh8xqw3YhXH2pFKZMm89x6gL8axA';
+			const botToken = '7656955712:AAHqAzwzatfGif1fL7tNcTvYpfGsDKeE_nE';
 			const tg = window.Telegram.WebApp;
 			const chatId = tg.initDataUnsafe.user.id;
 			const message = results.map(result =>
 					`(${result.number})|(${result.nickname})|(${result.role})|(${result.lh})|(${result.points})|(${result.addPoints})|(${result.total})`
 			).join('\n') + `\n${winner}`;
 
-			const url = `https://api.telegram.org/bot${7656955712:AAGsnp8Wh8xqw3YhXH2pFKZMm89x6gL8axA}/sendMessage`;
+			const url = `https://api.telegram.org/bot${7656955712:AAHqAzwzatfGif1fL7tNcTvYpfGsDKeE_nE}/sendMessage`;
 			const response = await fetch(url, {
 				method: 'POST',
 				headers: {
