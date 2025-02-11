@@ -22,84 +22,93 @@
 	<script src="https://telegram.org/js/telegram-web-app.js"></script>
 				<script>
 		$(document).ready(function() {
-			const tg = window.Telegram.WebApp;
-			tg.ready();
-			tg.MainButton.text = "Начать игру";
-			tg.MainButton.show();
-			tg.MainButton.onClick(function() {
-				alert('Telegram MainButton clicked!');
-			});
+	const tg = window.Telegram.WebApp;
+	tg.ready();
+	tg.MainButton.text = "Начать игру";
+	tg.MainButton.show();
+	tg.MainButton.onClick(function() {
+		alert('Telegram MainButton clicked!');
+	});
 
-			document.getElementById('saveGameButton').addEventListener('click', async () => {
-				const { results, winner } = collectGameResults();
-				const success = await sendGameResultsToTelegram(results, winner);
-				if (success) {
-					alert('Итоги игры успешно отправлены в Telegram');
-				} else {
-					alert('Возникла ошибка при отправке итогов игры в Telegram');
-				}
+	document.getElementById('saveGameButton').addEventListener('click', async () => {
+		const { results, winner } = collectGameResults();
+		const success = await sendGameResultsToTelegram(results, winner);
+		if (success) {
+			alert('Итоги игры успешно отправлены в Telegram');
+			displayGameResults(results, winner);
+		} else {
+			alert('Возникла ошибка при отправке итогов игры в Telegram');
+		}
+	});
+});
+
+function collectGameResults() {
+	let results = [];
+	document.querySelectorAll('.main-game-table tbody tr').forEach(row => {
+		const number = row.querySelector('.col1').textContent.trim();
+		const nickname = row.querySelector('.nick_acpl').value.trim();
+		const role = row.querySelector('.role').textContent.trim();
+		const lh = row.querySelector('.lh-button')?.textContent.trim() || '';
+		const points = row.querySelector('.form-item .form-text').value.trim();
+		const addPoints = row.querySelector('.col7 .form-text').value.trim();
+		const total = row.querySelector('.col8').textContent.trim();
+
+		if (nickname) {
+			results.push({
+				number,
+				nickname,
+				role,
+				lh,
+				points,
+				addPoints,
+				total
 			});
+		}
+	});
+
+	const winner = document.querySelector('#winner_field').value === 'm' ? 'Победа Мафия' : 'Победа Мирные';
+	return { results, winner };
+}
+
+async function sendGameResultsToTelegram(results, winner) {
+	const botToken = '7656955712:AAHqAzwzatfGif1fL7tNcTvYpfGsDKeE_nE';
+	const chatId = '1005574994';
+	const message = results.map(result =>
+			`(${result.number})|(${result.nickname})|(${result.role})|(${result.lh})|(${result.points})|(${result.addPoints})|(${result.total})`
+	).join('\n') + `\n${winner}`;
+
+	const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+	try {
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				chat_id: chatId,
+				text: message
+			})
 		});
 
-		function collectGameResults() {
-			let results = [];
-			document.querySelectorAll('.main-game-table tbody tr').forEach(row => {
-				const number = row.querySelector('.col1').textContent.trim();
-				const nickname = row.querySelector('.nick_acpl').value.trim();
-				const role = row.querySelector('.role').textContent.trim();
-				const lh = row.querySelector('.lh-button')?.textContent.trim() || '';
-				const points = row.querySelector('.form-item .form-text').value.trim();
-				const addPoints = row.querySelector('.col7 .form-text').value.trim();
-				const total = row.querySelector('.col8').textContent.trim();
-
-				if (nickname) {
-					results.push({
-						number,
-						nickname,
-						role,
-						lh,
-						points,
-						addPoints,
-						total
-					});
-				}
-			});
-
-			const winner = document.querySelector('#winner_field').value === 'm' ? 'Победа Мафия' : 'Победа Мирные';
-			return { results, winner };
+		if (!response.ok) {
+			const errorText = await response.text();
+			console.error('Failed to send message to Telegram:', response.status, response.statusText, errorText);
+			return false;
 		}
+		return true;
+	} catch (error) {
+		console.error('Error sending message to Telegram:', error);
+		return false;
+	}
+}
 
-		async function sendGameResultsToTelegram(results, winner) {
-			const botToken = '7656955712:AAHqAzwzatfGif1fL7tNcTvYpfGsDKeE_nE';
-			const chatId = '1005574994';
-			const message = results.map(result =>
-					`(${result.number})|(${result.nickname})|(${result.role})|(${result.lh})|(${result.points})|(${result.addPoints})|(${result.total})`
-			).join('\n') + `\n${winner}`;
-
-			const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-			try {
-				const response = await fetch(url, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({
-						chat_id: chatId,
-						text: message
-					})
-				});
-
-				if (!response.ok) {
-					const errorText = await response.text();
-					console.error('Failed to send message to Telegram:', response.status, response.statusText, errorText);
-					return false;
-				}
-				return true;
-			} catch (error) {
-				console.error('Error sending message to Telegram:', error);
-				return false;
-			}
-		}
+function displayGameResults(results, winner) {
+	const gameResultsDiv = document.getElementById('game-results');
+	const resultsHtml = results.map(result =>
+		`<p>(${result.number})|(${result.nickname})|(${result.role})|(${result.lh})|(${result.points})|(${result.addPoints})|(${result.total})</p>`
+	).join('') + `<p>${winner}</p>`;
+	gameResultsDiv.innerHTML = resultsHtml;
+}
 	</script>
 </head>
 <body>
@@ -266,5 +275,6 @@
 		<div class="error-message" style="display: none;">Нельзя выбрать более трех кандидатов!</div>
 	</div>
 </div>
+	<div id="game-results" class="game-results"></div>
 </body>
 </html>
