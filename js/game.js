@@ -364,7 +364,7 @@
     function set_winner_mafia() {
         for (var i = 0; i < 10; i++) {
             var points = 0;
-            var add_points = 0;
+            var add_points = parseFloat(document.getElementById(`add_points_${i}`).value) || 0; // Сохраняем текущие дополнительные очки
 
             // Начисляем 1 балл для мафии и дона
             switch ($('#role_field_' + i).attr('value')) {
@@ -397,7 +397,7 @@
     function set_winner_city() {
         for (var i = 0; i < 10; i++) {
             var points = 0;
-            var add_points = 0;
+            var add_points = parseFloat(document.getElementById(`add_points_${i}`).value) || 0; // Сохраняем текущие дополнительные очки
 
             // Начисляем 1 балл для мирных жителей и шерифа
             switch ($('#role_field_' + i).attr('value')) {
