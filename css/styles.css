@@ -608,3 +608,9 @@ input[type="text"]:focus {
 .killed-player {
     background-color: rgba(147, 112, 219, 0.3); /* Нежно-фиолетовый цвет с прозрачностью */
 }
+.max-vote-highlight {
+    background-color: rgba(141, 111, 255, 0.2); /* Нежно фиолетовый цвет */
+}
+.highlighted {
+    background-color: rgba(147, 112, 219, 0.3); /* Нежно-фиолетовый цвет с прозрачностью */
+}
