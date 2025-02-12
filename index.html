@@ -31,6 +31,7 @@
 					alert('Telegram MainButton clicked!');
 				});
 			}
+		});
 	</script>
 </head>
 <body>
@@ -64,47 +65,6 @@
 	jQuery(".user_entity_acp").autocomplete({
 		source: nicknames
 	});
-});</script>
-<script>function displayGameResults() {
-	let results = [];
-	document.querySelectorAll('.main-game-table tbody tr').forEach(row => {
-		const number = row.querySelector('.col1').textContent.trim();
-		const nickname = row.querySelector('.nick_acpl').value.trim();
-		const role = row.querySelector('.role').textContent.trim();
-		const lh = row.querySelector('.lh-button')?.textContent.trim() || '';
-		const points = row.querySelector('.form-item .form-text').value.trim();
-		const addPoints = row.querySelector('.col7 .form-text').value.trim();
-		const total = row.querySelector('.col8').textContent.trim();
-
-		if (nickname) {
-			results.push(`(${number})|(${nickname})|(${role})|(${lh})|(${points})|(${addPoints})|(${total})`);
-		}
-	});
-
-	const winner = document.querySelector('#winner_field').value === 'm' ? 'Победа Мафия' : 'Победа Мирные';
-	results.push(winner);
-
-	document.getElementById('game-summary').innerHTML = results.join('<br>');
-}
-
-document.getElementById('saveGameButton').addEventListener('click', async () => {
-	const { results, winner } = collectGameResults();
-	await sendGameResultsToTelegram(results, winner);
-	alert('Итоги игры отправлены в Telegram');
-
-	const gameResultsDiv = document.getElementById('game-results');
-	gameResultsDiv.innerHTML = ''; // Очистить предыдущие результаты
-	results.forEach(result => {
-		const resultElement = document.createElement('div');
-		resultElement.textContent = `(${result.number})|(${result.nickname})|(${result.role})|(${result.lh})|(${result.points})|(${result.addPoints})|(${result.total})`;
-		gameResultsDiv.appendChild(resultElement);
-	});
-	const winnerElement = document.createElement('div');
-	winnerElement.textContent = winner;
-	gameResultsDiv.appendChild(winnerElement);
-
-	// Вызов функции для отображения саммери игры
-	displayGameResults();
 });</script>
 <div class="vote-wrapper">
 	<div class="vote-table-wrapper">
@@ -217,7 +177,7 @@ document.getElementById('saveGameButton').addEventListener('click', async () => 
 	<button type="button" class="menu-cont-button" id="mafia">Победа Мафии</button>
 	<button type="button" class="menu-cont-button" id="citizens">Победа Мирных</button>
 	<button class="menu-cont-button" id="resetAllForms">Новая игра</button>
-	<button class="menu-cont-button" id="saveGameButton">Сохранить игру</button> <!-- Добавленная кнопка -->
+	<button class="menu-cont-button" id="saveGameButton">Сохранить игру</button>
 </div>
 <div id="selection-modal" class="modal">
 	<div class="modal-content">
@@ -238,8 +198,5 @@ document.getElementById('saveGameButton').addEventListener('click', async () => 
 		<div class="error-message" style="display: none;">Нельзя выбрать более трех кандидатов!</div>
 	</div>
 </div>
-<div id="game-results" class="game-results"></div>
-<div id="game-summary"></div>
 </body>
-<div id="game-results" class="game-results"></div>
 </html>
