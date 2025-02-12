@@ -239,10 +239,10 @@
 			// Получаем роль и форматируем её
 			const roleElement = document.getElementById(`role_view_${i}`);
 			let role = roleElement ? roleElement.innerHTML.trim() : 'Нет данных';
-			role = role.replace('&nbsp;', 'Мирный') // Заменяем &nbsp; на Мирный
-					.replace('М', 'Мафия')      // Заменяем М на Мафия
-					.replace('Д', 'Дон')         // Заменяем Д на Дон
-					.replace('Ш', 'Шериф');     // Заменяем Ш на Шериф
+			role = role.replace(/М/g, 'Мафия')      // Заменяем М на Мафия
+           .replace(/Д/g, 'Дон')         // Заменяем Д на Дон
+           .replace(/Ш/g, 'Шериф')      // Заменяем Ш на Шериф
+           .replace(/&nbsp;/g, 'Мирный'); // Заменяем &nbsp; на Мирный
 
 			// Получаем лучший ход (если есть)
 			const bestMoveElement = document.getElementById(`best_move_${i}`);
