@@ -853,9 +853,7 @@ async function sendGameResultsToTelegram(results, winner) {
         console.error('Failed to send message to Telegram:', response.status, response.statusText);
     }
 }
-document.getElementById('saveGameButton').addEventListener('click', async () => {
-    const { results, winner } = collectGameResults();
-    function displayGameResults() {
+function displayGameResults() {
     let results = [];
     document.querySelectorAll('.main-game-table tbody tr').forEach(row => {
         const number = row.querySelector('.col1').textContent.trim();
