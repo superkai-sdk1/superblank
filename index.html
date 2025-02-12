@@ -240,9 +240,9 @@
 			const roleElement = document.getElementById(`role_view_${i}`);
 			let role = roleElement ? roleElement.innerHTML.trim() : 'Нет данных';
 			role = role.replace(/М/g, 'Мафия')      // Заменяем М на Мафия
-           .replace(/Д/g, 'Дон')         // Заменяем Д на Дон
-           .replace(/Ш/g, 'Шериф')      // Заменяем Ш на Шериф
-           .replace(/&nbsp;/g, 'Мирный'); // Заменяем &nbsp; на Мирный
+					.replace(/Д/g, 'Дон')         // Заменяем Д на Дон
+					.replace(/Ш/g, 'Шериф')      // Заменяем Ш на Шериф
+					.replace(/&nbsp;/g, 'Мирный'); // Заменяем &nbsp; на Мирный
 
 			// Получаем лучший ход (если есть)
 			const bestMoveElement = document.getElementById(`best_move_${i}`);
@@ -258,19 +258,27 @@
 				bestMove = `ЛХ: ${bestMoveElement.value} (${mafiaCount})`; // Форматируем ЛХ
 			}
 
-		// Получаем основные баллы
-		const pointsElement = document.getElementById(`points_${i}`);
-		const points = pointsElement ? pointsElement.value : '0';
+			// Получаем основные баллы
+			const pointsElement = document.getElementById(`points_${i}`);
+			const points = pointsElement ? pointsElement.value : '0';
 
-		// Получаем дополнительные баллы
-		const addPointsElement = document.getElementById(`add_points_${i}`);
-		const addPoints = addPointsElement ? addPointsElement.value : '0';
+			// Получаем дополнительные баллы
+			const addPointsElement = document.getElementById(`add_points_${i}`);
+			const addPoints = addPointsElement ? addPointsElement.value : '0';
 
-		// Рассчитываем итоговый балл
-		const total = (parseFloat(points) + parseFloat(addPoints)).toFixed(2);
+			// Рассчитываем итоговый балл
+			const total = (parseFloat(points) + parseFloat(addPoints)).toFixed(2);
 
 			// Формируем строку с результатом
-			resultText += `${i + 1}. ${nickname} - ${role} - ${bestMove || 'Нет ЛХ'} - ${points} + ${addPoints} = ${total}\n`;
+			resultText += `${i + 1}. ${nickname} - ${role}`;
+
+			// Добавляем лучший ход, если он есть
+			if (bestMove) {
+				resultText += ` - ${bestMove}`;
+			}
+
+			// Добавляем баллы
+			resultText += ` - ${points} + ${addPoints} = ${total}\n`;
 		}
 
 		// Добавляем информацию о победителе
