@@ -803,31 +803,3 @@ modalBackground.addEventListener('click', () => {
     modal.classList.remove('show');
     modalBackground.classList.remove('show');
 });
-function collectGameResults() {
-    let results = [];
-    document.querySelectorAll('.main-game-table tbody tr').forEach(row => {
-        const number = row.querySelector('.col1').textContent.trim();
-        const nickname = row.querySelector('.nick_acpl').value.trim();
-        const role = row.querySelector('.role').textContent.trim();
-        const lh = row.querySelector('.lh-button')?.textContent.trim() || '';
-        const points = row.querySelector('.form-item .form-text').value.trim();
-        const addPoints = row.querySelector('.col7 .form-text').value.trim();
-        const total = row.querySelector('.col8').textContent.trim();
-
-        if (nickname) {
-            results.push({
-                number,
-                nickname,
-                role,
-                lh,
-                points,
-                addPoints,
-                total
-            });
-        }
-    });
-
-    const winner = document.querySelector('#winner_field').value === 'm' ? 'Победа Мафия' : 'Победа Мирные';
-    return { results, winner };
-}
-
