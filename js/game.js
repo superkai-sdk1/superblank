@@ -540,90 +540,90 @@
             $('#bp_'+delta).html('&nbsp;');
             $('#bp_'+delta).removeClass('b_pl');
 
-                var tar = (best_player[pos][1] == 0)?"#points_":"#add_points_";
-                var points = +$(tar+delta).attr('value');
-                points -= best_player[pos][0];
-                $(tar+delta).attr('value', points);
-                $(tar+delta).val(points);
-            }
+            var tar = (best_player[pos][1] == 0)?"#points_":"#add_points_";
+            var points = +$(tar+delta).attr('value');
+            points -= best_player[pos][0];
+            $(tar+delta).attr('value', points);
+            $(tar+delta).val(points);
         }
+    }
 
 
-        Drupal.behaviors.game_actions = {
+    Drupal.behaviors.game_actions = {
         attach: function (context, settings) {
 
-        check_all();
+            check_all();
 
 
-        $('#rate-table-type-node-form').on('submit', function(e){
-            window.onbeforeunload = null;
-        });
+            $('#rate-table-type-node-form').on('submit', function(e){
+                window.onbeforeunload = null;
+            });
 
-        $('.bp_select').click(function(){
-            var delta = $(this).data('delta');
-            if($(this).hasClass('b_pl')){
-                rem_bp(delta);
-            } else {
-                set_bp(delta);
-            }
-        });
+            $('.bp_select').click(function(){
+                var delta = $(this).data('delta');
+                if($(this).hasClass('b_pl')){
+                    rem_bp(delta);
+                } else {
+                    set_bp(delta);
+                }
+            });
 
-        $('#mafia').click(function(){
-            if(checkValues() == 0){
-                set_winner_mafia();
-            } else {
-                $(this).attr('checked', false);
-            }
-        });
+            $('#mafia').click(function(){
+                if(checkValues() == 0){
+                    set_winner_mafia();
+                } else {
+                    $(this).attr('checked', false);
+                }
+            });
 
-        $('#citizens').click(function(){
-            if(checkValues() == 0){
-                set_winner_city();
-            } else {
-                $(this).attr('checked', false);
-            }
-        });
+            $('#citizens').click(function(){
+                if(checkValues() == 0){
+                    set_winner_city();
+                } else {
+                    $(this).attr('checked', false);
+                }
+            });
 
-        $('#save_day').click(function(){
-            save_day();
-        });
+            $('#save_day').click(function(){
+                save_day();
+            });
 
-        $('.vote_butt').click(function(){
-            var line = $(this).data('line');
-            var nd = $('#vt_'+line+' .vote_nd').length;
-            var st = $('#vt_'+line+' .vote_st').length;
+            $('.vote_butt').click(function(){
+                var line = $(this).data('line');
+                var nd = $('#vt_'+line+' .vote_nd').length;
+                var st = $('#vt_'+line+' .vote_st').length;
 
-            if(nd){
-                if($(this).hasClass('vote_nd')){
-                    $(this).removeClass('vote_nd');
-                    if($(this).hasClass('vote_st')){
-                        $(this).removeClass('vote_st');
+                if(nd){
+                    if($(this).hasClass('vote_nd')){
+                        $(this).removeClass('vote_nd');
+                        if($(this).hasClass('vote_st')){
+                            $(this).removeClass('vote_st');
+                        }
+                    } else {
+                        $('#vt_'+line+' .vote_nd').each(function(){
+                            $(this).removeClass('vote_nd');
+                        });
+
+                        $(this).addClass('vote_nd');
                     }
                 } else {
-                    $('#vt_'+line+' .vote_nd').each(function(){
-                        $(this).removeClass('vote_nd');
-                    });
-
-                    $(this).addClass('vote_nd');
+                    if(st){
+                        $(this).addClass('vote_nd');
+                    } else {
+                        $(this).addClass('vote_st');
+                    }
                 }
-            } else {
-                if(st){
-                    $(this).addClass('vote_nd');
-                } else {
-                    $(this).addClass('vote_st');
-                }
-            }
-        });
+            });
 
-        $('.to_vote').click(function(){
-            var delta = $(this).data('delta');
-            put_to_vote(delta);
-        });
+            $('.to_vote').click(function(){
+                var delta = $(this).data('delta');
+                put_to_vote(delta);
+            });
 
-        $('.voute_p').click(function(){
-            var delta = $(this).html();
-            rem_from_vote(delta);
-        });
+            $('.voute_p').click(function(){
+                var delta = $(this).html();
+                rem_from_vote(delta);
+            });
 
             $(document).ready(function() {
                 let isVisible = false;
@@ -636,91 +636,91 @@
                 });
             });
 
-		$('.callc_pick').click(function(){
-			var delta = parseInt($(this).data('delta'));
-			var cur = parseInt($(this).data('current'));
-			var dir = parseInt($(this).data('target'));
-            points_callc(delta, cur, dir);
-		});
+            $('.callc_pick').click(function(){
+                var delta = parseInt($(this).data('delta'));
+                var cur = parseInt($(this).data('current'));
+                var dir = parseInt($(this).data('target'));
+                points_callc(delta, cur, dir);
+            });
 
-		$('.all_hide').click(function(){
-			var line = parseInt($(this).data('line'));
-			hide_bm(line);
-		});
+            $('.all_hide').click(function(){
+                var line = parseInt($(this).data('line'));
+                hide_bm(line);
+            });
 
-		$('.all_show').click(function(){
-			var line = parseInt($(this).data('line'));
-			show_bm(line);
-		});
+            $('.all_show').click(function(){
+                var line = parseInt($(this).data('line'));
+                show_bm(line);
+            });
 
-        $('.fk_pick').click(function(){
-			var delta = $(this).data('delta');
-            if(!$(this).hasClass("fk_selected")){
-                set_fk(delta);
-            }
-		});
+            $('.fk_pick').click(function(){
+                var delta = $(this).data('delta');
+                if(!$(this).hasClass("fk_selected")){
+                    set_fk(delta);
+                }
+            });
 
-        $('body').on('click', '.miss-last', function(){
-            if(_action){
-                _action = false;
-            } else {
-                var pos = parseInt($(this).attr('data-misspos'));
-                var input = $('#FK_field_'+pos);
-                var val = parseInt($(input).val());
-
-                if(val == -1){
-                    $(this).remove();
-                    $('.allpos[data-misspos='+(pos-1)+']').addClass('miss-last');
-                    $(input).attr('value', '');
-                    $(input).val('');
+            $('body').on('click', '.miss-last', function(){
+                if(_action){
+                    _action = false;
                 } else {
-                    var view = $('#fk_'+val);
-                    $(view).html("");
-                    $(view).removeClass('fk_selected');
-                    $(view).removeClass('miss-last');
-                    $('.allpos[data-misspos='+(pos-1)+']').addClass('miss-last');
-                    $(input).attr('value', '');
-                    $(input).val('');
+                    var pos = parseInt($(this).attr('data-misspos'));
+                    var input = $('#FK_field_'+pos);
+                    var val = parseInt($(input).val());
 
-                    if(pos == 0){
-                        $('.nick_'+val).css("display", "table-cell");
-            			$('.bm_line_'+val).css("display", "none");
-            			$('.hide_'+val).css("display", "none");
+                    if(val == -1){
+                        $(this).remove();
+                        $('.allpos[data-misspos='+(pos-1)+']').addClass('miss-last');
+                        $(input).attr('value', '');
+                        $(input).val('');
+                    } else {
+                        var view = $('#fk_'+val);
+                        $(view).html("");
+                        $(view).removeClass('fk_selected');
+                        $(view).removeClass('miss-last');
+                        $('.allpos[data-misspos='+(pos-1)+']').addClass('miss-last');
+                        $(input).attr('value', '');
+                        $(input).val('');
+
+                        if(pos == 0){
+                            $('.nick_'+val).css("display", "table-cell");
+                            $('.bm_line_'+val).css("display", "none");
+                            $('.hide_'+val).css("display", "none");
+                        }
                     }
                 }
-            }
-		});
+            });
 
-        $('#miss-button').click(function(){
-			set_fk(-1);
+            $('#miss-button').click(function(){
+                set_fk(-1);
 
-		});
+            });
 
-		$('.role').click(function(){
-			var delta = $(this).data('delta');
-			var val = $('#role_field_'+delta).val();
+            $('.role').click(function(){
+                var delta = $(this).data('delta');
+                var val = $('#role_field_'+delta).val();
 
-			switch(val){
-				case 'c':
-					if($('.role_field_all[value="m"]').length<2){
-						setRole(delta, 'm');
-						break;
-					}
-				case 'm':
-					if($('.role_field_all[value="d"]').length<1){
-						setRole(delta, 'd');
-						break;
-					}
-				case 'd':
-					if($('.role_field_all[value="s"]').length<1){
-						setRole(delta, 's');
-						break;
-					}
-				case 's':
-					setRole(delta, 'c');
-				break;
-			}
-		});
+                switch(val){
+                    case 'c':
+                        if($('.role_field_all[value="m"]').length<2){
+                            setRole(delta, 'm');
+                            break;
+                        }
+                    case 'm':
+                        if($('.role_field_all[value="d"]').length<1){
+                            setRole(delta, 'd');
+                            break;
+                        }
+                    case 'd':
+                        if($('.role_field_all[value="s"]').length<1){
+                            setRole(delta, 's');
+                            break;
+                        }
+                    case 's':
+                        setRole(delta, 'c');
+                        break;
+                }
+            });
             // Функция для обновления итоговой суммы
             function updateTotal(rowIndex) {
                 const points = parseFloat(document.getElementById(`points_${rowIndex}`).value) || 0;
@@ -744,8 +744,8 @@
                 });
             }
 
-     }
-  }
+        }
+    }
     // Предотвращение случайного зума
     document.addEventListener('dblclick', function(e) {
         e.preventDefault();
@@ -831,41 +831,3 @@ function collectGameResults() {
     return { results, winner };
 }
 
-function displayGameResults() {
-    let results = [];
-    document.querySelectorAll('.main-game-table tbody tr').forEach(row => {
-        const number = row.querySelector('.col1').textContent.trim();
-        const nickname = row.querySelector('.nick_acpl').value.trim();
-        const role = row.querySelector('.role').textContent.trim();
-        const lh = row.querySelector('.lh-button')?.textContent.trim() || '';
-        const points = row.querySelector('.form-item .form-text').value.trim();
-        const addPoints = row.querySelector('.col7 .form-text').value.trim();
-        const total = row.querySelector('.col8').textContent.trim();
-
-        if (nickname) {
-            results.push(`(${number})|(${nickname})|(${role})|(${lh})|(${points})|(${addPoints})|(${total})`);
-        }
-    });
-
-    const winner = document.querySelector('#winner_field').value === 'm' ? 'Победа Мафия' : 'Победа Мирные';
-    results.push(winner);
-
-    document.getElementById('game-summary').innerHTML = results.join('<br>');
-}
-
-document.getElementById('saveGameButton').addEventListener('click', async () => {
-    const { results, winner } = collectGameResults();
-    await sendGameResultsToTelegram(results, winner);
-    alert('Итоги игры отправлены в Telegram');
-
-    const gameResultsDiv = document.getElementById('game-results');
-    gameResultsDiv.innerHTML = ''; // Очистить предыдущие результаты
-    results.forEach(result => {
-        const resultElement = document.createElement('div');
-        resultElement.textContent = `(${result.number})|(${result.nickname})|(${result.role})|(${result.lh})|(${result.points})|(${result.addPoints})|(${result.total})`;
-        gameResultsDiv.appendChild(resultElement);
-    });
-    const winnerElement = document.createElement('div');
-    winnerElement.textContent = winner;
-    gameResultsDiv.appendChild(winnerElement);
-});
