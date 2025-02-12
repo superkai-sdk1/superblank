@@ -242,10 +242,11 @@
 			role = role.replace(/М/g, 'Мафия')      // Заменяем М на Мафия
 					.replace(/Д/g, 'Дон')         // Заменяем Д на Дон
 					.replace(/Ш/g, 'Шериф')      // Заменяем Ш на Шериф
-					.replace(/К/gi, 'Мирный'); // Заменяем К на Мирный
+					.replace(/К/g, 'Мирный'); // Заменяем К на Мирный
 
 			// Получаем лучший ход (если есть)
 			const bestMoveElement = document.getElementById(`best_move_${i}`);
+			let bestMove = '';
 			if (bestMoveElement && bestMoveElement.value) {
 				const bestMovePlayers = bestMoveElement.value.split(',').map(Number); // Номера игроков в ЛХ
 				const mafiaCount = bestMovePlayers.filter(player => {
@@ -254,7 +255,7 @@
 					return playerRole === 'М' || playerRole === 'Д'; // Проверяем, мафия или дон
 				}).length;
 
-				bestMoveText = `Лучший ход: ${bestMoveElement.value} (${mafiaCount}) от игрока ${i + 1}\n`; // Форматируем ЛХ
+				bestMove = `ЛХ: ${bestMoveElement.value} (${mafiaCount})`; // Форматируем ЛХ
 			}
 
 			// Получаем основные баллы
