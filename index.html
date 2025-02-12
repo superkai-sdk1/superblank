@@ -270,7 +270,7 @@
 		const total = (parseFloat(points) + parseFloat(addPoints)).toFixed(2);
 
 		// Формируем строку с результатом
-		resultText += `[${i + 1}]|[${nickname}]|[${role}]${bestMove ? `|[${bestMove}]` : ''}|[${points}]|[${addPoints}]|[${total}]\n`;
+		resultText += `${i + 1}.${nickname}-${role} (${bestMove ? `-${bestMove}` : ''} - ${points}+${addPoints}=${total}\n`;
 	}
 
 		// Добавляем информацию о победителе
