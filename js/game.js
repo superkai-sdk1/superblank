@@ -852,3 +852,20 @@ function displayGameResults() {
 
     document.getElementById('game-summary').innerHTML = results.join('<br>');
 }
+
+document.getElementById('saveGameButton').addEventListener('click', async () => {
+    const { results, winner } = collectGameResults();
+    await sendGameResultsToTelegram(results, winner);
+    alert('Итоги игры отправлены в Telegram');
+
+    const gameResultsDiv = document.getElementById('game-results');
+    gameResultsDiv.innerHTML = ''; // Очистить предыдущие результаты
+    results.forEach(result => {
+        const resultElement = document.createElement('div');
+        resultElement.textContent = `(${result.number})|(${result.nickname})|(${result.role})|(${result.lh})|(${result.points})|(${result.addPoints})|(${result.total})`;
+        gameResultsDiv.appendChild(resultElement);
+    });
+    const winnerElement = document.createElement('div');
+    winnerElement.textContent = winner;
+    gameResultsDiv.appendChild(winnerElement);
+});
