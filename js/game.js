@@ -1,7 +1,7 @@
 (function($){
     var _action = false;
     var roles = {
-        'c': '&nbsp;',
+        'c': 'К',
         'm': 'М',
         'd': 'Д',
         's': 'Ш'
@@ -537,7 +537,7 @@
         if($('#BP_field_'+pos).attr('value') == delta){
             $('#BP_field_'+pos).attr('value', '');
             $('#BP_field_'+pos).val('');
-            $('#bp_'+delta).html('&nbsp;');
+            $('#bp_'+delta).html('К');
             $('#bp_'+delta).removeClass('b_pl');
 
             var tar = (best_player[pos][1] == 0)?"#points_":"#add_points_";
