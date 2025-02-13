@@ -69,12 +69,24 @@
 		<button class="material-button large-button" onclick="resumeTimer()">Продолжить</button>
 		<button class="material-button large-button" onclick="stopTimer()">Стоп</button>
 	</div>
+
+	
 	<div class="audio-controls">
-		<button class="audio-button" onclick="playAudio('tts/destributephase.mp3')">Раздача</button>
-		<button class="audio-button" onclick="playAudio('tts/killphase.mp3')">Стрельба</button>
-		<button class="audio-button" onclick="playAudio('tts/donphase.mp3')">Дон</button>
-		<button class="audio-button" onclick="playAudio('tts/sherphase.mp3')">Шериф</button>
-		<button class="audio-button" onclick="stopAudio()">Стоп</button>
+		<button class="material-button small-button" onclick="playAudio('tts/destributephase.mp3')">
+			<img src="/images/desrtibute.png" alt="Раздача" class="audio-icon">
+		</button>
+		<button class="material-button small-button" onclick="playAudio('tts/killphase.mp3')">
+			<img src="/images/kill.png" alt="Стрельба" class="audio-icon">
+		</button>
+		<button class="material-button small-button" onclick="playAudio('tts/donphase.mp3')">
+			<img src="/images/don.png" alt="Дон" class="audio-icon">
+		</button>
+		<button class="material-button small-button" onclick="playAudio('tts/sherphase.mp3')">
+			<img src="/images/sheriff.png" alt="Шериф" class="audio-icon">
+		</button>
+		<button class="material-button small-button" onclick="stopAudio()">
+			<img src="/images/stop.png" alt="Стоп" class="audio-icon">
+		</button>
 	</div>
 
 <div class="main-game-table-wrapper table-wrapper">
