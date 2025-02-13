@@ -229,8 +229,23 @@ document.getElementById('saveGameButton').addEventListener('click', function() {
     resultHeader.textContent = 'Результат игры:';
     resultContainer.appendChild(resultHeader);
 
+    // Получаем никнейм пользователя, запустившего приложение
+    const tg = window.Telegram.WebApp;
+    const userNickname = tg.initDataUnsafe.user?.username || 'Неизвестный пользователь';
+
+    // Получаем текущую дату и время
+    const now = new Date();
+    const day = now.getDate(); // День
+    const month = now.toLocaleString('ru-RU', { month: 'long' }); // Месяц буквами
+    const year = now.getFullYear(); // Год
+    const hours = String(now.getHours()).padStart(2, '0'); // Часы
+    const minutes = String(now.getMinutes()).padStart(2, '0'); // Минуты
+
+    // Форматируем дату и время
+    const formattedDateTime = `${day} ${month} ${year}, ${hours}:${minutes}`;
+
     // Собираем данные по каждому игроку
-    let resultText = 'Результат игры:\n';
+    let resultText = `Результат игры:\nПользователь: @${userNickname}\nДата и время: ${formattedDateTime}\n\n`;
     for (let i = 0; i < 10; i++) {
         // Получаем никнейм
         const nicknameElement = document.querySelector(`.nick_acpl[data-delta="${i}"]`);
@@ -275,15 +290,14 @@ document.getElementById('saveGameButton').addEventListener('click', function() {
 
     // Добавляем информацию о победителе
     if (winner === 'm') {
-        resultText += 'Победила Мафия!';
+        resultText += '\nПобедила Мафия!';
     } else if (winner === 'c') {
-        resultText += 'Победили Мирные!';
+        resultText += '\nПобедили Мирные!';
     } else {
-        resultText += 'Победитель не выбран!';
+        resultText += '\nПобедитель не выбран!';
     }
 
     // Отправка результата в Telegram
-    const tg = window.Telegram.WebApp;
     if (tg) {
         const chatId = tg.initDataUnsafe.user?.id; // Получаем chat_id пользователя
         if (chatId) {
