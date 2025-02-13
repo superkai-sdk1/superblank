@@ -33,6 +33,31 @@
 			}
 		});
 	</script>
+
+	<script>
+		// Переменная для хранения текущего аудио
+		let currentAudio = null;
+
+		// Функция для воспроизведения аудио
+		function playAudio(src) {
+			// Останавливаем текущее аудио, если оно воспроизводится
+			if (currentAudio) {
+				currentAudio.pause();
+				currentAudio.currentTime = 0;
+			}
+			// Создаем новый объект аудио и воспроизводим
+			currentAudio = new Audio(src);
+			currentAudio.play();
+		}
+
+		// Функция для остановки аудио
+		function stopAudio() {
+			if (currentAudio) {
+				currentAudio.pause();
+				currentAudio.currentTime = 0;
+			}
+		}
+	</script>
 </head>
 <body>
 <div class="timer-container">
@@ -43,6 +68,13 @@
 		<button class="material-button large-button" onclick="pauseTimer()">Пауза</button>
 		<button class="material-button large-button" onclick="resumeTimer()">Продолжить</button>
 		<button class="material-button large-button" onclick="stopTimer()">Стоп</button>
+	</div>
+	<div class="audio-controls">
+		<button class="audio-button" onclick="playAudio('tts/destributephase.mp3')">Раздача</button>
+		<button class="audio-button" onclick="playAudio('tts/killphase.mp3')">Стрельба</button>
+		<button class="audio-button" onclick="playAudio('tts/donphase.mp3')">Дон</button>
+		<button class="audio-button" onclick="playAudio('tts/sherphase.mp3')">Шериф</button>
+		<button class="audio-button" onclick="stopAudio()">Стоп</button>
 	</div>
 
 <div class="main-game-table-wrapper table-wrapper">
