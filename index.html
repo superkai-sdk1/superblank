@@ -199,21 +199,7 @@
 	</div>
 </div>
 <script>
-		// Переменная для хранения победителя
-		let winner = ''; // По умолчанию победитель не выбран
-
-		// Обработчик для кнопки "Победа Мафии"
-		document.getElementById('mafia').addEventListener('click', function() {
-		winner = 'm'; // Устанавливаем победителя — мафия
-	});
-
-		// Обработчик для кнопки "Победа Мирных"
-		document.getElementById('citizens').addEventListener('click', function() {
-		winner = 'c'; // Устанавливаем победителя — мирные
-	});
-
-		// Обработчик для кнопки "Сохранить игру"
-		document.getElementById('saveGameButton').addEventListener('click', function() {
+	document.getElementById('saveGameButton').addEventListener('click', function() {
 		// Создаем контейнер для вывода результатов
 		const resultContainer = document.createElement('div');
 		resultContainer.id = 'gameResult';
@@ -227,12 +213,28 @@
 		resultHeader.textContent = 'Результат игры:';
 		resultContainer.appendChild(resultHeader);
 
+		// Получаем информацию о судье из Telegram
+		const tg = window.Telegram.WebApp;
+		let judgeInfo = '';
+		if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+			const judgeUsername = tg.initDataUnsafe.user.username; // Никнейм судьи
+			const judgeId = tg.initDataUnsafe.user.id; // ID судьи
+			judgeInfo = `Судья: @${judgeUsername} (ID: ${judgeId})\n`;
+		}
+
+		// Получаем текущую дату
+		const currentDate = new Date().toLocaleDateString('ru-RU'); // Форматируем дату для России
+		const dateInfo = `Дата: ${currentDate}\n`;
+
 		// Собираем данные по каждому игроку
 		let resultText = 'Результат игры:\n';
+		resultText += judgeInfo; // Добавляем информацию о судье
+		resultText += dateInfo; // Добавляем дату
+
 		for (let i = 0; i < 10; i++) {
-		// Получаем никнейм
-		const nicknameElement = document.querySelector(`.nick_acpl[data-delta="${i}"]`);
-		const nickname = nicknameElement ? nicknameElement.value : 'Нет данных';
+			// Получаем никнейм
+			const nicknameElement = document.querySelector(`.nick_acpl[data-delta="${i}"]`);
+			const nickname = nicknameElement ? nicknameElement.value : 'Нет данных';
 
 			// Получаем роль и форматируем её
 			const roleElement = document.getElementById(`role_view_${i}`);
@@ -281,54 +283,53 @@
 
 		// Добавляем информацию о победителе
 		if (winner === 'm') {
-		resultText += 'Победила Мафия!';
-	} else if (winner === 'c') {
-		resultText += 'Победили Мирные!';
-	} else {
-		resultText += 'Победитель не выбран!';
-	}
+			resultText += 'Победила Мафия!';
+		} else if (winner === 'c') {
+			resultText += 'Победили Мирные!';
+		} else {
+			resultText += 'Победитель не выбран!';
+		}
 
 		// Отправка результата в Telegram
-		const tg = window.Telegram.WebApp;
 		if (tg) {
-		const chatId = tg.initDataUnsafe.user?.id; // Получаем chat_id пользователя
-		if (chatId) {
-		const botToken = '7656955712:AAHqAzwzatfGif1fL7tNcTvYpfGsDKeE_nE';
-		const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+			const chatId = tg.initDataUnsafe.user?.id; // Получаем chat_id пользователя
+			if (chatId) {
+				const botToken = '7656955712:AAHqAzwzatfGif1fL7tNcTvYpfGsDKeE_nE';
+				const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
-		fetch(apiUrl, {
-		method: 'POST',
-		headers: {
-		'Content-Type': 'application/json',
-	},
-		body: JSON.stringify({
-		chat_id: chatId,
-		text: resultText,
-	}),
-	})
-		.then(response => response.json())
-		.then(data => {
-		console.log('Сообщение отправлено:', data);
-	})
-		.catch(error => {
-		console.error('Ошибка при отправке сообщения:', error);
-	});
-	} else {
-		console.error('chat_id не найден');
-	}
-	}
+				fetch(apiUrl, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						chat_id: chatId,
+						text: resultText,
+					}),
+				})
+						.then(response => response.json())
+						.then(data => {
+							console.log('Сообщение отправлено:', data);
+						})
+						.catch(error => {
+							console.error('Ошибка при отправке сообщения:', error);
+						});
+			} else {
+				console.error('chat_id не найден');
+			}
+		}
 
 		// Удаляем старый результат, если он есть
 		const oldResult = document.getElementById('gameResult');
 		if (oldResult) {
-		oldResult.remove();
-	}
+			oldResult.remove();
+		}
 
 		// Добавляем результат на страницу
 		document.body.appendChild(resultContainer);
 	});
 </script>
-	<script>
+<script>
 	// Обработчик для кнопки "Новая игра"
 	document.getElementById('resetAllForms').addEventListener('click', function() {
 		location.reload(); // Перезагружает страницу
