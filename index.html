@@ -214,8 +214,8 @@
     alert('Победили Мирные!');
   });
 
-  // Обработчик для кнопки "Сохранить игру"
-  document.getElementById('saveGameButton').addEventListener('click', function() {
+ // Обработчик для кнопки "Сохранить игру"
+document.getElementById('saveGameButton').addEventListener('click', function() {
     // Создаем контейнер для вывода результатов
     const resultContainer = document.createElement('div');
     resultContainer.id = 'gameResult';
@@ -229,108 +229,98 @@
     resultHeader.textContent = 'Результат игры:';
     resultContainer.appendChild(resultHeader);
 
-    // Никнейм судьи
-    const judgeNickname = document.createElement('p');
-    judgeNickname.textContent = `Судья: ${window.Telegram.WebApp.initDataUnsafe.user?.username || 'Неизвестно'}`;
-    resultContainer.appendChild(judgeNickname);
-
-    // Текущая дата
-    const currentDate = document.createElement('p');
-    currentDate.textContent = `Дата: ${new Date().toLocaleDateString()}`;
-    resultContainer.appendChild(currentDate);
-
     // Собираем данные по каждому игроку
     let resultText = 'Результат игры:\n';
     for (let i = 0; i < 10; i++) {
-      // Получаем никнейм
-      const nicknameElement = document.querySelector(`.nick_acpl[data-delta="${i}"]`);
-      const nickname = nicknameElement ? nicknameElement.value : 'Нет данных';
+        // Получаем никнейм
+        const nicknameElement = document.querySelector(`.nick_acpl[data-delta="${i}"]`);
+        const nickname = nicknameElement ? nicknameElement.value : 'Нет данных';
 
-      // Получаем роль и форматируем её
-      const roleElement = document.getElementById(`role_view_${i}`);
-      let role = roleElement ? roleElement.innerHTML.trim() : 'Нет данных';
-      role = role.replace('&nbsp;', 'Мирный') // Заменяем &nbsp; на Мирный
-        .replace('М', 'Мафия') // Заменяем М на Мафия
-        .replace('Д', 'Дон') // Заменяем Д на Дон
-        .replace('Ш', 'Шериф'); // Заменяем Ш на Шериф
+        // Получаем роль и форматируем её
+        const roleElement = document.getElementById(`role_view_${i}`);
+        let role = roleElement ? roleElement.innerHTML.trim() : 'Нет данных';
+        role = role.replace(/М/g, 'Мафия')      // Заменяем М на Мафия
+                  .replace(/Д/g, 'Дон')         // Заменяем Д на Дон
+                  .replace(/Ш/g, 'Шериф')      // Заменяем Ш на Шериф
+                  .replace(/К/g, 'Мирный'); // Заменяем К на Мирный
 
-      // Получаем лучший ход (если есть)
-      const bestMoveElement = document.getElementById(`best_move_${i}`);
-      let bestMove = '';
-      if (bestMoveElement && bestMoveElement.value) {
-        const bestMovePlayers = bestMoveElement.value.split(',').map(Number); // Номера игроков в ЛХ
-        const mafiaCount = bestMovePlayers.filter(player => {
-          const playerRoleElement = document.getElementById(`role_view_${player - 1}`);
-          const playerRole = playerRoleElement ? playerRoleElement.innerHTML.trim() : '';
-          return playerRole === 'М' || playerRole === 'Д'; // Проверяем, мафия или дон
-        }).length;
+        // Получаем лучший ход (если есть)
+        const bestMoveElement = document.getElementById(`best_move_${i}`);
+        let bestMove = '';
+        if (bestMoveElement && bestMoveElement.value) {
+            const bestMovePlayers = bestMoveElement.value.split(',').map(Number); // Номера игроков в ЛХ
+            const mafiaCount = bestMovePlayers.filter(player => {
+                const playerRoleElement = document.getElementById(`role_view_${player - 1}`);
+                const playerRole = playerRoleElement ? playerRoleElement.innerHTML.trim() : '';
+                return playerRole === 'М' || playerRole === 'Д'; // Проверяем, мафия или дон
+            }).length;
 
-        bestMove = `ЛХ(${bestMoveElement.value})(${mafiaCount})`; // Форматируем ЛХ
-      }
+            bestMove = ` (ЛХ: ${bestMoveElement.value} - ${mafiaCount})`; // Форматируем ЛХ
+        }
 
-      // Получаем основные баллы
-      const pointsElement = document.getElementById(`points_${i}`);
-      const points = pointsElement ? pointsElement.value : '0';
+        // Получаем основные баллы
+        const pointsElement = document.getElementById(`points_${i}`);
+        const points = pointsElement ? pointsElement.value : '0';
 
-      // Получаем дополнительные баллы
-      const addPointsElement = document.getElementById(`add_points_${i}`);
-      const addPoints = addPointsElement ? addPointsElement.value : '0';
+        // Получаем дополнительные баллы
+        const addPointsElement = document.getElementById(`add_points_${i}`);
+        const addPoints = addPointsElement ? addPointsElement.value : '0';
 
-      // Рассчитываем итоговый балл
-      const total = (parseFloat(points) + parseFloat(addPoints)).toFixed(2);
+        // Рассчитываем итоговый балл
+        const total = (parseFloat(points) + parseFloat(addPoints)).toFixed(2);
 
-      // Формируем строку с результатом
-      resultText += `[${i + 1}]|[${nickname}]|[${role}]${bestMove ? `|[${bestMove}]` : ''}|[${points}]|[${addPoints}]|[${total}]\n`;
+        // Формируем строку с результатом в новом формате
+        resultText += `${i + 1}. ${nickname} - ${role}${bestMove} | ${points} + ${addPoints} = ${total}\n`;
     }
 
     // Добавляем информацию о победителе
     if (winner === 'm') {
-      resultText += 'Победила Мафия!';
+        resultText += 'Победила Мафия!';
     } else if (winner === 'c') {
-      resultText += 'Победили Мирные!';
+        resultText += 'Победили Мирные!';
     } else {
-      resultText += 'Победитель не выбран!';
+        resultText += 'Победитель не выбран!';
     }
 
     // Отправка результата в Telegram
     const tg = window.Telegram.WebApp;
     if (tg) {
-      const chatId = tg.initDataUnsafe.user?.id; // Получаем chat_id пользователя
-      if (chatId) {
-        const botToken = '7656955712:AAHqAzwzatfGif1fL7tNcTvYpfGsDKeE_nE';
-        const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+        const chatId = tg.initDataUnsafe.user?.id; // Получаем chat_id пользователя
+        if (chatId) {
+            const botToken = '7656955712:AAHqAzwzatfGif1fL7tNcTvYpfGsDKeE_nE';
+            const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
-        fetch(apiUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            chat_id: chatId,
-            text: resultText,
-          }),
-        })
-          .then(response => response.json())
-          .then(data => {
-            console.log('Сообщение отправлено:', data);
-          })
-          .catch(error => {
-            console.error('Ошибка при отправке сообщения:', error);
-          });
-      } else {
-        console.error('chat_id не найден');
-      }
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: resultText,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Сообщение отправлено:', data);
+            })
+            .catch(error => {
+                console.error('Ошибка при отправке сообщения:', error);
+            });
+        } else {
+            console.error('chat_id не найден');
+        }
     }
 
     // Удаляем старый результат, если он есть
     const oldResult = document.getElementById('gameResult');
     if (oldResult) {
-      oldResult.remove();
+        oldResult.remove();
     }
 
     // Добавляем результат на страницу
     document.body.appendChild(resultContainer);
-  });
+});
 </script>
 </body>
 </html>
