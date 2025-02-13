@@ -614,3 +614,33 @@ input[type="text"]:focus {
 .highlighted {
     background-color: rgba(147, 112, 219, 0.3); /* Нежно-фиолетовый цвет с прозрачностью */
 }
+.audio-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.material-button.small-button {
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 12px;
+    background-color: var(--md-primary);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.material-button.small-button:hover {
+    background-color: var(--md-primary-variant);
+}
+
+.audio-icon {
+    width: 24px;
+    height: 24px;
+    filter: invert(1); /* Инвертировать цвет иконки для лучшей видимости на темном фоне */
+}
