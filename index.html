@@ -70,46 +70,59 @@
 		<button class="material-button large-button" onclick="stopTimer()">Стоп</button>
 	</div>
 
-
 	<div class="audio-controls">
 		<button class="material-button small-button" onclick="playAudio('tts/destributephase.mp3')">
-			<img src="/blank/images/desrtibute.png" alt="Раздача" class="audio-icon">
+			<img src="/blank/images/desrtibute.svg" alt="Раздача" class="audio-icon">
 		</button>
 		<button class="material-button small-button" onclick="playAudio('tts/killphase.mp3')">
-			<img src="/blank/images/kill.png" alt="Стрельба" class="audio-icon">
+			<img src="/blank/images/kill.svg" alt="Стрельба" class="audio-icon">
 		</button>
 		<button class="material-button small-button" onclick="playAudio('tts/donphase.mp3')">
-			<img src="/blank/images/don.png" alt="Дон" class="audio-icon">
+			<img src="/blank/images/don.svg" alt="Дон" class="audio-icon">
 		</button>
 		<button class="material-button small-button" onclick="playAudio('tts/sherphase.mp3')">
-			<img src="/blank/images/sheriff.png" alt="Шериф" class="audio-icon">
+			<img src="/blank/images/sheriff.svg" alt="Шериф" class="audio-icon">
 		</button>
 		<button class="material-button small-button" onclick="stopAudio()">
-			<img src="/blank/images/stop.png" alt="Стоп" class="audio-icon">
+			<img src="/blank/images/stop.svg" alt="Стоп" class="audio-icon">
 		</button>
 	</div>
-
-<div class="main-game-table-wrapper table-wrapper">
 </div>
-<script>jQuery(function () {
-	const nicknames = [
-		"AMOR", "Asia", "Alien", "Alinellas", "Animag", "Bittir", "Black", "Black Jack", "DULASHA", "Dill",
-		"Dizi", "Dushman", "EL", "Fox", "Gremlin", "Geralt", "Gestalter", "Hisoka", "Ivory", "Kai",
-		"LIRICA", "Miamore", "Mulan", "Neo", "ProDoc", "Shinobi", "Soza", "Saul Goodman", "Scorpion",
-		"TONI MONTANA", "Tam", "ZONDR", "evil", "finnick", "Йору", "Адвокат", "Альтман", "Альфа", "Асур",
-		"Бес", "Биполярка", "Булочка", "Валькирия", "Великая", "228Данте69", "Даня", "Дита", "Добрый",
-		"Дэва", "Ева", "Завклубом", "Зайка", "Зара", "Знаток", "Зёма", "Кари", "Кир", "Кира", "Кобра",
-		"Кову", "Копибара", "Коссмос", "Красавчик", "Лазер", "Лестер", "Лимонная долька", "Белый склон",
-		"Луи", "Мрак", "Маркетолог", "Марсело", "Мау", "Мафия", "Минахор", "Нафиля", "Окси", "Пантера",
-		"Паранойя", "Подкова", "Подсолнух", "Психолог", "Рокфор", "Руди", "Скорпион", "Саид", "Саймон",
-		"Салливан", "Сатору", "Светлячек", "Сирена", "Смурфик", "Статистика", "Темир", "Типсон",
-		"Томас Шелби", "Учитель", "Феникс", "Физик", "Фил", "Хейтер", "Штиль", "Элис"
-	];
 
-	jQuery(".user_entity_acp").autocomplete({
-		source: nicknames
+<div class="music-controls">
+	<button class="material-button small-button" id="playRandomMusic">
+		<img src="/blank/images/play.svg" alt="Play" class="audio-icon">
+	</button>
+	<input type="range" id="musicVolume" min="0" max="1" step="0.01" value="0.5" class="volume-slider">
+	<button class="material-button small-button" id="stopMusic">
+		<img src="/blank/images/stopmusic.svg" alt="Stop" class="audio-icon">
+	</button>
+</div>
+
+<div class="main-game-table-wrapper table-wrapper"></div>
+
+<script>
+	jQuery(function () {
+		const nicknames = [
+			"AMOR", "Asia", "Alien", "Alinellas", "Animag", "Bittir", "Black", "Black Jack", "DULASHA", "Dill",
+			"Dizi", "Dushman", "EL", "Fox", "Gremlin", "Geralt", "Gestalter", "Hisoka", "Ivory", "Kai",
+			"LIRICA", "Miamore", "Mulan", "Neo", "ProDoc", "Shinobi", "Soza", "Saul Goodman", "Scorpion",
+			"TONI MONTANA", "Tam", "ZONDR", "evil", "finnick", "Йору", "Адвокат", "Альтман", "Альфа", "Асур",
+			"Бес", "Биполярка", "Булочка", "Валькирия", "Великая", "228Данте69", "Даня", "Дита", "Добрый",
+			"Дэва", "Ева", "Завклубом", "Зайка", "Зара", "Знаток", "Зёма", "Кари", "Кир", "Кира", "Кобра",
+			"Кову", "Копибара", "Коссмос", "Красавчик", "Лазер", "Лестер", "Лимонная долька", "Белый склон",
+			"Луи", "Мрак", "Маркетолог", "Марсело", "Мау", "Мафия", "Минахор", "Нафиля", "Окси", "Пантера",
+			"Паранойя", "Подкова", "Подсолнух", "Психолог", "Рокфор", "Руди", "Скорпион", "Саид", "Саймон",
+			"Салливан", "Сатору", "Светлячек", "Сирена", "Смурфик", "Статистика", "Темир", "Типсон",
+			"Томас Шелби", "Учитель", "Феникс", "Физик", "Фил", "Хейтер", "Штиль", "Элис"
+		];
+
+		jQuery(".user_entity_acp").autocomplete({
+			source: nicknames
+		});
 	});
-});</script>
+</script>
+
 <div class="vote-wrapper">
 	<div class="vote-table-wrapper">
 		<table class="vote-table" cellspacing="5">
@@ -211,9 +224,11 @@
 		</table>
 	</div>
 </div>
+
 <div id="vote_res" data-line="0">
 	<div id="vr_l0" data-day="0" style="display:none;" class="vote_day"></div>
 </div>
+
 <div class="menu-content" id="menuContent">
 	<button class="menu-cont-button" id="settingsToggle">Роли и баллы</button>
 	<button class="menu-cont-button" id="shuffleButton">Рассадка</button>
@@ -223,25 +238,19 @@
 	<button class="menu-cont-button" id="resetAllForms">Новая игра</button>
 	<button class="menu-cont-button" id="saveGameButton">Сохранить игру</button>
 </div>
-<div id="selection-modal" class="modal">
+
+<!-- Модальное окно подтверждения -->
+<div id="confirmation-modal" class="modal">
 	<div class="modal-content">
-		<h2>Введите лучший ход</h2>
-		<div class="player-buttons">
-			<button class="player-button" data-player="1">1</button>
-			<button class="player-button" data-player="2">2</button>
-			<button class="player-button" data-player="3">3</button>
-			<button class="player-button" data-player="4">4</button>
-			<button class="player-button" data-player="5">5</button>
-			<button class="player-button" data-player="6">6</button>
-			<button class="player-button" data-player="7">7</button>
-			<button class="player-button" data-player="8">8</button>
-			<button class="player-button" data-player="9">9</button>
-			<button class="player-button" data-player="10">10</button>
+		<h2>Подтверждение</h2>
+		<p>Вы действительно хотите сохранить игру и отправить результаты в Telegram?</p>
+		<div class="modal-buttons">
+			<button id="confirm-save" class="settings-toggle-button">Да</button>
+			<button id="cancel-save" class="settings-toggle-button">Нет</button>
 		</div>
-		<button id="save-selection" class="settings-toggle-button">Принять ЛХ</button>
-		<div class="error-message" style="display: none;">Нельзя выбрать более трех кандидатов!</div>
 	</div>
 </div>
+
 <script>
 	// Переменная для хранения победителя
 	let winner = ''; // По умолчанию победитель не выбран
@@ -258,6 +267,17 @@
 
 	// Обработчик для кнопки "Сохранить игру"
 	document.getElementById('saveGameButton').addEventListener('click', function() {
+		// Показываем модальное окно подтверждения
+		const confirmationModal = document.getElementById('confirmation-modal');
+		confirmationModal.style.display = 'block';
+	});
+
+	// Обработчик для кнопки "Да" в модальном окне
+	document.getElementById('confirm-save').addEventListener('click', function() {
+		// Скрываем модальное окно
+		const confirmationModal = document.getElementById('confirmation-modal');
+		confirmationModal.style.display = 'none';
+
 		// Создаем контейнер для вывода результатов
 		const resultContainer = document.createElement('div');
 		resultContainer.id = 'gameResult';
@@ -359,9 +379,11 @@
 						.then(response => response.json())
 						.then(data => {
 							console.log('Сообщение отправлено:', data);
+							alert('Результаты успешно отправлены в Telegram!');
 						})
 						.catch(error => {
 							console.error('Ошибка при отправке сообщения:', error);
+							alert('Произошла ошибка при отправке результатов.');
 						});
 			} else {
 				console.error('chat_id не найден');
@@ -377,6 +399,153 @@
 		// Добавляем результат на страницу
 		document.body.appendChild(resultContainer);
 	});
+
+	// Обработчик для кнопки "Нет" в модальном окне
+	document.getElementById('cancel-save').addEventListener('click', function() {
+		// Скрываем модальное окно
+		const confirmationModal = document.getElementById('confirmation-modal');
+		confirmationModal.style.display = 'none';
+	});
 </script>
+<script>
+	// Список песен в папке /music/
+	const musicFiles = [
+		'music/_(1).mp3',
+		'music/_(10).mp3',
+		'music/_(11).mp3',
+		'music/_(12).mp3',
+		'music/_(13).mp3',
+		'music/_(14).mp3',
+		'music/_(15).mp3',
+		'music/_(16).mp3',
+		'music/_(17).mp3',
+		'music/_(18).mp3',
+		'music/_(19).mp3',
+		'music/_(2).mp3',
+		'music/_(20).mp3',
+		'music/_(21).mp3',
+		'music/_(22).mp3',
+		'music/_(23).mp3',
+		'music/_(24).mp3',
+		'music/_(25).mp3',
+		'music/_(26).mp3',
+		'music/_(27).mp3',
+		'music/_(28).mp3',
+		'music/_(29).mp3',
+		'music/_(3).mp3',
+		'music/_(30).mp3',
+		'music/_(31).mp3',
+		'music/_(32).mp3',
+		'music/_(33).mp3',
+		'music/_(34).mp3',
+		'music/_(35).mp3',
+		'music/_(36).mp3',
+		'music/_(37).mp3',
+		'music/_(38).mp3',
+		'music/_(39).mp3',
+		'music/_(4).mp3',
+		'music/_(40).mp3',
+		'music/_(41).mp3',
+		'music/_(42).mp3',
+		'music/_(43).mp3',
+		'music/_(44).mp3',
+		'music/_(45).mp3',
+		'music/_(46).mp3',
+		'music/_(47).mp3',
+		'music/_(48).mp3',
+		'music/_(49).mp3',
+		'music/_(5).mp3',
+		'music/_(50).mp3',
+		'music/_(51).mp3',
+		'music/_(52).mp3',
+		'music/_(53).mp3',
+		'music/_(54).mp3',
+		'music/_(55).mp3',
+		'music/_(56).mp3',
+		'music/_(57).mp3',
+		'music/_(58).mp3',
+		'music/_(59).mp3',
+		'music/_(6).mp3',
+		'music/_(60).mp3',
+		'music/_(61).mp3',
+		'music/_(62).mp3',
+		'music/_(63).mp3',
+		'music/_(64).mp3',
+		'music/_(65).mp3',
+		'music/_(66).mp3',
+		'music/_(67).mp3',
+		'music/_(68).mp3',
+		'music/_(69).mp3',
+		'music/_(7).mp3',
+		'music/_(70).mp3',
+		'music/_(71).mp3',
+		'music/_(72).mp3',
+		'music/_(73).mp3',
+		'music/_(74).mp3',
+		'music/_(75).mp3',
+		'music/_(76).mp3',
+		'music/_(77).mp3',
+		'music/_(78).mp3',
+		'music/_(79).mp3',
+		'music/_(8).mp3',
+		'music/_(80).mp3',
+		'music/_(81).mp3',
+		'music/_(82).mp3',
+		'music/_(83).mp3',
+		'music/_(84).mp3',
+		'music/_(85).mp3',
+		'music/_(86).mp3',
+		'music/_(87).mp3',
+		'music/_(88).mp3',
+		'music/_(89).mp3',
+		'music/_(9).mp3',
+		'music/_(90).mp3',
+		'music/_(91).mp3',
+		'music/_(92).mp3',
+		'music/_(93).mp3',
+		'music/_(94).mp3',
+		'music/_(95).mp3',
+		'music/_(96).mp3',
+		'music/_(97).mp3',
+		'music/_(98).mp3',
+		'music/_(99).mp3'
+	];
+
+	let musicAudio = null;
+
+	// Функция для воспроизведения случайной песни
+	function playRandomMusic() {
+		if (musicAudio) {
+			musicAudio.pause();
+			musicAudio.currentTime = 0;
+		}
+
+		const randomIndex = Math.floor(Math.random() * musicFiles.length);
+		const randomMusic = musicFiles[randomIndex];
+		musicAudio = new Audio(randomMusic);
+		musicAudio.volume = document.getElementById('musicVolume').value;
+		musicAudio.play();
+	}
+
+	// Функция для остановки музыки
+	function stopMusic() {
+		if (musicAudio) {
+			musicAudio.pause();
+			musicAudio.currentTime = 0;
+		}
+	}
+
+	// Обработчики для кнопок Play и Stop
+	document.getElementById('playRandomMusic').addEventListener('click', playRandomMusic);
+	document.getElementById('stopMusic').addEventListener('click', stopMusic);
+
+	// Обработчик для ползунка громкости
+	document.getElementById('musicVolume').addEventListener('input', function() {
+		if (musicAudio) {
+			musicAudio.volume = this.value;
+		}
+	});
+</script>
+
 </body>
 </html>
