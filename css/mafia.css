@@ -1,48 +1,48 @@
 :root {
-  /* Material 3 Expressive (Violet theme) */
-  --m3-primary: #6750a4;
+  /* Material 3 Expressive Dark Theme (Violet accent) */
+  --m3-primary: #8f67ff;                /* Ваш фиолетовый акцент */
   --m3-on-primary: #fff;
-  --m3-primary-container: #eaddff;
-  --m3-on-primary-container: #21005d;
+  --m3-primary-container: #3c255a;
+  --m3-on-primary-container: #eaddff;
 
-  --m3-secondary: #625b71;
+  --m3-secondary: #5a5372;
   --m3-on-secondary: #fff;
-  --m3-secondary-container: #e8def8;
-  --m3-on-secondary-container: #1d192b;
+  --m3-secondary-container: #232136;
+  --m3-on-secondary-container: #e8def8;
 
-  --m3-tertiary: #7d5260;
+  --m3-tertiary: #ad43a1;
   --m3-on-tertiary: #fff;
-  --m3-tertiary-container: #ffd8e4;
-  --m3-on-tertiary-container: #31111d;
+  --m3-tertiary-container: #3b2238;
+  --m3-on-tertiary-container: #ffd8e4;
 
-  --m3-error: #b3261e;
-  --m3-on-error: #fff;
-  --m3-error-container: #f9dedc;
-  --m3-on-error-container: #410e0b;
+  --m3-error: #ffb4a9;
+  --m3-on-error: #690005;
+  --m3-error-container: #93000a;
+  --m3-on-error-container: #f2b8b5;
 
-  --m3-background: #f4eff4;
-  --m3-on-background: #1c1b1f;
+  --m3-background: #18122b;
+  --m3-on-background: #e6e1e6;
 
-  --m3-surface: #f4eff4;
-  --m3-surface-dim: #ded8e1;
-  --m3-surface-bright: #fff;
-  --m3-on-surface: #1c1b1f;
-  --m3-surface-container-low: #f7f2fa;
-  --m3-surface-container: #f3edf7;
-  --m3-surface-container-high: #ece6f0;
-  --m3-outline: #7a757f;
+  --m3-surface: #201634;
+  --m3-surface-dim: #18122b;
+  --m3-surface-bright: #2a213f;
+  --m3-on-surface: #e6e1e6;
+  --m3-surface-container-low: #23193a;
+  --m3-surface-container: #251b3d;
+  --m3-surface-container-high: #30224b;
+  --m3-outline: #7c73a7;
 
-  --m3-shadow: 0 1.5px 4px 0 rgba(103,80,164,0.08), 0 1.5px 8px 0 rgba(103,80,164,0.12);
+  --m3-shadow: 0 2px 8px 0 rgba(63, 36, 130, 0.35), 0 1px 3px 0 rgba(0,0,0,0.26);
   --m3-radius-small: 12px;
   --m3-radius-medium: 16px;
   --m3-radius-large: 28px;
   --m3-radius-extra-large: 40px;
-  --m3-transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  --m3-transition: all 0.21s cubic-bezier(0.4, 0, 0.2, 1);
 
-  --m3-font-family: "Roboto", "Noto Sans", "Inter", Arial, sans-serif;
+  --m3-font-family: "Roboto", "Inter", Arial, sans-serif;
 }
 
-/* --- Body & Main --- */
+/* Body and Base */
 body {
   font-family: var(--m3-font-family);
   background: var(--m3-background);
@@ -53,102 +53,126 @@ body {
   width: 100vw;
   overflow-x: hidden;
   letter-spacing: 0.02em;
+  transition: background 0.3s, color 0.3s;
 }
 
-/* --- Buttons --- */
+/* Buttons */
 button, .material-button, .settings-toggle-button, .menu-cont-button {
   font-family: var(--m3-font-family);
   font-size: 1rem;
   font-weight: 500;
   border-radius: var(--m3-radius-large);
   padding: 12px 28px;
-  box-shadow: var(--m3-shadow);
   background: var(--m3-primary);
   color: var(--m3-on-primary);
   border: none;
   cursor: pointer;
-  transition: var(--m3-transition);
+  box-shadow: var(--m3-shadow);
+  transition: background 0.23s, color 0.23s, box-shadow 0.23s, transform 0.17s;
   outline: none;
-  letter-spacing: 0.04em;
   min-width: 64px;
   min-height: 48px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  will-change: background, color, box-shadow, transform;
 }
-button:active,
-button:focus,
+button:active, button:focus,
 .material-button:focus,
 .settings-toggle-button:focus {
   box-shadow: 0 0 0 3px var(--m3-primary-container);
 }
-button:hover,
-.material-button:hover,
-.settings-toggle-button:hover,
-.menu-cont-button:hover {
+button:hover, .material-button:hover, .settings-toggle-button:hover, .menu-cont-button:hover {
   background: var(--m3-primary-container);
   color: var(--m3-on-primary-container);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 4px 16px 0 rgba(143,103,255,0.22);
 }
 
-/* --- Table --- */
-#miss-table,
-#rate_table,
-.tr_seats,
-#point_settings,
-#game_settings {
+/* Modals */
+.modal, .m3-modal, #confirmation-modal {
+  background: var(--m3-surface-container);
+  color: var(--m3-on-surface);
+  border-radius: var(--m3-radius-large);
+  box-shadow: var(--m3-shadow);
+  padding: 32px 24px;
+  max-width: 440px;
+  width: 90vw;
+  margin: auto;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  z-index: 10000;
+  display: none;
+  transition: box-shadow 0.25s, background 0.3s, color 0.3s;
+  animation: m3e-fadein 0.36s cubic-bezier(0.3,0.8,0.5,1.1);
+}
+.modal.active, .m3-modal.active, #confirmation-modal.active {
+  display: block;
+}
+@keyframes m3e-fadein {
+  from { opacity: 0; transform: translate(-50%,-56%) scale(0.98);}
+  to   { opacity: 1; transform: translate(-50%,-50%) scale(1);}
+}
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.modal-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+/* Tables (all) */
+#miss-table, #rate_table, .tr_seats, #point_settings, #game_settings {
   background: var(--m3-surface-container-low);
   border-radius: var(--m3-radius-medium);
   box-shadow: var(--m3-shadow);
   overflow: hidden;
+  transition: background 0.3s;
 }
-#miss-table td,
-.tr_seats td,
-#rate_table td,
-#point_settings td,
-#game_settings td {
+#miss-table td, .tr_seats td, #rate_table td, #point_settings td, #game_settings td {
   border: 1px solid var(--m3-outline);
   border-radius: var(--m3-radius-medium);
   padding: 8px;
   background: var(--m3-surface);
   color: var(--m3-on-surface);
+  transition: background 0.19s, color 0.19s;
 }
-#miss-table td,
-#miss-table #miss-button,
-.miss_clik {
+#miss-table td, #miss-table #miss-button, .miss_clik {
   background: var(--m3-primary-container);
   border-radius: var(--m3-radius-medium);
-  transition: var(--m3-transition);
+  transition: background 0.23s, transform 0.19s;
 }
-#miss-table #miss-button:hover,
-.miss_clik:hover {
+#miss-table #miss-button:hover, .miss_clik:hover {
   background: var(--m3-primary);
   transform: scale(1.1);
 }
-.tr_seats td,
-#rate_table td {
+.tr_seats td, #rate_table td {
   border: 1.5px solid var(--m3-primary);
 }
 #miss-table td {
   width: 24px;
   height: 32px;
 }
+
+/* Table Special Classes */
 .vote_st {
   background: var(--m3-error-container);
   color: var(--m3-error);
   font-weight: 600;
 }
-.win_team {
+.win_team, .tar_sel, .bm_selected {
   background: var(--m3-primary) !important;
   color: var(--m3-on-primary) !important;
 }
 .vote_nd {
   background: var(--m3-primary);
   color: var(--m3-on-primary);
-}
-.tar_sel, .bm_selected {
-  background: var(--m3-primary) !important;
-  color: var(--m3-on-primary) !important;
 }
 .voute_p {
   font-size: 1.25rem;
@@ -157,24 +181,10 @@ button:hover,
 }
 .voute_line:hover {
   background: var(--m3-secondary-container);
+  color: var(--m3-on-secondary-container);
 }
-.settings-toggle,
-.settings-toggle-button {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1000;
-}
-.settings-toggle-button {
-  margin: 8px;
-  background: var(--m3-primary);
-  color: var(--m3-on-primary);
-}
-.settings-toggle-button:hover {
-  background: var(--m3-primary-container);
-  color: var(--m3-on-primary-container);
-}
+
+/* Vote Day and Helpers */
 #vote_res {
   width: 80%;
   padding: 16px;
@@ -184,6 +194,7 @@ button:hover,
   color: var(--m3-on-surface);
   font-size: 1rem;
   margin: 0 auto 16px;
+  transition: background 0.3s, color 0.3s;
 }
 .vote_day {
   display: flex;
@@ -196,9 +207,9 @@ button:hover,
   border-radius: var(--m3-radius-large);
   font-size: 20px;
   color: var(--m3-on-primary);
-  font-family: var(--m3-font-family);
   cursor: pointer;
-  transition: var(--m3-transition);
+  transition: background 0.22s, color 0.22s, box-shadow 0.2s, transform 0.14s;
+  font-family: var(--m3-font-family);
 }
 .vote_day p {
   background: var(--m3-primary);
@@ -208,7 +219,7 @@ button:hover,
   padding: 20px;
   border-radius: 30%;
   box-shadow: var(--m3-shadow);
-  transition: var(--m3-transition);
+  transition: background 0.2s, color 0.2s;
 }
 .vote_day p:hover {
   background: var(--m3-primary-container);
@@ -230,7 +241,7 @@ button:hover,
   opacity: 0;
   z-index: 50;
   box-shadow: var(--m3-shadow);
-  transition: opacity 1.5s ease, top 1s ease, background 0.3s, color 0.3s;
+  transition: opacity 1.5s, top 1s, background 0.28s, color 0.28s;
 }
 .vote_day:hover .helper {
   visibility: visible;
@@ -241,21 +252,85 @@ button:hover,
   background: var(--m3-primary);
   color: var(--m3-on-primary);
 }
+
+/* Inputs */
+input[type="text"], .m3-input, .bm_nick input {
+  font-family: var(--m3-font-family);
+  font-size: 1rem;
+  background: var(--m3-surface-bright);
+  color: var(--m3-on-surface);
+  border: none;
+  border-bottom: 2px solid var(--m3-outline);
+  border-radius: var(--m3-radius-small) var(--m3-radius-small) 0 0;
+  padding: 10px 0 6px 0;
+  width: 100%;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+  margin-bottom: 12px;
+}
+input[type="text"]:focus, .m3-input:focus, .bm_nick input:focus {
+  border-bottom: 2px solid var(--m3-primary);
+  outline: none;
+  background: var(--m3-surface-container-high);
+  color: var(--m3-on-surface);
+}
+
+/* Chips, pickers, misc */
+.role {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--m3-radius-medium);
+  padding-top: 8px;
+  background: var(--m3-surface-container-low);
+  color: var(--m3-on-surface);
+  transition: background 0.18s, color 0.18s, transform 0.19s;
+}
+.role:hover {
+  transform: scale(1.06);
+  background: var(--m3-primary-container);
+  color: var(--m3-on-primary-container);
+}
+.bm_pick {
+  position: relative;
+  cursor: pointer;
+  background: var(--m3-surface);
+  border-radius: var(--m3-radius-medium);
+  padding: 8px;
+  box-shadow: var(--m3-shadow);
+  color: var(--m3-on-surface);
+  transition: background 0.18s, color 0.18s, transform 0.13s;
+  display: none;
+}
+.bm_pick.show {
+  display: block;
+  position: absolute;
+  z-index: 100;
+  top: 100%;
+  left: 0;
+  background: var(--m3-surface-container-high);
+  box-shadow: var(--m3-shadow);
+}
+.bm_pick:hover {
+  background: var(--m3-primary-container);
+  color: var(--m3-on-primary-container);
+  transform: scale(1.05);
+}
+.bm_selected {
+  background: var(--m3-primary) !important;
+  color: var(--m3-on-primary) !important;
+}
+
+/* Miscellaneous */
 .remove_click {
   width: 25px;
   background: url(../images/backspace.svg) center no-repeat;
   border-radius: var(--m3-radius-medium);
-  transition: var(--m3-transition);
+  transition: background 0.18s, transform 0.13s;
 }
 .remove_click:hover {
   background-color: var(--m3-primary-container);
   transform: scale(1.1);
 }
-.fall_0,
-.fall_1,
-.fall_2,
-.fall_3,
-.fall_4 {
+.fall_0, .fall_1, .fall_2, .fall_3, .fall_4 {
   height: 20px;
   display: flex;
   align-items: center;
@@ -264,8 +339,7 @@ button:hover,
   font-weight: bold;
   border-radius: var(--m3-radius-medium);
 }
-.fall_3,
-.fall_4 {
+.fall_3, .fall_4 {
   color: var(--m3-error);
 }
 .fall_active {
@@ -280,64 +354,7 @@ button:hover,
   background: var(--m3-surface-dim) !important;
 }
 
-/* --- Chips, pickers, misc --- */
-.role {
-  width: 100%;
-  height: 100%;
-  border-radius: var(--m3-radius-medium);
-  padding-top: 8px;
-  background: var(--m3-surface-container-low);
-  color: var(--m3-on-surface);
-  transition: var(--m3-transition);
-}
-.role:hover {
-  transform: scale(1.1);
-  background: var(--m3-primary-container);
-  color: var(--m3-on-primary-container);
-}
-.bm_nick input {
-  background: var(--m3-surface);
-  color: var(--m3-on-surface);
-  border: 1px solid var(--m3-primary);
-  border-radius: var(--m3-radius-medium);
-  padding: 8px 12px;
-  transition: var(--m3-transition);
-}
-.bm_nick input:focus,
-.bm_nick input:hover {
-  border-color: var(--m3-primary-container);
-  background: var(--m3-surface-container-high);
-}
-.bm_pick {
-  position: relative;
-  cursor: pointer;
-  background: var(--m3-surface);
-  border-radius: var(--m3-radius-medium);
-  padding: 8px;
-  box-shadow: var(--m3-shadow);
-  color: var(--m3-on-surface);
-  transition: var(--m3-transition);
-  display: none;
-}
-.bm_pick.show {
-  display: block;
-  position: absolute;
-  z-index: 100;
-  top: 100%;
-  left: 0;
-  background: var(--m3-surface-container-high);
-  box-shadow: var(--m3-shadow);
-}
-.bm_pick:hover {
-  background: var(--m3-primary-container);
-  transform: scale(1.05);
-}
-.bm_selected {
-  background: var(--m3-primary) !important;
-  color: var(--m3-on-primary) !important;
-}
-
-/* --- Responsive --- */
+/* Responsive */
 @media (max-width: 768px) {
   #game_settings td {
     padding: 8px 4px;
