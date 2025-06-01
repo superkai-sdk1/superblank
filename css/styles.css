@@ -1,12 +1,8 @@
 :root {
-  /* Material 3 variables should be imported from mafia.css if both used */
+  /* Не дублируем переменные, все уже в mafia.css */
 }
 
-body {
-  /* Inherit styles from mafia.css */
-}
-
-/* --- Main Info & Containers --- */
+/* Основные контейнеры, таблицы, таймер */
 .main-game-top-info {
   background: var(--m3-surface-container-high);
   border-radius: var(--m3-radius-large);
@@ -14,6 +10,7 @@ body {
   padding: 24px;
   margin-bottom: 24px;
   color: var(--m3-on-surface);
+  transition: background 0.3s;
 }
 .table-wrapper {
   width: 100%;
@@ -33,7 +30,6 @@ body {
   }
 }
 
-/* --- Timer --- */
 .timer {
   background: var(--m3-primary-container);
   color: var(--m3-on-primary-container);
@@ -45,9 +41,10 @@ body {
   font-size: 1.5rem;
   font-weight: 500;
   padding: 8px 24px;
+  transition: background 0.2s, color 0.2s;
 }
 .timer:hover {
-  box-shadow: 0 8px 16px rgba(103,80,164,0.13);
+  box-shadow: 0 8px 16px rgba(143,103,255,0.15);
   transform: translateY(-4px);
 }
 .timer .stop {
@@ -72,6 +69,7 @@ body {
   gap: 14px;
   justify-content: center;
   margin: 16px 0;
+  animation: m3e-fadein 0.35s;
 }
 .timer-display {
   font-size: 4rem;
@@ -83,6 +81,7 @@ body {
   padding: 16px 0;
   text-align: center;
   letter-spacing: 0.04em;
+  transition: background 0.2s, color 0.2s;
 }
 .timer-display.warning {
   animation: blink 1s step-end infinite;
@@ -94,13 +93,8 @@ body {
 @keyframes blink {
   50% { opacity: 0; }
 }
-@media (max-width: 600px) {
-  .timer-display {
-    font-size: 2.2rem;
-  }
-}
 
-/* --- Vote Table --- */
+/* Голосование */
 .vote-table {
   background: var(--m3-surface-container-low);
   border-radius: var(--m3-radius-medium);
@@ -108,6 +102,7 @@ body {
   margin: 0 auto;
   width: 100%;
   max-width: 680px;
+  transition: background 0.2s;
 }
 .vote-table th,
 .vote-table td {
@@ -115,6 +110,7 @@ body {
   color: var(--m3-on-surface);
   border-radius: var(--m3-radius-small);
   background: var(--m3-surface);
+  transition: background 0.18s;
 }
 @media (max-width: 768px) {
   .vote-table th,
@@ -129,7 +125,6 @@ body {
   }
 }
 
-/* --- Buttons --- */
 .material-button, .menu-cont-button, .reset-button {
   font-family: var(--m3-font-family);
   border-radius: var(--m3-radius-large);
@@ -138,7 +133,7 @@ body {
   color: var(--m3-on-primary);
   border: none;
   cursor: pointer;
-  transition: var(--m3-transition);
+  transition: background 0.23s, color 0.23s, box-shadow 0.23s;
   font-size: 1rem;
   box-shadow: var(--m3-shadow);
 }
@@ -188,7 +183,7 @@ body {
   color: var(--m3-on-error-container);
 }
 
-/* --- Inputs & Sliders --- */
+/* Inputs & Sliders */
 input[type="text"], .m3-input {
   font-family: var(--m3-font-family);
   font-size: 1rem;
@@ -199,13 +194,14 @@ input[type="text"], .m3-input {
   border-radius: var(--m3-radius-small) var(--m3-radius-small) 0 0;
   padding: 10px 0 6px 0;
   width: 100%;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
   margin-bottom: 12px;
 }
-input[type="text"]:focus,
-.m3-input:focus {
+input[type="text"]:focus, .m3-input:focus {
   border-bottom: 2px solid var(--m3-primary);
   outline: none;
+  background: var(--m3-surface-container-high);
+  color: var(--m3-on-surface);
 }
 input[type="range"], .volume-slider, .m3-slider {
   width: 100px;
@@ -217,14 +213,10 @@ input[type="range"], .volume-slider, .m3-slider {
   opacity: 0.85;
   transition: opacity 0.2s;
 }
-input[type="range"]:hover,
-.volume-slider:hover,
-.m3-slider:hover {
+input[type="range"]:hover, .volume-slider:hover, .m3-slider:hover {
   opacity: 1;
 }
-input[type="range"]::-webkit-slider-thumb,
-.volume-slider::-webkit-slider-thumb,
-.m3-slider::-webkit-slider-thumb {
+input[type="range"]::-webkit-slider-thumb, .volume-slider::-webkit-slider-thumb, .m3-slider::-webkit-slider-thumb {
   width: 16px;
   height: 16px;
   background: var(--m3-primary);
@@ -232,7 +224,7 @@ input[type="range"]::-webkit-slider-thumb,
   cursor: pointer;
 }
 
-/* --- Audio Controls --- */
+/* Audio Controls */
 .audio-controls, .music-controls {
   display: flex;
   align-items: center;
@@ -251,7 +243,7 @@ input[type="range"]::-webkit-slider-thumb,
   }
 }
 
-/* --- Modal --- */
+/* Modal (дополнительно) */
 .modal, #confirmation-modal {
   background: var(--m3-surface-container);
   color: var(--m3-on-surface);
@@ -282,7 +274,6 @@ input[type="range"]::-webkit-slider-thumb,
   justify-content: center;
 }
 
-/* --- Misc --- */
 .vote {
   display: flex;
   justify-content: center;
